@@ -45,6 +45,7 @@ class PlanType(BaseModel):
 class DietPlan(BaseModel):
     name = models.CharField(verbose_name=_("Diet Plan Name"), max_length=FieldConstants.MAX_NAME_LENGTH)
     plan_type = models.ForeignKey(PlanType, on_delete=models.SET_NULL, blank=True, null=True)
+    value = models.PositiveIntegerField(verbose_name=_("Plan Value"))
 
     class Meta:
         verbose_name = _("Diet Plan")
