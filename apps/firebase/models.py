@@ -12,15 +12,9 @@ from .managers import UserManager
 
 
 class AbstractFirebaseUser(AbstractBaseUser, PermissionsMixin):
-    uid = models.CharField(unique=True, default=uuid.uuid1, max_length=FieldConstants.MAX_UID_LENGTH)
-    first_name = models.CharField(
-        verbose_name="First Name",
-        max_length=FieldConstants.MAX_NAME_LENGTH,
-        blank=True,
-        null=True,
-    )
-    last_name = models.CharField(
-        verbose_name="Last Name",
+    uid = models.CharField(unique=True, default=uuid.uuid4, max_length=FieldConstants.MAX_UID_LENGTH)
+    display_name = models.CharField(
+        verbose_name="display_name",
         max_length=FieldConstants.MAX_NAME_LENGTH,
         blank=True,
         null=True,
@@ -33,14 +27,14 @@ class AbstractFirebaseUser(AbstractBaseUser, PermissionsMixin):
         },
     )
     email = models.EmailField(
-        verbose_name="Email Address",
+        verbose_name="email_address",
         unique=True,
         blank=True,
         null=True,
         error_messages={"unique": "A user with this email already exists"},
     )
     is_staff = models.BooleanField(
-        verbose_name="Staff Status",
+        verbose_name="staff_status",
         default=False,
         help_text="Designate whether the user can log into this admin site.",
     )
@@ -67,12 +61,8 @@ class AbstractFirebaseUser(AbstractBaseUser, PermissionsMixin):
         self.email = self.__class__.objects.normalize_email(self.email)
 
     @property
-    def full_name(self):
-        return f'{self.first_name} {self.last_name}'
-
-    @property
     def identifier(self):
-        return self.full_name or self.phone_number or self.email or self.uid
+        return self.display_name or self.phone_number or self.email or self.uid
 
 
 class FirebaseUser(AbstractFirebaseUser):

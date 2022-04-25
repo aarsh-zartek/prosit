@@ -1,9 +1,8 @@
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ImproperlyConfigured
 from django.db import IntegrityError
 
 from rest_framework import authentication
-from rest_framework.exceptions import AuthenticationFailed, server_error
+from rest_framework.exceptions import AuthenticationFailed
 
 from firebase_admin import auth as firebase_auth
 from .firebase_app import firebase_app
@@ -13,17 +12,17 @@ User = get_user_model()
 
 class FirebaseAuthentication(authentication.BaseAuthentication):
     """
-    Firebase Authentication based django rest framework authentication class
+    Firebase Authentication based Django Rest Framework Authentication Class
 
-    clients shuld authenticate by passing a Firebase ID token in the
-    "Authorization" HTTP heade, prepended with the string "<keyword>" where
-    <keyword> is this classes  `keyword` string property. For example:
+    Clients shuld authenticate by passing a Firebase ID token in the
+    "Authorization" HTTP header, prepended with the string value `keyword` where
+    `keyword` string attribute. For example:
 
-    Authorization: Bearer xxxxx.yyyyy.zzzzz
+    Authorization: FirebaseToken xxxxx.yyyyy.zzzzz
     """
 
-    keyword = "Bearer"
-    check_revoked = False
+    keyword = "FirebaseToken"
+    check_revoked = True
 
     def authenticate(self, request):
         auth = authentication.get_authorization_header(request).split()
