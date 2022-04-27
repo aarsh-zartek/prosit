@@ -25,11 +25,11 @@
           </div>
 
           <!-- Sign-in button -->
-          <button disabled class="mdl-button mdl-js-button mdl-button--raised" id="sign-in-button">Sign-in</button>
+          <button disabled class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" id="sign-in-button">Sign-in</button>
         </form>
 
         <!-- Button that handles sign-out -->
-        <button class="mdl-button mdl-js-button mdl-button--raised" id="sign-out-button">Sign-out</button>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" id="sign-out-button">Sign-out</button>
 
         <form id="verification-code-form" action="#">
           <!-- Input to enter the verification code -->
@@ -39,10 +39,10 @@
           </div>
 
           <!-- Button that triggers code verification -->
-          <input type="submit" class="mdl-button mdl-js-button mdl-button--raised" id="verify-code-button"
+          <input type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" id="verify-code-button"
             value="Verify Code" />
           <!-- Button to cancel code verification -->
-          <button class="mdl-button mdl-js-button mdl-button--raised" id="cancel-verify-code-button">Cancel</button>
+          <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" id="cancel-verify-code-button">Cancel</button>
         </form>
       </div>
     </div>
@@ -51,12 +51,30 @@
     <div id="user-details-card"
       class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
       <div class="mdl-card__title mdl-color--light-blue-600 mdl-color-text--white">
-        <h2 class="mdl-card__title-text">User sign-in status</h2>
+        <h2 class="mdl-card__title-text">User Status</h2>
       </div>
       <div class="mdl-card__supporting-text mdl-color-text--grey-600">
         <!-- Container where we'll display the user details -->
-        <div class="user-details-container">
-          Firebase sign-in status: <span id="sign-in-status">Unknown</span>
+        <div>
+          <button class="mdl-button mdl-js-button mdl-button--colored mdl-js-ripple-effect mdl-button--raised" id="copy-accessToken-button" style="color: white;">
+            <i class="material-icons">copy_all</i>
+            Copy Access Token
+          </button>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <button class="mdl-button mdl-js-button mdl-button--accent mdl-js-ripple-effect mdl-button--raised" id="copy-refreshToken-button" style="color: white;">
+            <i class="material-icons">autorenew</i>
+            Copy Refresh Token
+          </button>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised" id="copy-apiKey-button">
+            <i class="material-icons">api</i>
+            Copy API Key
+          </button>
+          <br>
+        </div>
+        <br>
+        <div class="user-details-container" style="overflow-x: scroll;">
+          Firebase sign-in status: <span id="sign-in-status" style="font-weight: bold;">Unknown</span>
           <div>Firebase auth <code>currentUser</code> object value:</div>
           <pre><code id="account-details">null</code></pre>
         </div>
@@ -73,6 +91,7 @@
    * Set up UI event listeners and registering Firebase auth listeners.
    */
   window.onload = function () {
+    'use strict';
     // Listening for auth state changes.
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
@@ -91,6 +110,7 @@
       updateSignOutButtonUI();
       updateSignedInUserStatusUI();
       updateVerificationCodeFormUI();
+      disableButtons();
     });
 
     // Event bindings.
@@ -101,6 +121,10 @@
     document.getElementById('verification-code').addEventListener('change', updateVerifyCodeButtonUI);
     document.getElementById('verification-code-form').addEventListener('submit', onVerifyCodeSubmit);
     document.getElementById('cancel-verify-code-button').addEventListener('click', cancelVerification);
+    document.getElementById('copy-accessToken-button').addEventListener('click', copyAccessToken);
+    document.getElementById('copy-refreshToken-button').addEventListener('click', copyRefreshToken);
+    document.getElementById('copy-apiKey-button').addEventListener('click', copyApiKey);
+    var snackbarContainer = document.querySelector('#snackbar');
 
     // [START appVerifier]
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('sign-in-button', {
@@ -288,6 +312,71 @@
       document.getElementById('sign-in-status').textContent = 'Signed out';
       document.getElementById('account-details').textContent = 'null';
     }
+  }
+  
+  function disableButtons() {
+    var user = firebase.auth().currentUser;
+    if(!user) {
+      document.getElementById('copy-accessToken-button').disabled = true;
+      document.getElementById('copy-refreshToken-button').disabled = true;
+      document.getElementById('copy-apiKey-button').disabled = true;
+    } else {
+      document.getElementById('copy-accessToken-button').disabled = false;
+      document.getElementById('copy-refreshToken-button').disabled = false;
+      document.getElementById('copy-apiKey-button').disabled = false;
+    }
+
+  }
+  function copyApiKey() {
+    'use strict';
+    var userData = JSON.parse(document.getElementById('account-details').textContent);
+    var api_key = userData.stsTokenManager.apiKey
+    if(api_key) {
+      copy(api_key);
+    }
+  }
+
+  function copyRefreshToken() {
+    'use strict';
+    var userData = JSON.parse(document.getElementById('account-details').textContent);
+    var token = userData.stsTokenManager.refreshToken
+    if(token) {
+      copy(token);
+    }
+  }
+
+  function copyAccessToken() {
+    'use strict';
+    var userData = JSON.parse(document.getElementById('account-details').textContent);
+    var token = userData.stsTokenManager.accessToken
+    var snackBarmessage = "Token Copied!"
+    if(token) {
+      copy(token);
+    } else {
+      snackBarmessage = "No Token Found!"
+    }
+    
+    /*
+    var data = {
+      message: snackBarmessage,
+      timeout: 6000,
+      actionHandler: function() {},
+      action: function() {},
+    };
+    snackbarContainer.MaterialSnackbar.showSnackbar(data);
+    */
+  }
+
+  function copy(text) {
+    var input = document.createElement('input');
+    input.setAttribute('value', text.trim());
+    document.body.appendChild(input);
+    input.select();
+
+    var result = document.execCommand('copy');
+    document.body.removeChild(input);
+    
+    return result;
   }
 </script>
 {% endblock script %}

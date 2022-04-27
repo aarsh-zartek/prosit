@@ -14,6 +14,11 @@ from pathlib import Path
 from environ import environ
 import os
 
+import logging.config
+from django.utils.log import DEFAULT_LOGGING
+
+from lib.constants import FieldConstants
+
 env = environ.Env()
 environ.Env.read_env()
 
@@ -40,6 +45,8 @@ ALLOWED_HOSTS = [DOMAIN, DOMAIN_IP]
 # Application definition
 
 DJANGO_APPS = [
+    # Must be added before `django.contrib.admin`
+    'jazzmin', # Custom Admin
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -52,15 +59,16 @@ THIRD_PARTY_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_extensions',
+    'drf_yasg',
     'corsheaders',
     'phonenumber_field',
 ]
 
 LOCAL_APPS = [
-    'apps.firebase',#.apps.FirebaseConfig',
-    'apps.core',#.apps.CoreConfig',
-    'apps.users',#.apps.UsersConfig',
-    'apps.plan',#.apps.PlanConfig',
+    'apps.firebase.apps.FirebaseConfig',
+    'apps.core.apps.CoreConfig',
+    'apps.users.apps.UsersConfig',
+    'apps.plan.apps.PlanConfig',
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -160,9 +168,72 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Loggers
+LOGGING_CONFIG = None
 
-# Rest Framework Config
-# django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
+LOGLEVEL = os.environ.get('LOGLEVEL', 'info').upper()
+LOG_FILE_NAME = os.path.join(BASE_DIR, "logs/prosit.log")
+
+
+logging.config.dictConfig({
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'default': {
+            # exact format is not important, this is the minimum information
+            'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+        },
+        'django.server': DEFAULT_LOGGING['formatters']['django.server'],
+    },
+    'handlers': {
+        # console logs to stderr
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'default',
+        },
+        # Add Handler for Sentry for `warning` and above
+        'file': {
+            'level': 'WARNING',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': LOG_FILE_NAME,
+            'maxBytes': 1024 * 1024 * 10,  # 10MB
+            'backupCount': 10,
+            'formatter': 'default',
+        },
+        'django.server': DEFAULT_LOGGING['handlers']['django.server'],
+    },
+    'loggers': {
+        # default for all undefined Python modules
+        '': {
+            'level': 'INFO',
+            'handlers': ['console', 'file'],
+        },
+        # Our application code
+        'apps.firebase': {
+            'level': LOGLEVEL,
+            'handlers': ['console', 'file'],
+            # Avoid double logging because of root logger
+            'propagate': False,
+        },
+        'apps.plan': {
+            'level': LOGLEVEL,
+            'handlers': ['console', 'file'],
+            # Avoid double logging because of root logger
+            'propagate': False,
+        },
+        # # Prevent noisy modules from logging to Sentry
+        # 'noisy_module': {
+        #     'level': 'ERROR',
+        #     'handlers': ['console'],
+        #     'propagate': False,
+        # },
+        # Default runserver request logging
+        'django.server': DEFAULT_LOGGING['loggers']['django.server'],
+    },
+})
+
+
+# Rest Framework Config - https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "apps.firebase.authentication.FirebaseAuthentication",
@@ -170,5 +241,21 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
     ),
-    "DEFAULT_PAGINATION_CLASS": "getmedgo.core.pagination.PageNumberPagination",
+    "DATE_TIME_FORMAT": FieldConstants.FULL_DATE_TIME_FORMAT
+}
+
+FIREBASE_CONFIG = {
+    "FIREBASE_SERVICE_ACCOUNT": env.str("FIREBASE_SERVICE_ACCOUNT"),
+    "FIREBASE_WEBAPP_CONFIG": env.str("FIREBASE_WEBAPP_CONFIG"),
+}
+
+
+# Djoser Config
+DJOSER = {
+    'SERIALIZERS': {
+        'current_user': 'apps.users.serializers.TokenSerializer',
+        'user': 'apps.users.serializers.UserSerializer',
+        # 'token': 'apps.users.serializers.TokenSerializer',
+        # 'token_create': 'apps.users.serializers.TokenSerializer',
+    },
 }

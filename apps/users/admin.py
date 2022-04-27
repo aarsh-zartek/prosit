@@ -12,7 +12,7 @@ admin.site.unregister(Group)
 
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('uid', 'full_name', 'email', 'is_active')
+    list_display = ('uid', 'display_name', 'phone_number', 'email', 'is_active')
 
 
 admin.site.register(User, UserAdmin)

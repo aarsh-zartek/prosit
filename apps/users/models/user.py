@@ -5,6 +5,7 @@ from apps.core.models import BaseModel
 from apps.firebase.models import AbstractFirebaseUser
 
 from lib.choices import GENDER_TYPES, FOOD_PREFERENCES
+from lib.constants import FieldConstants
 from lib.utils import get_user_health_image_path
 
 # Create your models here.
@@ -12,6 +13,8 @@ from lib.utils import get_user_health_image_path
 class User(BaseModel, AbstractFirebaseUser):
     """Default user for prosit which inherits from FirebaseUser"""
     pass
+    # first_name = models.CharField(max_length=FieldConstants.MAX_NAME_LENGTH)
+    # last_name = models.CharField(max_length=FieldConstants.MAX_NAME_LENGTH)
 
     def delete(self):
         self.is_active = False
