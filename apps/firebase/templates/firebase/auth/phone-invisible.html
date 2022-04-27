@@ -55,10 +55,17 @@
       </div>
       <div class="mdl-card__supporting-text mdl-color-text--grey-600">
         <!-- Container where we'll display the user details -->
-        <div class="user-details-container">
-          Firebase sign-in status: <span id="sign-in-status">Unknown</span>
+        <div class="user-details-container" style="overflow-x: scroll;">
+          Firebase sign-in status: <span id="sign-in-status" style="font-weight: bold;">Unknown</span>
           <div>Firebase auth <code>currentUser</code> object value:</div>
           <pre><code id="account-details">null</code></pre>
+        </div>
+        <br>
+        <div>
+          <button class="mdl-button mdl-js-button mdl-button--colored mdl-js-ripple-effect mdl-button--raised" id="copy-accessToken-button" style="color: white;">
+            Copy Access Token
+          </button>
+          <br>
         </div>
       </div>
     </div>
@@ -73,6 +80,7 @@
    * Set up UI event listeners and registering Firebase auth listeners.
    */
   window.onload = function () {
+    'use strict';
     // Listening for auth state changes.
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
@@ -101,6 +109,8 @@
     document.getElementById('verification-code').addEventListener('change', updateVerifyCodeButtonUI);
     document.getElementById('verification-code-form').addEventListener('submit', onVerifyCodeSubmit);
     document.getElementById('cancel-verify-code-button').addEventListener('click', cancelVerification);
+    document.getElementById('copy-accessToken-button').addEventListener('click', copyAccessToken);
+    var snackbarContainer = document.querySelector('#snackbar');
 
     // [START appVerifier]
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('sign-in-button', {
@@ -288,6 +298,40 @@
       document.getElementById('sign-in-status').textContent = 'Signed out';
       document.getElementById('account-details').textContent = 'null';
     }
+  }
+
+  function copyAccessToken() {
+    'use strict';
+    var userData = JSON.parse(document.getElementById('account-details').textContent);
+    var token = userData.stsTokenManager.accessToken
+    var snackBarmessage = "Token Copied!"
+    if(token) {
+      copy(token);
+    } else {
+      snackBarmessage = "No Token Found!"
+    }
+    
+    /*
+    var data = {
+      message: snackBarmessage,
+      timeout: 6000,
+      actionHandler: function() {},
+      action: function() {},
+    };
+    snackbarContainer.MaterialSnackbar.showSnackbar(data);
+    */
+  }
+
+  function copy(text) {
+    var input = document.createElement('input');
+    input.setAttribute('value', text.trim());
+    document.body.appendChild(input);
+    input.select();
+
+    var result = document.execCommand('copy');
+    document.body.removeChild(input);
+    
+    return result;
   }
 </script>
 {% endblock script %}

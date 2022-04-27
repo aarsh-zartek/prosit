@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+from djoser.views import TokenCreateView, TokenDestroyView
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 
@@ -29,10 +30,13 @@ urlpatterns = [
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
     
+    path('login/', TokenCreateView.as_view(), name='login'),
+    path('logout/', TokenDestroyView.as_view(), name='logout'),
+    
     path("firebase/", include("apps.firebase.urls")),
         
-    # path("", include(("apps.users.urls", "users"), namespace="users")),
-    # path("", include(("apps.plan.urls", "plan"), namespace="plan")),
+    path("api/v1/", include(("apps.users.urls", "users"), namespace="users")),
+    path("api/v1/", include(("apps.plan.urls", "plan"), namespace="plan")),
 ]
 
 schema_view = get_schema_view(

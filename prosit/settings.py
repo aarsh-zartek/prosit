@@ -17,6 +17,8 @@ import os
 import logging.config
 from django.utils.log import DEFAULT_LOGGING
 
+from lib.constants import FieldConstants
+
 env = environ.Env()
 environ.Env.read_env()
 
@@ -44,7 +46,7 @@ ALLOWED_HOSTS = [DOMAIN, DOMAIN_IP]
 
 DJANGO_APPS = [
     # Must be added before `django.contrib.admin`
-    # 'jazzmin', # Custom Admin
+    'jazzmin', # Custom Admin
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -239,9 +241,21 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
     ),
+    "DATE_TIME_FORMAT": FieldConstants.FULL_DATE_TIME_FORMAT
 }
 
 FIREBASE_CONFIG = {
     "FIREBASE_SERVICE_ACCOUNT": env.str("FIREBASE_SERVICE_ACCOUNT"),
     "FIREBASE_WEBAPP_CONFIG": env.str("FIREBASE_WEBAPP_CONFIG"),
+}
+
+
+# Djoser Config
+DJOSER = {
+    'SERIALIZERS': {
+        'current_user': 'apps.users.serializers.TokenSerializer',
+        'user': 'apps.users.serializers.UserSerializer',
+        # 'token': 'apps.users.serializers.TokenSerializer',
+        # 'token_create': 'apps.users.serializers.TokenSerializer',
+    },
 }
