@@ -55,29 +55,32 @@
       </div>
       <div class="mdl-card__supporting-text mdl-color-text--grey-600">
         <!-- Container where we'll display the user details -->
-        <div>
-          <button class="mdl-button mdl-js-button mdl-button--colored mdl-js-ripple-effect mdl-button--raised" id="copy-accessToken-button" style="color: white;">
-            <i class="material-icons">copy_all</i>
-            Copy Access Token
-          </button>
-          &nbsp;&nbsp;&nbsp;&nbsp;
-          <button class="mdl-button mdl-js-button mdl-button--accent mdl-js-ripple-effect mdl-button--raised" id="copy-refreshToken-button" style="color: white;">
-            <i class="material-icons">autorenew</i>
-            Copy Refresh Token
-          </button>
-          &nbsp;&nbsp;&nbsp;&nbsp;
-          <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised" id="copy-apiKey-button">
-            <i class="material-icons">api</i>
-            Copy API Key
-          </button>
-          <br>
-        </div>
-        <br>
         <div class="user-details-container" style="overflow-x: scroll;">
           Firebase sign-in status: <span id="sign-in-status" style="font-weight: bold;">Unknown</span>
           <div>Firebase auth <code>currentUser</code> object value:</div>
           <pre><code id="account-details">null</code></pre>
         </div>
+      </div>
+      <div class="mdl-card__menu">
+        <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--primary" id="refresh-button" style="color: white;" onclick="window.location.reload()">
+          <i class="material-icons">refresh</i>
+        </button>
+      </div>
+      <div class="mdl-card__actions mdl-card--border">
+        <button class="mdl-button mdl-js-button mdl-button--colored mdl-js-ripple-effect mdl-button--raised" id="copy-accessToken-button" style="color: white;">
+          <i class="material-icons">copy_all</i>
+          Copy Access Token
+        </button>
+        &nbsp;
+        <button class="mdl-button mdl-js-button mdl-button--accent mdl-js-ripple-effect mdl-button--raised" id="copy-refreshToken-button" style="color: white;">
+          <i class="material-icons">autorenew</i>
+          Copy Refresh Token
+        </button>
+        &nbsp;
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised" id="copy-apiKey-button">
+          <i class="material-icons">api</i>
+          Copy API Key
+        </button>
       </div>
     </div>
   </div>
@@ -124,7 +127,6 @@
     document.getElementById('copy-accessToken-button').addEventListener('click', copyAccessToken);
     document.getElementById('copy-refreshToken-button').addEventListener('click', copyRefreshToken);
     document.getElementById('copy-apiKey-button').addEventListener('click', copyApiKey);
-    var snackbarContainer = document.querySelector('#snackbar');
 
     // [START appVerifier]
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('sign-in-button', {
