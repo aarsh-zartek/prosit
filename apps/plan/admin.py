@@ -2,17 +2,16 @@ from django.contrib import admin
 
 # Register your models here.
 
-from apps.plan.models import DietPlan, UserDietPlan, PlanType
+from apps.plan.models import DietPlan, PlanCategory
 
 
-class PlanTypeAdmin(admin.ModelAdmin):
+class PlanCategoryAdmin(admin.ModelAdmin):
 	list_display = ("name", "created")
 
 
 class DietPlanAdmin(admin.ModelAdmin):
-	list_display = ("name", "plan_type")
+	list_display = ("name", "plan_category")
 
 
-admin.site.register(PlanType, PlanTypeAdmin)
 admin.site.register(DietPlan, DietPlanAdmin)
-admin.site.register(UserDietPlan)
+admin.site.register(PlanCategory, PlanCategoryAdmin)

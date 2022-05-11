@@ -64,6 +64,27 @@
           <pre><code id="account-details">null</code></pre>
         </div>
       </div>
+      <div class="mdl-card__menu">
+        <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--primary" id="refresh-button" style="color: white;" onclick="window.location.reload()">
+          <i class="material-icons">refresh</i>
+        </button>
+      </div>
+      <div class="mdl-card__actions mdl-card--border">
+        <button class="mdl-button mdl-js-button mdl-button--colored mdl-js-ripple-effect mdl-button--raised" id="copy-accessToken-button" style="color: white;">
+          <i class="material-icons">copy_all</i>
+          Copy Access Token
+        </button>
+        &nbsp;
+        <button class="mdl-button mdl-js-button mdl-button--accent mdl-js-ripple-effect mdl-button--raised" id="copy-refreshToken-button" style="color: white;">
+          <i class="material-icons">autorenew</i>
+          Copy Refresh Token
+        </button>
+        &nbsp;
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised" id="copy-apiKey-button">
+          <i class="material-icons">api</i>
+          Copy API Key
+        </button>
+      </div>
     </div>
   </div>
 </main>
@@ -95,6 +116,7 @@
       updateSignOutButtonUI();
       updateSignedInUserStatusUI();
       updateVerificationCodeFormUI();
+      disableButtons();
     });
 
     // Event bindings.
@@ -106,6 +128,9 @@
     document.getElementById('verification-code').addEventListener('change', updateVerifyCodeButtonUI);
     document.getElementById('verification-code-form').addEventListener('submit', onVerifyCodeSubmit);
     document.getElementById('cancel-verify-code-button').addEventListener('click', cancelVerification);
+    document.getElementById('copy-accessToken-button').addEventListener('click', copyAccessToken);
+    document.getElementById('copy-refreshToken-button').addEventListener('click', copyRefreshToken);
+    document.getElementById('copy-apiKey-button').addEventListener('click', copyApiKey);
 
     // [START appVerifier]
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
@@ -330,6 +355,59 @@
       document.getElementById('sign-in-status').textContent = 'Signed out';
       document.getElementById('account-details').textContent = 'null';
     }
+  }
+
+  function disableButtons() {
+    var user = firebase.auth().currentUser;
+    if(!user) {
+      document.getElementById('copy-accessToken-button').disabled = true;
+      document.getElementById('copy-refreshToken-button').disabled = true;
+      document.getElementById('copy-apiKey-button').disabled = true;
+    } else {
+      document.getElementById('copy-accessToken-button').disabled = false;
+      document.getElementById('copy-refreshToken-button').disabled = false;
+      document.getElementById('copy-apiKey-button').disabled = false;
+    }
+
+  }
+  function copyApiKey() {
+    'use strict';
+    var userData = JSON.parse(document.getElementById('account-details').textContent);
+    var api_key = userData.stsTokenManager.apiKey
+    if(api_key) {
+      copy(api_key);
+    }
+  }
+
+  function copyRefreshToken() {
+    'use strict';
+    var userData = JSON.parse(document.getElementById('account-details').textContent);
+    var token = userData.stsTokenManager.refreshToken
+    if(token) {
+      copy(token);
+    }
+  }
+
+  function copyAccessToken() {
+    'use strict';
+    var userData = JSON.parse(document.getElementById('account-details').textContent);
+    var token = userData.stsTokenManager.accessToken
+    var snackBarmessage = "Token Copied!"
+    if(token) {
+      copy(token);
+    }
+  }
+
+  function copy(text) {
+    var input = document.createElement('input');
+    input.setAttribute('value', text.trim());
+    document.body.appendChild(input);
+    input.select();
+
+    var result = document.execCommand('copy');
+    document.body.removeChild(input);
+    
+    return result;
   }
 </script>
 
