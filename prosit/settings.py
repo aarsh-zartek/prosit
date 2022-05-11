@@ -154,7 +154,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static/'),
+)
 
 # Media Files
 MEDIA_URL = '/media/'
@@ -233,6 +237,16 @@ logging.config.dictConfig({
 })
 
 
+# CORS
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = (
+    'http://127.0.0.1:8000',
+    'http://localhost:8000',
+    'https://*.ngrok.io',
+)
+
+CSRF_TRUSTED_ORIGINS = ['https://*.ngrok.io','https://*.127.0.0.1']
+
 # Rest Framework Config - https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
@@ -258,4 +272,40 @@ DJOSER = {
         # 'token': 'apps.users.serializers.TokenSerializer',
         # 'token_create': 'apps.users.serializers.TokenSerializer',
     },
+}
+
+JAZZMIN_SETTINGS = {
+    "site_brand": "Prosit",
+    "site_icon": "icon.png",
+    "site_logo": "prosit-logo-1.jpg",
+    "welcome_sign": "Welcome to Prosit Admin Panel",
+
+    "icons": {
+        "authtoken.tokenproxy": "fas fa-coins",
+        
+        "plan.dietplan": "fas fa-calendar-alt",
+        "plan.plantype": "fas fa-stream",
+        "plan.plancategory": "fas fa-list",
+
+        "users.user": "fas fa-user",
+        "users.profile": "fas fa-id-card",
+        "users.medicalcondition": "fas fa-hand-holding-medical",
+        "users.foodallergy": "fas fa-utensils",
+        "users.userhealthreport": "fas fa-file-medical",
+    },
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar": "navbar-gray-dark navbar-dark",
+    "theme": "litera",
+    #00a68c
+
+    "button_classes": {
+        "primary": "btn-outline-primary",
+        "secondary": "btn-outline-secondary",
+        "info": "btn-outline-info",
+        "warning": "btn-outline-warning",
+        "danger": "btn-outline-danger",
+        "success": "btn-success"
+    }
 }
