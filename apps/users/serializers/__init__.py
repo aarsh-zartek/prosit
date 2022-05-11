@@ -1,2 +1,2 @@
-from .user_serializer import TokenSerializer, UserSerializer
-# from .profile_serializer import ProfileSerializer
+from .user_serializer import TokenSerializer, UserSerializer, DailyActivitySerializer
+from .profile_serializer import ProfileSerializer

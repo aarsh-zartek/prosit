@@ -292,6 +292,7 @@ JAZZMIN_SETTINGS = {
         "users.medicalcondition": "fas fa-hand-holding-medical",
         "users.foodallergy": "fas fa-utensils",
         "users.userhealthreport": "fas fa-file-medical",
+        "users.dailyactivity": "fas fa-calendar-day",
     },
 }
 

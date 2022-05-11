@@ -25,6 +25,8 @@ class User(LifecycleModelMixin, BaseModel, AbstractFirebaseUser):
         # self.category = category
 
     class Meta:
+        verbose_name = _("User")
+        verbose_name_plural = _("Users")
         ordering = ("created",)
     
     def __str__(self) -> str:
@@ -98,9 +100,14 @@ class DailyActivity(BaseModel):
     date = models.DateField()
 
     class Meta:
+        verbose_name = _("Daily Activity")
+        verbose_name_plural = _("Daily Activities")
         constraints = [
             models.UniqueConstraint(
                 fields=['user', 'date'],
                 name=_("user_date_unique")
             )
         ]
+    
+    def __str__(self) -> str:
+        return f"{self.user} - {self.date} - {self.weight}"
