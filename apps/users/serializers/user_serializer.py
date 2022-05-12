@@ -2,8 +2,7 @@ from datetime import datetime
 
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
-
-from dateutil import parser
+from rest_framework.validators import UniqueTogetherValidator
 
 from phonenumber_field.serializerfields import PhoneNumberField
 
@@ -49,9 +48,15 @@ class DailyActivitySerializer(serializers.ModelSerializer):
     def validate_date(self, date_value):
         today = datetime.today().date()
         if date_value > today:
-            raise serializers.ValidationError("Date must be less than today")
+            raise serializers.ValidationError("Date must be less than or equal to today's date")
         return date_value
     
     class Meta:
         model = DailyActivity
         fields = ("user", "weight", "date")
+        validators = [
+            UniqueTogetherValidator(
+                queryset=DailyActivity.objects.all(),
+                fields=["user", "date"]
+            )
+        ]
