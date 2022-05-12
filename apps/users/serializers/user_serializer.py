@@ -28,13 +28,23 @@ class UserSerializer(DynamicFieldsModelSerializer):
 
     password = serializers.CharField(required=False, write_only=True)
     phone_number = PhoneNumberField(required=False)
-    profile = ProfileSerializer()
+    profile = ProfileSerializer(required=False)
+
     class Meta:
         model = User
         fields = (
             "id", "uid", "display_name", "password", "phone_number",
             "email", "first_name", "last_name", "profile",
         )
+
+    def update(self, instance, validated_data):
+        profile_data = validated_data.pop('profile', None)
+        user = super().update(instance, validated_data)
+        if profile_data:
+            serializer = ProfileSerializer(instance=user.profile, data=profile_data)
+            serializer.is_valid()
+            serializer.save()
+        return user
 
 
 class UserHealthReportSerializer(DynamicFieldsModelSerializer):

@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
 
+# from rest_framework.authtoken.models import TokenProxy
 # Register your models here.
 
 from apps.users.models import User, Profile, UserHealthReport, FoodAllergy, MedicalCondition, DailyActivity
@@ -9,6 +10,7 @@ admin.site.site_header = "Prosit Admin Panel"
 admin.site.site_title = "Prosit Site Administration"
 admin.site.index_title = "Admin Panel"
 admin.site.unregister(Group)
+# admin.site.unregister(TokenProxy)
 
 
 class UserAdmin(admin.ModelAdmin):

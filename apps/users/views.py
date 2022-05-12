@@ -23,7 +23,7 @@ class UserView(APIView):
 
 class UserViewSet(mixins.UpdateModelMixin, GenericViewSet):
 	serializer_class = UserSerializer
-	queryset = User.objects.all()
+	queryset = User.objects.prefetch_related('profile').all()
 	
 	def update(self, request, *args, **kwargs):
 		serializer = UserSerializer(instance=request.user, data=request.data)
