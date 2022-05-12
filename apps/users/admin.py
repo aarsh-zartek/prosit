@@ -17,13 +17,20 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ("phone_number", "email", "full_name")
 
 
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ("full_name", "age", "weight", "height", "gender")
+
+    def full_name(self, instance):
+        return instance.user.full_name
+
+
 class DailyActvityAdmin(admin.ModelAdmin):
     list_display = ("user", "weight", "date")
     list_filter = ("date",)
 
 
 admin.site.register(User, UserAdmin)
-admin.site.register(Profile)
+admin.site.register(Profile, ProfileAdmin)
 admin.site.register(UserHealthReport)
 admin.site.register(FoodAllergy)
 admin.site.register(MedicalCondition)
