@@ -63,15 +63,52 @@ class FoodAllergy(BaseModel):
 
 
 class UserHealthReport(BaseModel):
-    """Model which stores data for lab tests for a user"""
+    """Model which stores data for lab tests of a user"""
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="health_reports")
     date = models.DateField()
     
-    blood_sugar_level = models.CharField(max_length=48, blank=True, null=True)
-    blood_pressure_level = models.CharField(max_length=48, blank=True, null=True)
-    cholestrol_count = models.CharField(max_length=48, blank=True, null=True)
-    thyroid_count = models.CharField(max_length=48, blank=True, null=True)
+    vitamin_b12 = models.CharField(
+                verbose_name=_("Vitamin B12"),
+                max_length=FieldConstants.MAX_VALUE_LENGTH,
+                null=True
+            )
+    vitamin_d = models.CharField(
+                verbose_name=_("Vitamin D"),
+                max_length=FieldConstants.MAX_VALUE_LENGTH,
+                null=True
+            )
+    hemoglobin = models.CharField(
+                verbose_name=_("Hemoglobin"),
+                max_length=FieldConstants.MAX_VALUE_LENGTH,
+                null=True
+            )
+    uric_acid = models.CharField(
+                verbose_name=_("Uric Acid"),
+                max_length=FieldConstants.MAX_VALUE_LENGTH,
+                null=True
+            )
+    creatin = models.CharField(
+                verbose_name=_("Creatin"),
+                max_length=FieldConstants.MAX_VALUE_LENGTH,
+                null=True
+            )
+    fasting_blood_sugar = models.CharField(
+                verbose_name=_("Fasting Blood Sugar"),
+                max_length=FieldConstants.MAX_VALUE_LENGTH,
+                null=True
+            )
+    thyroid_tsh = models.CharField(
+                verbose_name=_("Thyroid TSH"),
+                max_length=FieldConstants.MAX_VALUE_LENGTH,
+                null=True
+            )
+    pcod_pcos = models.CharField(
+                verbose_name=_("PCOD / PCOS"),
+                max_length=FieldConstants.MAX_VALUE_LENGTH,
+                blank=True, null=True
+            )
+    
     image = models.ImageField(upload_to=get_user_health_image_path, blank=True, null=True)
     extra_info = models.TextField(blank=True, null=True)
 

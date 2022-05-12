@@ -6,6 +6,7 @@ class FieldConstants:
     MAX_UID_LENGTH = 48
     MAX_LENGTH = 255
     MAX_NAME_LENGTH = 60
+    MAX_VALUE_LENGTH = 24
     DATE_FORMAT = "%b %-d, %Y"
     FULL_DATE_FORMAT = "%B %d, %Y"
     DATE_TIME_FORMAT = f"{DATE_FORMAT} %-I:%M %p"

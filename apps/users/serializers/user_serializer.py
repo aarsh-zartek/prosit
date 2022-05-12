@@ -7,7 +7,7 @@ from rest_framework.validators import UniqueTogetherValidator
 from phonenumber_field.serializerfields import PhoneNumberField
 
 from apps.core.serializers import DynamicFieldsModelSerializer
-from apps.users.models import User, DailyActivity
+from apps.users.models import User, DailyActivity, UserHealthReport
 from apps.users.serializers.profile_serializer import ProfileSerializer
 
 
@@ -36,6 +36,17 @@ class UserSerializer(DynamicFieldsModelSerializer):
             "email", "first_name", "last_name", "profile",
         )
 
+
+class UserHealthReportSerializer(DynamicFieldsModelSerializer):
+
+    class Meta:
+        model = UserHealthReport
+        fields = (
+            "date", "vitamin_b12", "vitamin_d", "hemoglobin", "uric_acid",
+            "creatin", "fasting_blood_sugar", "thyroid_tsh", "pcod_pcos",
+            "image"
+        )
+    
 
 class DailyActivitySerializer(serializers.ModelSerializer):
     """To track daily user activity
