@@ -14,4 +14,5 @@ class ProfileSerializer(DynamicFieldsModelSerializer):
         fields = (
             "weight", "height", "age",
             "blood_group", "gender", "food_preference",
+            "address", "location",
         )
