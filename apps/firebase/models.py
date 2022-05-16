@@ -29,6 +29,8 @@ class AbstractFirebaseUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(
         verbose_name="email_address",
         unique=True,
+        blank=True,
+        null=True,
         error_messages={"unique": "A user with this email already exists"},
     )
     is_staff = models.BooleanField(
