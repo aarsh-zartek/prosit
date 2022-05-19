@@ -34,12 +34,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env.str('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool('DEBUG', default=True)
+DEBUG = env.bool('DEBUG', default=False)
 
 DOMAIN = env.str('DOMAIN')
 DOMAIN_IP = env.str('DOMAIN_IP')
+TESTING_DOMAIN = env.bool('TESTING_DOMAIN')
 
-ALLOWED_HOSTS = [DOMAIN, DOMAIN_IP]
+ALLOWED_HOSTS = [DOMAIN, DOMAIN_IP, TESTING_DOMAIN]
 
 
 # Application definition
@@ -275,9 +276,9 @@ DJOSER = {
 }
 
 JAZZMIN_SETTINGS = {
-    "site_brand": "Prosit",
+    "site_brand": "Prosit Health",
     "site_icon": "icon.png",
-    "site_logo": "prosit-logo-1.jpg",
+    "site_logo": "prosit-logo-png.png",
     "welcome_sign": "Welcome to Prosit Admin Panel",
 
     "icons": {
