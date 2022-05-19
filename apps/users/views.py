@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from rest_framework import mixins
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_202_ACCEPTED
+from rest_framework.status import HTTP_200_OK, HTTP_202_ACCEPTED
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.views import APIView
 
@@ -15,6 +15,7 @@ from apps.users.serializers import UserSerializer, DailyActivitySerializer
 
 class UserView(APIView):
 	serializer_class = UserSerializer
+	permission_classes = (IsAuthenticated,)
 
 	def get(self, request, *args, **kwargs):
 		data = UserSerializer(instance=request.user).data
@@ -23,6 +24,7 @@ class UserView(APIView):
 
 class UserViewSet(mixins.UpdateModelMixin, GenericViewSet):
 	serializer_class = UserSerializer
+	permission_classes = (IsAuthenticated,)
 	queryset = User.objects.prefetch_related('profile').all()
 	
 	def update(self, request, *args, **kwargs):
