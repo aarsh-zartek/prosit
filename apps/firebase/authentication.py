@@ -18,10 +18,10 @@ class FirebaseAuthentication(authentication.BaseAuthentication):
     "Authorization" HTTP header, prepended with the string value `keyword` where
     `keyword` string attribute. For example:
 
-    Authorization: FirebaseToken xxxxx.yyyyy.zzzzz
+    Authorization: Firebase xxxxx.yyyyy.zzzzz
     """
 
-    keyword = "FirebaseToken"
+    keyword = "Firebase"
     check_revoked = True
 
     def authenticate(self, request):
@@ -77,6 +77,10 @@ class FirebaseAuthentication(authentication.BaseAuthentication):
             making sure the user doesn't already exist with a different uid
             """
             user = self._create_user(firebase_user_record)
+
+        except firebase_auth.UserNotFoundError:
+            msg = "No such user found"
+            raise AuthenticationFailed(detail=msg)
 
         if user is None:
             msg = "Authentication credentials were not provided."
