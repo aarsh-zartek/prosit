@@ -2,7 +2,7 @@ from django.http import JsonResponse
 
 from rest_framework import mixins
 from rest_framework.generics import CreateAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.status import HTTP_200_OK, HTTP_202_ACCEPTED
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.views import APIView
@@ -18,7 +18,7 @@ class UserView(APIView):
 	permission_classes = (IsAuthenticated,)
 
 	def get(self, request, *args, **kwargs):
-		data = UserSerializer(instance=request.user).data
+		data = self.serializer_class(instance=request.user).data
 		return JsonResponse(data=data, status=HTTP_200_OK)
 
 
@@ -46,3 +46,16 @@ class DailyActivityView(CreateAPIView):
 	def get_queryset(self):
 		return DailyActivity.objects.filter(user=self.request.user)
 	
+
+class CheckPhoneNumberExistsView(APIView):
+	
+	permission_classes = (AllowAny,)
+	def post(self, request):
+		phone_number = request.data.get('phone_number')
+
+		exists = User.objects.filter(phone_number=phone_number).exists()
+		return JsonResponse(
+			data={
+				"success": exists
+			}, status=HTTP_200_OK
+		)

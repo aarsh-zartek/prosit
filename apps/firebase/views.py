@@ -24,22 +24,3 @@ def passthought(request, page):
         "FIREBASE_CONFIG": FIREBASE_CONFIG['FIREBASE_WEBAPP_CONFIG'],
     }
     return render(request, f"firebase/auth/{page}", context=context)
-
-
-class FirebaseLoginView(APIView):
-    serializer_class = UserSerializer
-
-    @csrf_exempt
-    def post(self, request, *args, **kwargs):
-        try:
-            user = User.objects.get(phone_number=request.data.get('phone_number'))
-        except User.DoesNotExist:
-            return JsonResponse(data={
-                "message": "User does not exist"
-            }, status=HTTP_401_UNAUTHORIZED)
-        else:
-            token = create_custom_token(uid=user.uid).decode('utf8')
-            return JsonResponse(data={
-                    "firebase_access_token": token
-                }, status=HTTP_200_OK
-            )

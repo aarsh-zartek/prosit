@@ -239,21 +239,19 @@ logging.config.dictConfig({
 
 
 # CORS
-CORS_ORIGIN_ALLOW_ALL = False
-CORS_ORIGIN_WHITELIST = (
-    'http://127.0.0.1:8000',
-    'http://localhost:8000',
-    'https://*.ngrok.io',
-)
+CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ORIGIN_WHITELIST = (
+#     'http://127.0.0.1:8000',
+#     'http://localhost:8000',
+#     'https://*.ngrok.io',
+# )
 
-CSRF_TRUSTED_ORIGINS = ['https://*.ngrok.io','https://*.127.0.0.1']
+# CSRF_TRUSTED_ORIGINS = ['https://*.ngrok.io','https://*.127.0.0.1']
 
 # Rest Framework Config - https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "apps.firebase.authentication.FirebaseAuthentication",
-        "rest_framework.authentication.BasicAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
     ),
     "DATE_TIME_FORMAT": FieldConstants.FULL_DATE_TIME_FORMAT
@@ -268,10 +266,9 @@ FIREBASE_CONFIG = {
 # Djoser Config
 DJOSER = {
     'SERIALIZERS': {
-        'current_user': 'apps.users.serializers.TokenSerializer',
+        # 'current_user': 'apps.users.serializers.TokenSerializer',
+        'current_user': 'apps.users.serializers.UserSerializer',
         'user': 'apps.users.serializers.UserSerializer',
-        # 'token': 'apps.users.serializers.TokenSerializer',
-        # 'token_create': 'apps.users.serializers.TokenSerializer',
     },
 }
 
