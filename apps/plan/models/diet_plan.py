@@ -91,12 +91,13 @@ class DietPlan(BaseModel):
     class Meta:
         verbose_name = _("Diet Plan")
         verbose_name_plural = _("Diet Plans")
-        constraints = [
-            models.UniqueConstraint(
-                fields=['name', 'plan_category'],
-                name=_("diet_plan_category")
-            )
-        ]
+        # constraints = [
+        #     models.UniqueConstraint(
+        #         fields=['name', 'plan_category'],
+        #         name=_("diet_plan_category")
+        #     )
+        # ]
+        unique_together = ['name', 'plan_category']
 
 
     def __str__(self) -> str:

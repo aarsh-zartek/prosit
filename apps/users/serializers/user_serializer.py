@@ -55,6 +55,8 @@ class UserHealthReportSerializer(DynamicFieldsModelSerializer):
         if (pcod_pcos is None) and (user.profile.gender == GENDER.female):
             raise serializers.ValidationError("You must provide `pcod_pcos` field for female user")
         
+        return attrs
+        
     class Meta:
         model = UserHealthReport
         fields = (

@@ -27,6 +27,13 @@ class UserAdmin(admin.ModelAdmin):
     inlines = [ProfileInline,]
 
 
+class UserHealthReportAdmin(admin.ModelAdmin):
+    list_display = (
+        "user", "date", "vitamin_b12", "vitamin_d",
+        "uric_acid", "creatin", "fasting_blood_sugar",
+        "cholestrol", "hemoglobin", "thyroid_tsh", "pcod_pcos",
+    )
+
 class DailyActvityAdmin(admin.ModelAdmin):
     list_display = ("user", "weight", "date")
     list_filter = ("date",)
@@ -34,5 +41,5 @@ class DailyActvityAdmin(admin.ModelAdmin):
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Profile, ProfileAdmin)
-admin.site.register(UserHealthReport)
+admin.site.register(UserHealthReport, UserHealthReportAdmin)
 admin.site.register(DailyActivity, DailyActvityAdmin)

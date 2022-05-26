@@ -79,12 +79,13 @@ class UserHealthReport(BaseModel):
     class Meta:
         verbose_name = _('User Health Report')
         verbose_name_plural = _('User Health Reports')
-        constraints = [
-            models.UniqueConstraint(
-                fields=['user', 'date'],
-                name=_("user_health_report_date_unique")
-            )
-        ]
+        # constraints = [
+        #     models.UniqueConstraint(
+        #         fields=['user', 'date'],
+        #         name=_("user_health_report_date_unique")
+        #     )
+        # ]
+        unique_together = ("user", "date")
 
     def __str__(self) -> str:
         return f'{self.user} - {self.date}'
