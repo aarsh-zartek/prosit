@@ -1,2 +1,2 @@
-from .user import User, UserHealthReport, MedicalCondition, FoodAllergy, DailyActivity
+from .user import User, UserHealthReport, DailyActivity
 from .profile import Profile

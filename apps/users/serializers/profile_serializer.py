@@ -5,9 +5,6 @@ from apps.core.serializers import DynamicFieldsModelSerializer
 
 
 class ProfileSerializer(DynamicFieldsModelSerializer):
-    blood_group = serializers.CharField(source="get_blood_group_display", required=False)
-    gender = serializers.CharField(source="get_gender_display", required=False)
-    food_preference = serializers.CharField(source="get_food_preference_display", required=False)
     
     class Meta:
         model = Profile
@@ -16,3 +13,11 @@ class ProfileSerializer(DynamicFieldsModelSerializer):
             "blood_group", "gender", "food_preference",
             "address", "location",
         )
+
+    def to_representation(self, instance: Profile):
+        representation = super().to_representation(instance)
+        representation['blood_group'] = instance.get_blood_group_display()
+        representation['gender'] = instance.get_gender_display()
+        representation['food_preference'] = instance.get_food_preference_display()
+        
+        return representation

@@ -1,22 +1,13 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
 
-# from rest_framework.authtoken.models import TokenProxy
+from apps.users.models import User, Profile, UserHealthReport, DailyActivity
 # Register your models here.
-
-from apps.users.models import User, Profile, UserHealthReport, FoodAllergy, MedicalCondition, DailyActivity
 
 admin.site.site_header = "Prosit Admin Panel"
 admin.site.site_title = "Prosit Site Administration"
 admin.site.index_title = "Admin Panel"
 admin.site.unregister(Group)
-# admin.site.unregister(TokenProxy)
-
-
-class UserAdmin(admin.ModelAdmin):
-    list_display = ('full_name', 'uid', 'phone_number', 'email', 'is_active')
-    list_filter = ("is_active", "is_staff")
-    search_fields = ("phone_number", "email", "full_name")
 
 
 class ProfileAdmin(admin.ModelAdmin):
@@ -24,6 +15,16 @@ class ProfileAdmin(admin.ModelAdmin):
 
     def full_name(self, instance):
         return instance.user.full_name
+
+
+class ProfileInline(admin.TabularInline):
+    model = Profile
+
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('full_name', 'uid', 'phone_number', 'email', 'is_active')
+    list_filter = ("is_active", "is_staff")
+    search_fields = ("phone_number", "email", "full_name")
+    inlines = [ProfileInline,]
 
 
 class DailyActvityAdmin(admin.ModelAdmin):
@@ -34,6 +35,4 @@ class DailyActvityAdmin(admin.ModelAdmin):
 admin.site.register(User, UserAdmin)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(UserHealthReport)
-admin.site.register(FoodAllergy)
-admin.site.register(MedicalCondition)
 admin.site.register(DailyActivity, DailyActvityAdmin)

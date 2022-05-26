@@ -1,3 +1,4 @@
+from django.core.validators import validate_integer
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -43,70 +44,33 @@ class User(LifecycleModelMixin, BaseModel, AbstractFirebaseUser):
         self.is_active = False
         self.save()
 
-
-class MedicalCondition(BaseModel):
-    medical_condition = models.CharField(verbose_name=_("Medical Conditions"), max_length=FieldConstants.MAX_NAME_LENGTH)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="medical_conditions")
-
-    class Meta:
-        verbose_name = _("Medical Condition")
-        verbose_name_plural = _("Medical Conditions")
-
-
-class FoodAllergy(BaseModel):
-    food_allergy = models.CharField(verbose_name=_("Food Allergies"), max_length=FieldConstants.MAX_NAME_LENGTH)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="food_allergies")
-
-    class Meta:
-        verbose_name = _("Food Allergy")
-        verbose_name_plural = _("Food Allergies")
-
-
 class UserHealthReport(BaseModel):
     """Model which stores data for lab tests of a user"""
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="health_reports")
-    date = models.DateField()
+    date = models.DateField(verbose_name=_("Reports Generated On"))
     
-    vitamin_b12 = models.CharField(
-                verbose_name=_("Vitamin B12"),
+    vitamin_b12 = models.BooleanField(verbose_name=_("Vitamin B12"))
+    vitamin_d = models.BooleanField(verbose_name=_("Vitamin D"))
+    uric_acid = models.BooleanField(verbose_name=_("Uric Acid"))
+    creatin = models.BooleanField(verbose_name=_("Creatin"))
+    fasting_blood_sugar = models.CharField(
+                verbose_name=_("Fasting Blood Sugar"),
                 max_length=FieldConstants.MAX_VALUE_LENGTH,
-                null=True
             )
-    vitamin_d = models.CharField(
-                verbose_name=_("Vitamin D"),
+    cholestrol = models.CharField(
+                verbose_name=_("Cholestrol"),
                 max_length=FieldConstants.MAX_VALUE_LENGTH,
-                null=True
+                validators=[validate_integer,],
             )
     hemoglobin = models.CharField(
                 verbose_name=_("Hemoglobin"),
                 max_length=FieldConstants.MAX_VALUE_LENGTH,
-                null=True
             )
-    uric_acid = models.CharField(
-                verbose_name=_("Uric Acid"),
-                max_length=FieldConstants.MAX_VALUE_LENGTH,
-                null=True
-            )
-    creatin = models.CharField(
-                verbose_name=_("Creatin"),
-                max_length=FieldConstants.MAX_VALUE_LENGTH,
-                null=True
-            )
-    fasting_blood_sugar = models.CharField(
-                verbose_name=_("Fasting Blood Sugar"),
-                max_length=FieldConstants.MAX_VALUE_LENGTH,
-                null=True
-            )
-    thyroid_tsh = models.CharField(
-                verbose_name=_("Thyroid TSH"),
-                max_length=FieldConstants.MAX_VALUE_LENGTH,
-                null=True
-            )
-    pcod_pcos = models.CharField(
+    thyroid_tsh = models.BooleanField(verbose_name=_("Thyroid TSH"))
+    pcod_pcos = models.BooleanField(
                 verbose_name=_("PCOD / PCOS"),
-                max_length=FieldConstants.MAX_VALUE_LENGTH,
-                blank=True, null=True
+                blank=True, default=False
             )
     
     image = models.ImageField(upload_to=get_user_health_image_path, blank=True, null=True)
@@ -133,7 +97,10 @@ class DailyActivity(BaseModel):
     
     user = models.ForeignKey(User, related_name="daily_activity", on_delete=models.CASCADE)
 
-    weight = models.PositiveSmallIntegerField(verbose_name=_("Weight in KG"))
+    weight = models.DecimalField(
+                verbose_name=_("Weight in KG"),
+                max_digits=5, decimal_places=2
+            )
     date = models.DateField()
 
     class Meta:
