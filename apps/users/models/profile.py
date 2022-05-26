@@ -21,7 +21,7 @@ class Profile(BaseModel):
                 verbose_name=_("Weight in KG"),
                 blank=True, null=True,
                 max_digits=5, decimal_places=2
-        )
+            )
     height = models.DecimalField(
                 verbose_name=_("Height in CM"),
                 blank=True, null=True,

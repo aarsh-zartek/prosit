@@ -1,26 +1,15 @@
 from datetime import datetime
 
 from rest_framework import serializers
-from rest_framework.authtoken.models import Token
 from rest_framework.validators import UniqueTogetherValidator
 
 from phonenumber_field.serializerfields import PhoneNumberField
 
 from apps.core.serializers import DynamicFieldsModelSerializer
-from apps.users.models import User, DailyActivity, UserHealthReport
+from apps.users.models import User, DailyActivity, UserHealthReport, Profile
 from apps.users.serializers.profile_serializer import ProfileSerializer
 
-
-class TokenSerializer(serializers.ModelSerializer):
-    token = serializers.SerializerMethodField()
-
-    def get_token(self, instance):
-        token, created = Token.objects.get_or_create(user=instance)
-        return token.key
-    
-    class Meta:
-        model = User
-        fields = ["token", "uid", "display_name"]
+from lib.choices import GENDER
 
 
 class UserSerializer(DynamicFieldsModelSerializer):
@@ -37,24 +26,41 @@ class UserSerializer(DynamicFieldsModelSerializer):
             "email", "first_name", "last_name", "profile",
         )
 
+    def create(self, validated_data):
+        instance = super().create(validated_data)
+        profile, _ = Profile.objects.create(user=instance)
+        return instance
+    
     def update(self, instance, validated_data):
         profile_data = validated_data.pop('profile', None)
-        user = super().update(instance, validated_data)
         if profile_data:
-            serializer = ProfileSerializer(instance=user.profile, data=profile_data)
-            serializer.is_valid()
+            profile, _ = Profile.objects.get_or_create(user=instance)
+            serializer = ProfileSerializer(instance=profile, data=profile_data)
+            serializer.is_valid(raise_exception=True)
             serializer.save()
+        user = super().update(instance, validated_data)
         return user
 
 
 class UserHealthReportSerializer(DynamicFieldsModelSerializer):
 
+    def validate_hemoglobin(self, hemoglobin):
+        if not 1 < int(hemoglobin) < 30:
+            raise serializers.ValidationError("Enter a value between 1 and 30")
+        return hemoglobin
+    
+    def validate(self, attrs):
+        user = self.context.get('user')
+        pcod_pcos = attrs.pop('pcod_pcos', None)
+        if (pcod_pcos is None) and (user.profile.gender == GENDER.female):
+            raise serializers.ValidationError("You must provide `pcod_pcos` field for female user")
+        
     class Meta:
         model = UserHealthReport
         fields = (
-            "date", "vitamin_b12", "vitamin_d", "hemoglobin", "uric_acid",
-            "creatin", "fasting_blood_sugar", "thyroid_tsh", "pcod_pcos",
-            "image"
+            "user", "date", "vitamin_b12", "vitamin_d", "hemoglobin", "uric_acid",
+            "creatin", "fasting_blood_sugar", "cholestrol", "thyroid_tsh", "pcod_pcos",
+            "image", "extra_info"
         )
     
 

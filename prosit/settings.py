@@ -266,7 +266,6 @@ FIREBASE_CONFIG = {
 # Djoser Config
 DJOSER = {
     'SERIALIZERS': {
-        # 'current_user': 'apps.users.serializers.TokenSerializer',
         'current_user': 'apps.users.serializers.UserSerializer',
         'user': 'apps.users.serializers.UserSerializer',
     },
@@ -275,7 +274,7 @@ DJOSER = {
 JAZZMIN_SETTINGS = {
     "site_brand": "Prosit Health",
     "site_icon": "icon.png",
-    "site_logo": "prosit-logo-png.png",
+    "site_logo": "prosit-logo.png",
     "welcome_sign": "Welcome to Prosit Admin Panel",
 
     "icons": {

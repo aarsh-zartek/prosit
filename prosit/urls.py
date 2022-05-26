@@ -35,7 +35,7 @@ urlpatterns = [
     
     path("firebase/", include("apps.firebase.urls")),
         
-    path("api/v1/", include(("apps.users.urls", "users"), namespace="users")),
+    path("api/v1/user/", include(("apps.users.urls", "users"), namespace="users")),
     path("api/v1/", include(("apps.plan.urls", "plan"), namespace="plan")),
 ]
 
