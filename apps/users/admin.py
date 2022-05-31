@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
 
+from rest_framework.authtoken.models import TokenProxy
 from apps.users.models import User, Profile, UserHealthReport, DailyActivity
 # Register your models here.
 
@@ -8,6 +9,7 @@ admin.site.site_header = "Prosit Admin Panel"
 admin.site.site_title = "Prosit Site Administration"
 admin.site.index_title = "Admin Panel"
 admin.site.unregister(Group)
+admin.site.unregister(TokenProxy)
 
 
 class ProfileAdmin(admin.ModelAdmin):
@@ -31,7 +33,7 @@ class UserHealthReportAdmin(admin.ModelAdmin):
     list_display = (
         "user", "date", "vitamin_b12", "vitamin_d",
         "uric_acid", "creatin", "fasting_blood_sugar",
-        "cholestrol", "hemoglobin", "thyroid_tsh", "pcod_pcos",
+        "cholesterol", "hemoglobin", "thyroid_tsh", "pcod_pcos",
     )
 
 class DailyActvityAdmin(admin.ModelAdmin):

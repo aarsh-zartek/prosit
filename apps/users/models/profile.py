@@ -30,9 +30,10 @@ class Profile(BaseModel):
     age = models.PositiveSmallIntegerField(verbose_name=_("Age in Years"), null=True)
     blood_group = models.CharField(choices=BLOOD_GROUP_CHOICES, blank=True, null=True, max_length=8)
     gender = models.CharField(choices=GENDER, max_length=8, default=_(GENDER.male))
-    food_preference = models.CharField(choices=FOOD_PREFERENCES, max_length=20, default=_(FOOD_PREFERENCES.vegetarian))
+    food_preference = models.CharField(choices=FOOD_PREFERENCES, max_length=20, default=_(FOOD_PREFERENCES.vegetarian), blank=True, null=True)
     address = models.TextField(blank=True, null=True)
     location = models.CharField(max_length=FieldConstants.MAX_LENGTH, blank=True, null=True)
+    health_code = models.CharField(verbose_name=_("User Health Code"), max_length=FieldConstants.MAX_HEALTH_CODE_LENGTH, null=True, editable=False)
 
     class Meta:
         verbose_name = _("User Profile")

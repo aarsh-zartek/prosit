@@ -51,9 +51,11 @@ class UserHealthReportSerializer(DynamicFieldsModelSerializer):
     
     def validate(self, attrs):
         user = self.context.get('user')
-        pcod_pcos = attrs.pop('pcod_pcos', None)
+        pcod_pcos = attrs.get('pcod_pcos', None)
         if (pcod_pcos is None) and (user.profile.gender == GENDER.female):
             raise serializers.ValidationError("You must provide `pcod_pcos` field for female user")
+        elif pcod_pcos and (user.profile.gender == GENDER.male):
+            attrs.pop('pcod_pcos')
         
         return attrs
         
@@ -61,7 +63,7 @@ class UserHealthReportSerializer(DynamicFieldsModelSerializer):
         model = UserHealthReport
         fields = (
             "user", "date", "vitamin_b12", "vitamin_d", "hemoglobin", "uric_acid",
-            "creatin", "fasting_blood_sugar", "cholestrol", "thyroid_tsh", "pcod_pcos",
+            "creatin", "fasting_blood_sugar", "cholesterol", "thyroid_tsh", "pcod_pcos",
             "image", "extra_info"
         )
     

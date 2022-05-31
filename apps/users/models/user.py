@@ -6,6 +6,7 @@ from django_lifecycle import LifecycleModelMixin, AFTER_CREATE, hook
 
 from apps.core.models import BaseModel
 from apps.firebase.models import AbstractFirebaseUser
+from apps.users.utils import get_category
 
 from lib.constants import FieldConstants
 from lib.utils import get_user_health_image_path
@@ -18,27 +19,17 @@ class User(LifecycleModelMixin, BaseModel, AbstractFirebaseUser):
     first_name = models.CharField(max_length=FieldConstants.MAX_NAME_LENGTH, null=True)
     last_name = models.CharField(max_length=FieldConstants.MAX_NAME_LENGTH, null=True)
     
-    # category = models.ForeignKey(PlanCategory, on_delete=models.SET_NULL, blank=True, null=True)
-
-    @hook(AFTER_CREATE)
-    def after_create(self):
-        category = self.assign_category()    
-        # self.category = category
-
     class Meta:
         verbose_name = _("User")
         verbose_name_plural = _("Users")
         ordering = ("created",)
     
     def __str__(self) -> str:
-        return f"{self.first_name} {self.last_name}" if self.first_name and self.last_name else (self.display_name if self.display_name else "")
+        return self.display_name if self.display_name else ""
     
     @property
     def full_name(self) -> str:
-        return self.__str__()
-
-    def assign_category(self):
-        return "new_category"    
+        return f"{self.first_name} {self.last_name}"
 
     def delete(self):
         self.is_active = False
@@ -58,10 +49,9 @@ class UserHealthReport(BaseModel):
                 verbose_name=_("Fasting Blood Sugar"),
                 max_length=FieldConstants.MAX_VALUE_LENGTH,
             )
-    cholestrol = models.CharField(
-                verbose_name=_("Cholestrol"),
+    cholesterol = models.CharField(
+                verbose_name=_("Cholesterol"),
                 max_length=FieldConstants.MAX_VALUE_LENGTH,
-                validators=[validate_integer,],
             )
     hemoglobin = models.CharField(
                 verbose_name=_("Hemoglobin"),
@@ -90,6 +80,67 @@ class UserHealthReport(BaseModel):
     def __str__(self) -> str:
         return f'{self.user} - {self.date}'
 
+    # @hook(hook=AFTER_CREATE)
+    def after_create(self):
+        health_code = self.assign_health_code()
+        health_code_exists = User.objects.filter(health_code=health_code).exists()
+        if health_code_exists:
+            self.user.profile.health_code = health_code
+        else:
+            # notify_admin?
+            pass
+
+    def assign_health_code(self) -> str:
+        profile = self.user.profile
+        
+        weight = round(profile.weight)
+        gender = profile.get_gender_display()[0]
+        food_preference = profile.get_food_preference_display()[0]
+        category = self.assign_category()
+
+        return f"{weight:03}{gender}{food_preference}{category}"
+
+    def assign_category(self) -> str:
+        vitamin_b12 = self.vitamin_b12
+        vitamin_d = self.vitamin_d
+        uric_acid = self.uric_acid
+        creatin = self.creatin
+        fasting_blood_sugar = self.fasting_blood_sugar
+        cholesterol = self.cholesterol
+        hemoglobin = self.hemoglobin
+        thyroid_tsh = self.thyroid_tsh
+        pcod_pcos = self.pcod_pcos
+        gender = self.user.profile.gender
+        category_data = {
+            "vitamin_b12": vitamin_b12,
+            "vitamin_d": vitamin_d,
+            "uric_acid": uric_acid,
+            "creatin": creatin,
+            "fasting_blood_sugar": fasting_blood_sugar,
+            "cholesterol": cholesterol,
+            "hemoglobin": hemoglobin,
+            "thyroid_tsh": thyroid_tsh,
+            "pcod_pcos": pcod_pcos,
+            "gender": gender,
+        }
+
+        return get_category(category_data)
+
+    def has_fasting_blood_sugar(self) -> str:
+        if 70 < self.fasting_blood_sugar < 95:
+            return False
+        return True
+    
+    def has_cholesterol(self) -> str:
+        if 70 < self.cholesterol < 95:
+            return False
+        return True
+    
+    def has_hemoglobin(self) -> str:
+        if 11 < self.hemoglobin < 15:
+            return False
+        return True
+
 
 class DailyActivity(BaseModel):
     """
@@ -107,12 +158,13 @@ class DailyActivity(BaseModel):
     class Meta:
         verbose_name = _("Daily Activity")
         verbose_name_plural = _("Daily Activities")
-        constraints = [
-            models.UniqueConstraint(
-                fields=['user', 'date'],
-                name=_("user_date_unique")
-            )
-        ]
+        # constraints = [
+        #     models.UniqueConstraint(
+        #         fields=['user', 'date'],
+        #         name=_("user_date_unique")
+        #     )
+        # ]
+        unique_together = ('user', 'date')
     
     def __str__(self) -> str:
         return f"{self.user} - {self.date} - {self.weight}"
