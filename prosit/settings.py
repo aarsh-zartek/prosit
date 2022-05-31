@@ -22,6 +22,7 @@ from lib.constants import FieldConstants
 env = environ.Env()
 environ.Env.read_env()
 
+env.escape_proxy = True
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -117,6 +118,8 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     },
 }
+
+# 'default': env.db_url()
 
 AUTH_USER_MODEL = 'users.User'
 
