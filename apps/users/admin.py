@@ -23,17 +23,17 @@ class ProfileInline(admin.TabularInline):
     model = Profile
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('full_name', 'uid', 'phone_number', 'email', 'is_active')
+    list_display = ('display_name', 'uid', 'phone_number', 'email', 'is_active')
     list_filter = ("is_active", "is_staff")
-    search_fields = ("phone_number", "email", "full_name")
+    search_fields = ("phone_number", "uid", "display_name", "first_name", "last_name")
     inlines = [ProfileInline,]
 
 
 class UserHealthReportAdmin(admin.ModelAdmin):
     list_display = (
         "user", "date", "vitamin_b12", "vitamin_d",
-        "uric_acid", "creatin", "fasting_blood_sugar",
-        "cholesterol", "hemoglobin", "thyroid_tsh", "pcod_pcos",
+        "creatin", "fasting_blood_sugar", "cholesterol",
+        "hemoglobin", "thyroid_tsh", "dry_skin",
     )
 
 class DailyActvityAdmin(admin.ModelAdmin):
