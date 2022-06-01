@@ -16,8 +16,8 @@ from lib.utils import get_user_health_image_path
 class User(LifecycleModelMixin, BaseModel, AbstractFirebaseUser):
     """Default `Prosit` User which inherits from AbstractFirebaseUser"""
 
-    first_name = models.CharField(max_length=FieldConstants.MAX_NAME_LENGTH, null=True)
-    last_name = models.CharField(max_length=FieldConstants.MAX_NAME_LENGTH, null=True)
+    first_name = models.CharField(max_length=FieldConstants.MAX_NAME_LENGTH)
+    last_name = models.CharField(max_length=FieldConstants.MAX_NAME_LENGTH)
     
     class Meta:
         verbose_name = _("User")
@@ -25,7 +25,7 @@ class User(LifecycleModelMixin, BaseModel, AbstractFirebaseUser):
         ordering = ("created",)
     
     def __str__(self) -> str:
-        return self.display_name if self.display_name else ""
+        return f"{self.first_name} {self.last_name}"
     
     @property
     def full_name(self) -> str:
@@ -34,6 +34,7 @@ class User(LifecycleModelMixin, BaseModel, AbstractFirebaseUser):
     def delete(self):
         self.is_active = False
         self.save()
+
 
 class UserHealthReport(BaseModel):
     """Model which stores data for lab tests of a user"""
@@ -57,7 +58,7 @@ class UserHealthReport(BaseModel):
                 verbose_name=_("Hemoglobin"),
                 max_length=FieldConstants.MAX_VALUE_LENGTH,
             )
-    thyroid_tsh = models.BooleanField(verbose_name=_("Thyroid TSH"))
+    thyroid_tsh = models.BooleanField(verbose_name=_("Thyroid (TSH)"))
     dry_skin = models.BooleanField(verbose_name=_("Dry Skin"), default=False)
     pcod_pcos = models.BooleanField(
                 verbose_name=_("PCOD / PCOS"),
