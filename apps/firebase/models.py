@@ -16,7 +16,6 @@ class AbstractFirebaseUser(AbstractBaseUser, PermissionsMixin):
     display_name = models.CharField(
         verbose_name="display_name",
         max_length=FieldConstants.MAX_NAME_LENGTH,
-        blank=True,
         null=True,
     )
     phone_number = PhoneNumberField(
