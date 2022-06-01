@@ -29,7 +29,7 @@ class User(LifecycleModelMixin, BaseModel, AbstractFirebaseUser):
     
     @property
     def full_name(self) -> str:
-        return f"{self.first_name} {self.last_name}"
+        return self.__str__()
 
     def delete(self):
         self.is_active = False
@@ -58,6 +58,7 @@ class UserHealthReport(BaseModel):
                 max_length=FieldConstants.MAX_VALUE_LENGTH,
             )
     thyroid_tsh = models.BooleanField(verbose_name=_("Thyroid TSH"))
+    dry_skin = models.BooleanField(verbose_name=_("Dry Skin"), default=False)
     pcod_pcos = models.BooleanField(
                 verbose_name=_("PCOD / PCOS"),
                 blank=True, default=False
