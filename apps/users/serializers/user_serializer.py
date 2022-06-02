@@ -24,6 +24,7 @@ class UserSerializer(DynamicFieldsModelSerializer):
         fields = (
             "id", "uid", "display_name", "password", "phone_number",
             "email", "first_name", "last_name", "profile",
+            "profile_picture",
         )
 
     def create(self, validated_data):
@@ -68,7 +69,7 @@ class UserHealthReportSerializer(DynamicFieldsModelSerializer):
         )
     
 
-class DailyActivitySerializer(serializers.ModelSerializer):
+class DailyActivitySerializer(DynamicFieldsModelSerializer):
     """To track daily user activity
 
     `weight` is a non-editable field

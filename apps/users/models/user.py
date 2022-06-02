@@ -18,6 +18,7 @@ class User(LifecycleModelMixin, BaseModel, AbstractFirebaseUser):
 
     first_name = models.CharField(max_length=FieldConstants.MAX_NAME_LENGTH)
     last_name = models.CharField(max_length=FieldConstants.MAX_NAME_LENGTH)
+    profile_picture = models.ImageField(blank=True, null=True)
     
     class Meta:
         verbose_name = _("User")
@@ -46,18 +47,9 @@ class UserHealthReport(BaseModel):
     vitamin_d = models.BooleanField(verbose_name=_("Vitamin D"))
     uric_acid = models.BooleanField(verbose_name=_("Uric Acid"))
     creatin = models.BooleanField(verbose_name=_("Creatin"))
-    fasting_blood_sugar = models.CharField(
-                verbose_name=_("Fasting Blood Sugar"),
-                max_length=FieldConstants.MAX_VALUE_LENGTH,
-            )
-    cholesterol = models.CharField(
-                verbose_name=_("Cholesterol"),
-                max_length=FieldConstants.MAX_VALUE_LENGTH,
-            )
-    hemoglobin = models.CharField(
-                verbose_name=_("Hemoglobin"),
-                max_length=FieldConstants.MAX_VALUE_LENGTH,
-            )
+    fasting_blood_sugar = models.PositiveSmallIntegerField(verbose_name=_("Fasting Blood Sugar"))
+    cholesterol = models.PositiveSmallIntegerField(verbose_name=_("Cholesterol"))
+    hemoglobin = models.PositiveSmallIntegerField(verbose_name=_("Hemoglobin"))
     thyroid_tsh = models.BooleanField(verbose_name=_("Thyroid (TSH)"))
     dry_skin = models.BooleanField(verbose_name=_("Dry Skin"), default=False)
     pcod_pcos = models.BooleanField(
