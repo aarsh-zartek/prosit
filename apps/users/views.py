@@ -3,13 +3,13 @@ from django.http import JsonResponse
 from rest_framework import mixins
 from rest_framework.generics import CreateAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.status import HTTP_200_OK, HTTP_202_ACCEPTED, HTTP_422_UNPROCESSABLE_ENTITY
+from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_202_ACCEPTED, HTTP_422_UNPROCESSABLE_ENTITY
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.views import APIView
 
-from django_filters.rest_framework import DjangoFilterBackend
+# from django_filters.rest_framework import DjangoFilterBackend
 
-from apps.users.filters import DailyActivityFilterSet
+# from apps.users.filters import DailyActivityFilterSet
 from apps.users.models import User, DailyActivity
 from apps.users.serializers import UserSerializer, DailyActivitySerializer, UserHealthReportSerializer
 
@@ -45,11 +45,19 @@ class UserViewSet(mixins.UpdateModelMixin, GenericViewSet):
 class DailyActivityView(CreateAPIView, RetrieveAPIView):
 	serializer_class = DailyActivitySerializer
 	permission_classes = (IsAuthenticated,)
-	filter_backends = (DjangoFilterBackend,)
-	filterset_class = DailyActivityFilterSet
+	# filter_backends = (DjangoFilterBackend,)
+	# filterset_class = DailyActivityFilterSet
 	
 	def get_queryset(self):
 		return DailyActivity.objects.filter(user=self.request.user).order_by('date')
+	
+	def create(self, request, *args, **kwargs):
+		data = request.data
+		data['user'] = request.user.id
+		serializer = self.get_serializer(data=data)
+		serializer.is_valid(raise_exception=True)
+		serializer.save()
+		return JsonResponse(serializer.data, status=HTTP_201_CREATED)
 	
 	def retrieve(self, request, *args, **kwargs):
 		queryset = self.get_queryset()
