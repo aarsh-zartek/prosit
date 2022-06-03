@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from apps.core.models import BaseModel
 
 from lib.constants import FieldConstants, AudioFormats, DocumentFormats
+from lib.choices import PLAN_TYPES
 from lib.utils import get_diet_plan_instruction_path, get_preparation_path
 
 # Create your models here
@@ -12,10 +13,10 @@ from lib.utils import get_diet_plan_instruction_path, get_preparation_path
 
 class PlanCategory(BaseModel):
     name = models.CharField(verbose_name=_("Category Name"), max_length=FieldConstants.MAX_NAME_LENGTH)
-    instruction_text_in_english = models.TextField()
-    instruction_text_in_malayalam = models.TextField()
+    instruction_text_english = models.TextField()
+    instruction_text_malayalam = models.TextField()
 
-    instruction_audio_in_english = models.FileField(
+    instruction_audio_english = models.FileField(
             verbose_name="Instruction Audio in English",
             upload_to=get_diet_plan_instruction_path,
             validators=[
@@ -24,7 +25,7 @@ class PlanCategory(BaseModel):
             blank=True,
             null=True
     )
-    instruction_audio_in_malayalam = models.FileField(
+    instruction_audio_malayalam = models.FileField(
             verbose_name="Instruction Audio in Malayalam",
             upload_to=get_diet_plan_instruction_path,
             validators=[
@@ -34,8 +35,8 @@ class PlanCategory(BaseModel):
             null=True
     )
 
-    instruction_pdf_in_english = models.FileField(
-                        verbose_name="Instruction in Pdf",
+    instruction_pdf_english = models.FileField(
+                        verbose_name=_("Instruction PDF in English"),
                         upload_to=get_diet_plan_instruction_path,
                         validators=[
                             FEV(allowed_extensions=DocumentFormats.all())
@@ -43,8 +44,8 @@ class PlanCategory(BaseModel):
                         blank=True,
                         null=True
                     )
-    instruction_pdf_in_malayalam = models.FileField(
-                        verbose_name="Instruction in Pdf",
+    instruction_pdf_malayalam = models.FileField(
+                        verbose_name=_("Instruction PDF in Malayalam"),
                         upload_to=get_diet_plan_instruction_path,
                         validators=[
                             FEV(allowed_extensions=DocumentFormats.all())
@@ -53,10 +54,10 @@ class PlanCategory(BaseModel):
                         null=True
                     )
 
-    preparation_instruction_text_english = models.TextField()
-    preparation_instruction_text_malayalam = models.TextField()
+    preparation_text_english = models.TextField()
+    preparation_text_malayalam = models.TextField()
 
-    preparation_instruction_audio_english = models.FileField(
+    preparation_audio_english = models.FileField(
             verbose_name="Preparation Instruction Audio in English",
             upload_to=get_preparation_path,
             validators=[
@@ -65,7 +66,7 @@ class PlanCategory(BaseModel):
             blank=True,
             null=True
     )
-    preparation_instruction_audio_malayalam = models.FileField(
+    preparation_audio_malayalam = models.FileField(
             verbose_name="Preparation Instruction Audio in Malayalam",
             upload_to=get_preparation_path,
             validators=[
@@ -74,6 +75,25 @@ class PlanCategory(BaseModel):
             blank=True,
             null=True
     )
+
+    preparation_pdf_english = models.FileField(
+                        verbose_name=_("Preparation PDF in English"),
+                        upload_to=get_preparation_path,
+                        validators=[
+                            FEV(allowed_extensions=DocumentFormats.all())
+                        ],
+                        blank=True,
+                        null=True
+                    )
+    preparation_pdf_malayalam = models.FileField(
+                        verbose_name=_("Preparation PDF in Malayalam"),
+                        upload_to=get_preparation_path,
+                        validators=[
+                            FEV(allowed_extensions=DocumentFormats.all())
+                        ],
+                        blank=True,
+                        null=True
+                    )
 
     class Meta:
         verbose_name = _("Plan Category")
@@ -85,20 +105,43 @@ class PlanCategory(BaseModel):
 
 class DietPlan(BaseModel):
     name = models.CharField(verbose_name=_("Diet Plan Name"), max_length=FieldConstants.MAX_NAME_LENGTH)
-    plan_category = models.ForeignKey(PlanCategory, on_delete=models.SET_NULL, blank=True, null=True, related_name="diet_plans")
-    value = models.PositiveIntegerField(verbose_name=_("Plan Value"))
+    category = models.ForeignKey(
+        PlanCategory,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="diet_plans"
+    )
+    plan_type = models.CharField(verbose_name=_("Plan Type"), choices=PLAN_TYPES, max_length=FieldConstants.MAX_VALUE_LENGTH)
+    parent = models.ForeignKey(to="self", on_delete=models.PROTECT, blank=True, null=True)
+
+    def clean(self) -> None:
+        from django.core.exceptions import ValidationError
+
+        # Main Category can't have parent
+        if self.plan_type == PLAN_TYPES.main_category and self.parent is not None:
+            raise ValidationError("Parent can't be specified for Main Category Plan Type")
+        
+        # Sub Category must have parent
+        elif self.plan_type == PLAN_TYPES.sub_category and self.parent is None:
+            raise ValidationError("Parent must be specified for Sub Category Plan Type")
+
+        # Sub Category can't have 'self' as parent
+        elif self.plan_type == PLAN_TYPES.sub_category and self.parent == self:
+            raise ValidationError("Parent can't be the same plan")
+        
+        # Sub category can't have other Sub Category as parent
+        elif self.plan_type == PLAN_TYPES.sub_category and self.parent.plan_type == PLAN_TYPES.sub_category:
+            raise ValidationError("Sub category can't have other Sub Category as parent")
+        
+        
+        return super().clean()
 
     class Meta:
         verbose_name = _("Diet Plan")
         verbose_name_plural = _("Diet Plans")
-        # constraints = [
-        #     models.UniqueConstraint(
-        #         fields=['name', 'plan_category'],
-        #         name=_("diet_plan_category")
-        #     )
-        # ]
-        unique_together = ['name', 'plan_category']
+        unique_together = ['name', 'category']
 
 
     def __str__(self) -> str:
-        return f"{self.name} - {self.plan_category}"
+        return f"{self.name} - {self.category}"
