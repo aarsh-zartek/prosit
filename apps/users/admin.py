@@ -32,7 +32,7 @@ class UserAdmin(admin.ModelAdmin):
 class UserHealthReportAdmin(admin.ModelAdmin):
     list_display = (
         "user", "date", "vitamin_b12", "vitamin_d",
-        "creatin", "fasting_blood_sugar", "cholesterol",
+        "creatin", "fasting_blood_sugar",
         "hemoglobin", "thyroid_tsh", "dry_skin",
     )
 

@@ -2,65 +2,51 @@ from lib.choices import GENDER
 
 
 def has_fasting_blood_sugar(fasting_blood_sugar) -> bool:
-    if 70 < fasting_blood_sugar < 95:
-        return False
-    return True
-
-def has_cholesterol(cholesterol) -> bool:
-    if 70 < cholesterol < 95:
+    if fasting_blood_sugar < 95:
         return False
     return True
 
 def has_hemoglobin(hemoglobin) -> bool:
-    if 11 < hemoglobin < 15:
+    if 11 < hemoglobin:
         return False
     return True
 
 def category_a(data: dict) -> bool:
-    # a = normal_diet, cholesterol
-    normal_diet = data.get('normal_diet')
-    cholestrol = data.get('cholestrol')
-    return all([normal_diet, has_cholesterol(cholestrol)])
+    # a = normal_diet
+    return True
 
 def category_b(data: dict) -> bool:
-    # b = fasting_blood_sugar, uric_acid, cholesterol
+    # b = fasting_blood_sugar, uric_acid
     fasting_blood_sugar = data.get('fasting_blood_sugar')
     uric_acid = data.get('uric_acid')
-    cholesterol = data.get('cholesterol')
     return all([
         has_fasting_blood_sugar(fasting_blood_sugar),
-        has_cholesterol(cholesterol),
-        uric_acid,
+        uric_acid
     ])
 
 def category_c(data: dict) -> bool:
-    # c = thyroid, pcod, cholesterol
+    # c = thyroid, pcod
     thyroid = data.get('thyroid')
-    cholesterol = data.get('cholesterol')
     pcod_pcos = data.get('pcod_pcos')
-    thyroid_cholesterol = thyroid and has_cholesterol(cholesterol)
     gender = data.get('gender')
     if gender == GENDER.female:
-        return all([thyroid_cholesterol, pcod_pcos])
+        return all([thyroid, pcod_pcos])
     else:
-        return all([thyroid_cholesterol])
+        return thyroid
 
 def category_d(data: dict) -> bool:
-    # d = fasting_blood_sugar, thyroid, cholesterol
+    # d = fasting_blood_sugar, thyroid
     fasting_blood_sugar = data.get('fasting_blood_sugar')
     thyroid = data.get('thyroid')
-    cholesterol = data.get('cholesterol')
     return all([
         has_fasting_blood_sugar(fasting_blood_sugar),
-        has_cholesterol(cholesterol),
-        thyroid,
+        thyroid
     ])
 
 def category_e(data: dict) -> bool:
-    # e = thyroid, pcod, cholesterol, fasting_blood_sugar
+    # e = thyroid, pcod, fasting_blood_sugar
     thyroid = data.get('thyroid')
     pcod_pcos = data.get('pcod_pcos')
-    cholesterol = data.get('cholesterol')
     fasting_blood_sugar = data.get('fasting_blood_sugar')
     gender = data.get('gender')
     if gender == GENDER.female:
@@ -69,32 +55,27 @@ def category_e(data: dict) -> bool:
         return category_d(data)
 
 def category_f(data: dict) -> bool:
-    # f = vitamin_b12, hemoglobin, cholesterol
+    # f = vitamin_b12, hemoglobin
     vitamin_b12 = data.get('vitamin_b12')
     hemoglobin = data.get('hemoglobin')
-    cholesterol = data.get('cholesterol')
     return all([
         vitamin_b12,
-        hemoglobin,
-        has_cholesterol(cholesterol)
+        hemoglobin
     ])
 
 def category_g(data: dict) -> bool:
-    # g = fasting_blood_sugar, creatine, cholesterol
+    # g = fasting_blood_sugar, creatine
     fasting_blood_sugar = data.get('fasting_blood_sugar')
     creatine = data.get('creatine')
-    cholesterol = data.get('cholesterol')
     return all([
         has_fasting_blood_sugar(fasting_blood_sugar),
-        has_cholesterol(cholesterol),
         creatine,
     ])
 
 def category_h(data: dict) -> bool:
-    # h = vitamin_d, thyroid, pcod, cholesterol
+    # h = vitamin_d, thyroid, pcod 
     vitamin_d = data.get('vitamin_d')
     thyroid = data.get('thyroid')
-    cholesterol = data.get('cholesterol')
     pcod_pcos = data.get('pcod_pcos')
     gender = data.get('gender')
     if gender == GENDER.female:
@@ -102,69 +83,55 @@ def category_h(data: dict) -> bool:
             vitamin_d,
             thyroid,
             pcod_pcos,
-            has_cholesterol(cholesterol)
         ])
     else:
         return all([
             vitamin_d,
             thyroid,
-            has_cholesterol(cholesterol)
         ])
 
 def category_i(data: dict) -> bool:
-    # i = vitamin_d, fasting_blood_sugar, cholesterol
+    # i = vitamin_d, fasting_blood_sugar, 
     vitamin_d = data.get('vitamin_d')
     fasting_blood_sugar = data.get('fasting_blood_sugar')
-    cholesterol = data.get('cholesterol')
     return all([
         vitamin_d,
-        has_fasting_blood_sugar(fasting_blood_sugar),
-        has_cholesterol(cholesterol)
+        has_fasting_blood_sugar(fasting_blood_sugar)
     ])
 
 def category_j(data: dict) -> bool:
-    # j = vitamin_d, cholesterol, uric_acid
+    # j = vitamin_d, uric_acid
     vitamin_d = data.get('vitamin_d')
     uric_acid = data.get('uric_acid')
-    cholesterol = data.get('cholesterol')
-    return all([
-        vitamin_d,
-        uric_acid,
-        has_cholesterol(cholesterol)
-    ])
+    return all([vitamin_d, uric_acid])
 
 def category_k(data: dict) -> bool:
-    # k = vitamin_b12, fasting_blood_sugar, creatine, cholesterol
+    # k = vitamin_b12, fasting_blood_sugar, creatine, 
     vitamin_b12 = data.get('vitamin_b12')
     fasting_blood_sugar = data.get('fasting_blood_sugar')
     creatine = data.get('creatine')
-    cholesterol = data.get('cholesterol')
     return all([
         vitamin_b12,
         has_fasting_blood_sugar(fasting_blood_sugar),
-        has_cholesterol(cholesterol),
-        creatine,
+        creatine
     ])
 
 def category_l(data: dict) -> bool:
-    # l = vitamin_b12, thyroid, pcod, cholesterol
+    # l = vitamin_b12, thyroid, pcod, 
     vitamin_b12 = data.get('vitamin_b12')
     thyroid = data.get('thyroid')
-    cholesterol = data.get('cholesterol')
     pcod_pcos = data.get('pcod_pcos')
     gender = data.get('gender')
     if gender == GENDER.female:
         return all([
             vitamin_b12,
             thyroid,
-            has_cholesterol(cholesterol),
             pcod_pcos
         ])
     else:
         return all([
             vitamin_b12,
-            thyroid,
-            has_cholesterol(cholesterol)
+            thyroid
         ])
 
 def get_category(category_data: dict) -> str:
