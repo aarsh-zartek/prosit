@@ -158,11 +158,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-# STATICFILES_DIRS = (
-#     os.path.join(BASE_DIR, 'static/'),
-# )
+if DEBUG:
+    STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, 'static/'),
+    )
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Media Files
 MEDIA_URL = '/media/'
@@ -182,6 +184,12 @@ LOGGING_CONFIG = None
 LOGLEVEL = os.environ.get('LOGLEVEL', 'info').upper()
 LOG_FILE_NAME = os.path.join(BASE_DIR, "logs/prosit.log")
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': 'f:/Coding/zartek/prosit/prosit/cache',
+    }
+}
 
 logging.config.dictConfig({
     'version': 1,
@@ -286,6 +294,7 @@ JAZZMIN_SETTINGS = {
         "plan.dietplan": "fas fa-calendar-alt",
         "plan.plantype": "fas fa-stream",
         "plan.plancategory": "fas fa-list",
+        "plan.questionanswer": "fas fa-question",
 
         "users.user": "fas fa-user",
         "users.profile": "fas fa-id-card",
@@ -294,6 +303,8 @@ JAZZMIN_SETTINGS = {
         "users.userhealthreport": "fas fa-file-medical",
         "users.dailyactivity": "fas fa-calendar-day",
     },
+
+    # "changeform_format": "vertical_tabs"
 }
 
 JAZZMIN_UI_TWEAKS = {
