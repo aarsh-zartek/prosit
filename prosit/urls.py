@@ -26,7 +26,7 @@ from drf_yasg.views import get_schema_view
 urlpatterns = [
     path('admin/', admin.site.urls),
     
-    path('auth/', include('djoser.urls')),
+    path('api/v1/auth/', include('djoser.urls')),
     
     path("api/v1/user/", include(("apps.users.urls", "users"), namespace="users")),
     path("api/v1/plan/", include(("apps.plan.urls", "plan"), namespace="plan")),
@@ -51,6 +51,6 @@ urlpatterns += [
         )]
 
 if settings.DEBUG:
-    urlpatterns += [path("firebase/", include("apps.firebase.urls"))]
+    urlpatterns += [path("api/v1/firebase/", include("apps.firebase.urls"))]
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
