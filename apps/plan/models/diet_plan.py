@@ -113,7 +113,8 @@ class DietPlan(BaseModel):
         related_name="diet_plans"
     )
     plan_type = models.CharField(verbose_name=_("Plan Type"), choices=PLAN_TYPES, max_length=FieldConstants.MAX_VALUE_LENGTH)
-    parent = models.ForeignKey(to="self",
+    parent = models.ForeignKey(
+                to="self",
                 related_name="sub_categories",
                 on_delete=models.PROTECT,
                 blank=True, null=True
@@ -138,14 +139,12 @@ class DietPlan(BaseModel):
         elif self.plan_type == PLAN_TYPES.sub_category and self.parent.plan_type == PLAN_TYPES.sub_category:
             raise ValidationError("Sub category can't have other Sub Category as parent")
         
-        
         return super().clean()
 
     class Meta:
         verbose_name = _("Diet Plan")
         verbose_name_plural = _("Diet Plans")
         unique_together = ['name', 'category']
-
 
     def __str__(self) -> str:
         return f"{self.name} - {self.category}"
@@ -162,12 +161,9 @@ class QuestionAnswer(BaseModel):
     question = models.CharField(max_length=FieldConstants.MAX_LENGTH)
     answer = models.TextField()
 
+    class Meta:
+        verbose_name = _("Question Answer")
+        verbose_name_plural = _("Question Answers")
 
     def __str__(self) -> str:
         return f"{self.diet_plan} || {self.question}"
-
-
-    class Meta:
-
-        verbose_name = _("Question Answer")
-        verbose_name_plural = _("Question Answers") 

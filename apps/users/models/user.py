@@ -57,6 +57,8 @@ class UserHealthReport(LifecycleModelMixin, BaseModel):
                 blank=True, default=False
             )
     
+    health_code = models.CharField(verbose_name=_("User Health Code"), max_length=FieldConstants.MAX_HEALTH_CODE_LENGTH, null=True, editable=False)
+    
     image = models.ImageField(upload_to=get_user_health_image_path, blank=True, null=True)
     extra_info = models.TextField(blank=True, null=True)
 
@@ -70,13 +72,16 @@ class UserHealthReport(LifecycleModelMixin, BaseModel):
 
     @hook(hook=AFTER_CREATE)
     def after_create(self):
-        health_code = self.assign_health_code()
-        health_code_exists = User.objects.filter(profile__health_code=health_code).exists()
-        if health_code_exists:
-            self.user.profile.health_code = health_code
-        else:
-            # notify_admin?
-            pass
+        if not self.user.profile.health_code:
+        # if not self.health_code:
+            health_code = self.assign_health_code()
+            health_code_exists = User.objects.filter(profile__health_code=health_code).exists()
+            if health_code_exists:
+                self.health_code = health_code
+                self.user.profile.health_code = health_code
+            else:
+                # notify_admin?
+                pass
 
     def assign_health_code(self) -> str:
         profile = self.user.profile

@@ -13,7 +13,8 @@ admin.site.unregister(TokenProxy)
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ("full_name", "age", "weight", "height", "gender")
+    list_display = ("full_name", "age", "weight", "height", "gender", "health_code")
+    readonly_fields=('health_code',)
 
     def full_name(self, instance):
         return instance.user.full_name
