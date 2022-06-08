@@ -113,7 +113,11 @@ class DietPlan(BaseModel):
         related_name="diet_plans"
     )
     plan_type = models.CharField(verbose_name=_("Plan Type"), choices=PLAN_TYPES, max_length=FieldConstants.MAX_VALUE_LENGTH)
-    parent = models.ForeignKey(to="self", on_delete=models.PROTECT, blank=True, null=True)
+    parent = models.ForeignKey(to="self",
+                related_name="sub_categories",
+                on_delete=models.PROTECT,
+                blank=True, null=True
+            )
 
     def clean(self) -> None:
         from django.core.exceptions import ValidationError
@@ -145,3 +149,25 @@ class DietPlan(BaseModel):
 
     def __str__(self) -> str:
         return f"{self.name} - {self.category}"
+
+
+class QuestionAnswer(BaseModel):
+    diet_plan = models.ForeignKey(
+                to=DietPlan,
+                verbose_name=_("Diet Plan"),
+                on_delete=models.CASCADE,
+                related_name="question_answers"
+            )
+    
+    question = models.CharField(max_length=FieldConstants.MAX_LENGTH)
+    answer = models.TextField()
+
+
+    def __str__(self) -> str:
+        return f"{self.diet_plan} || {self.question}"
+
+
+    class Meta:
+
+        verbose_name = _("Question Answer")
+        verbose_name_plural = _("Question Answers") 

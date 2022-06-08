@@ -37,7 +37,7 @@ class User(LifecycleModelMixin, BaseModel, AbstractFirebaseUser):
         self.save()
 
 
-class UserHealthReport(BaseModel):
+class UserHealthReport(LifecycleModelMixin, BaseModel):
     """Model which stores data for lab tests of a user"""
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="health_reports")
@@ -68,10 +68,10 @@ class UserHealthReport(BaseModel):
     def __str__(self) -> str:
         return f'{self.user} - {self.date}'
 
-    # @hook(hook=AFTER_CREATE)
+    @hook(hook=AFTER_CREATE)
     def after_create(self):
         health_code = self.assign_health_code()
-        health_code_exists = User.objects.filter(health_code=health_code).exists()
+        health_code_exists = User.objects.filter(profile__health_code=health_code).exists()
         if health_code_exists:
             self.user.profile.health_code = health_code
         else:
@@ -94,7 +94,6 @@ class UserHealthReport(BaseModel):
         uric_acid = self.uric_acid
         creatin = self.creatin
         fasting_blood_sugar = self.fasting_blood_sugar
-        cholesterol = self.cholesterol
         hemoglobin = self.hemoglobin
         thyroid_tsh = self.thyroid_tsh
         pcod_pcos = self.pcod_pcos
@@ -105,7 +104,6 @@ class UserHealthReport(BaseModel):
             "uric_acid": uric_acid,
             "creatin": creatin,
             "fasting_blood_sugar": fasting_blood_sugar,
-            "cholesterol": cholesterol,
             "hemoglobin": hemoglobin,
             "thyroid_tsh": thyroid_tsh,
             "pcod_pcos": pcod_pcos,
@@ -113,21 +111,6 @@ class UserHealthReport(BaseModel):
         }
 
         return get_category(category_data)
-
-    def has_fasting_blood_sugar(self) -> str:
-        if 70 < self.fasting_blood_sugar < 95:
-            return False
-        return True
-    
-    def has_cholesterol(self) -> str:
-        if 70 < self.cholesterol < 95:
-            return False
-        return True
-    
-    def has_hemoglobin(self) -> str:
-        if 11 < self.hemoglobin < 15:
-            return False
-        return True
 
 
 class DailyActivity(BaseModel):
