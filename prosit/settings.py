@@ -86,6 +86,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'apps.core.exceptions.CustomExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'prosit.urls'
@@ -265,6 +266,9 @@ REST_FRAMEWORK = {
         "apps.firebase.authentication.FirebaseAuthentication",
         "rest_framework.authentication.TokenAuthentication",
     ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'apps.core.renderers.CustomAPIRenderer',
+    ),
     "DATE_TIME_FORMAT": FieldConstants.FULL_DATE_TIME_FORMAT
 }
 
@@ -291,6 +295,8 @@ JAZZMIN_SETTINGS = {
     "icons": {
         "authtoken.tokenproxy": "fas fa-coins",
         
+        "core.prosit": "fas fa-building",
+
         "plan.dietplan": "fas fa-calendar-alt",
         "plan.plantype": "fas fa-stream",
         "plan.plancategory": "fas fa-list",
