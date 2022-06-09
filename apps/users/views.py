@@ -1,8 +1,7 @@
-from django.http import JsonResponse
-
 from rest_framework import mixins
 from rest_framework.generics import CreateAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_202_ACCEPTED, HTTP_422_UNPROCESSABLE_ENTITY
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.views import APIView
@@ -22,7 +21,7 @@ class UserView(APIView):
 
 	def get(self, request, *args, **kwargs):
 		data = self.serializer_class(instance=request.user).data
-		return JsonResponse(data=data, status=HTTP_200_OK)
+		return Response(data=data, status=HTTP_200_OK)
 
 
 class UserViewSet(mixins.UpdateModelMixin, GenericViewSet):
@@ -35,7 +34,7 @@ class UserViewSet(mixins.UpdateModelMixin, GenericViewSet):
 		serializer.is_valid(raise_exception=True)
 		serializer.save()
 
-		return JsonResponse(
+		return Response(
 			data={
 				"data": serializer.data,
 			}, status=HTTP_202_ACCEPTED
@@ -57,12 +56,12 @@ class DailyActivityView(CreateAPIView, RetrieveAPIView):
 		serializer = self.get_serializer(data=data)
 		serializer.is_valid(raise_exception=True)
 		serializer.save()
-		return JsonResponse(serializer.data, status=HTTP_201_CREATED)
+		return Response(serializer.data, status=HTTP_201_CREATED)
 	
 	def retrieve(self, request, *args, **kwargs):
 		queryset = self.get_queryset()
 		serializer = self.get_serializer(queryset, many=True, exclude=["user"])
-		return JsonResponse({
+		return Response({
 			"data": serializer.data
 			}, status=HTTP_200_OK
 		)
@@ -85,12 +84,12 @@ class CheckPhoneNumberExistsView(APIView):
 		phone_number = request.data.get('phone_number')
 
 		if not phone_number:
-			return JsonResponse(data={
+			return Response(data={
 				'error': 'Please provide a phone number'
 			}, status=HTTP_422_UNPROCESSABLE_ENTITY
 		)
 		exists = User.objects.filter(phone_number=phone_number).exists()
-		return JsonResponse(
+		return Response(
 			data={
 				"success": exists
 			}, status=HTTP_200_OK
