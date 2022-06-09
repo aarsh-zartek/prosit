@@ -9,7 +9,7 @@ from apps.firebase.models import AbstractFirebaseUser
 from apps.users.utils import get_category
 
 from lib.constants import FieldConstants
-from lib.utils import get_user_health_image_path
+from lib.utils import get_user_health_image_path, get_profile_picture_path
 
 # Create your models here.
 
@@ -18,7 +18,7 @@ class User(LifecycleModelMixin, BaseModel, AbstractFirebaseUser):
 
     first_name = models.CharField(max_length=FieldConstants.MAX_NAME_LENGTH)
     last_name = models.CharField(max_length=FieldConstants.MAX_NAME_LENGTH)
-    profile_picture = models.ImageField(blank=True, null=True)
+    profile_picture = models.ImageField(upload_to=get_profile_picture_path, blank=True, null=True)
     
     class Meta:
         verbose_name = _("User")
