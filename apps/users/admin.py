@@ -24,9 +24,9 @@ class ProfileInline(admin.TabularInline):
     model = Profile
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('display_name', 'uid', 'phone_number', 'email', 'is_active')
+    list_display = ('full_name', 'uid', 'phone_number', 'email', 'is_active')
     list_filter = ("is_active", "is_staff")
-    search_fields = ("phone_number", "uid", "display_name", "first_name", "last_name")
+    search_fields = ("phone_number", "uid", "first_name", "last_name", "display_name")
     inlines = [ProfileInline,]
 
 
