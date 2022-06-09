@@ -2,10 +2,12 @@ from django.core.validators import FileExtensionValidator as FEV
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from multiselectfield import MultiSelectField
+
 from apps.core.models import BaseModel
 
 from lib.constants import FieldConstants, AudioFormats, DocumentFormats
-from lib.choices import PLAN_TYPES
+from lib.choices import PLAN_TYPES, FIELDS_TO_SHOW
 from lib.utils import get_diet_plan_instruction_path, get_preparation_path
 
 # Create your models here
@@ -95,6 +97,8 @@ class PlanCategory(BaseModel):
                         null=True
                     )
 
+    fields_required = MultiSelectField(choices=FIELDS_TO_SHOW, min_choices=3)
+    
     class Meta:
         verbose_name = _("Plan Category")
         verbose_name_plural = _("Plan Categories")
