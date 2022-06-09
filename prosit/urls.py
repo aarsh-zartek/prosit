@@ -28,6 +28,7 @@ urlpatterns = [
     
     path('api/v1/auth/', include('djoser.urls')),
     
+    path("api/v1/prosit/", include(("apps.about.urls", "about"), namespace="about")),
     path("api/v1/user/", include(("apps.users.urls", "users"), namespace="users")),
     path("api/v1/plan/", include(("apps.plan.urls", "plan"), namespace="plan")),
 ]

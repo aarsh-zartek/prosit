@@ -14,6 +14,19 @@ PLAN_TYPES = Choices(
     (_("sub_category"), ("Sub Category")),
 )
 
+FIELDS_TO_SHOW = Choices(
+    (_("vitamin_b12"), _("Vitamin B12")),
+    (_("vitamin_d"), _("Vitamin D")),
+    (_("uric_acid"), _("Uric Acid")),
+    (_("creatin"), _("Creatin")),
+    (_("fasting_blood_sugar"), _("Fasting Blood Sugar")),
+    (_("cholesterol"), _("Cholesterol")),
+    (_("hemoglobin"), _("Hemoglobin")),
+    (_("thyroid_tsh"), _("Thyroid (TSH)")),
+    (_("dry_skin"), _("Dry Skin")),
+    (_("pcod_pcos"), _("PCOD / PCOS")),
+)
+
 GENDER = Choices(
     (_("male"), _("Male")),
     (_("female"), _("Female")),

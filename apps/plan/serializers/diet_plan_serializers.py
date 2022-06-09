@@ -17,6 +17,7 @@ class PlanCategorySerializer(DynamicFieldsModelSerializer):
 			"preparation_text_english", "preparation_text_malayalam",
 			"preparation_audio_english", "preparation_audio_malayalam",
 			"preparation_pdf_english", "preparation_pdf_malayalam",
+			"fields_required"
 		)
 
 

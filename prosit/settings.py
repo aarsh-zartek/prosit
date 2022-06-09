@@ -71,6 +71,7 @@ LOCAL_APPS = [
     'apps.core.apps.CoreConfig',
     'apps.users.apps.UsersConfig',
     'apps.plan.apps.PlanConfig',
+    'apps.about.apps.AboutConfig',
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -295,7 +296,8 @@ JAZZMIN_SETTINGS = {
     "icons": {
         "authtoken.tokenproxy": "fas fa-coins",
         
-        "core.prosit": "fas fa-building",
+        "about.company": "fas fa-building",
+        "about.faq": "fas fa-meh",
 
         "plan.dietplan": "fas fa-calendar-alt",
         "plan.plantype": "fas fa-stream",
