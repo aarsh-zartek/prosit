@@ -129,7 +129,7 @@ class DailyActivity(BaseModel):
                 verbose_name=_("Weight in KG"),
                 max_digits=5, decimal_places=2
             )
-    date = models.DateField()
+    date = models.DateTimeField()
 
     class Meta:
         verbose_name = _("Daily Activity")
