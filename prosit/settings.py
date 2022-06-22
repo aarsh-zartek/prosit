@@ -272,7 +272,7 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'apps.core.renderers.CustomAPIRenderer',
     ),
-    "DATE_TIME_FORMAT": FieldConstants.FULL_DATE_TIME_FORMAT
+    # "DATE_TIME_FORMAT": FieldConstants.FULL_DATE_TIME_FORMAT
 }
 
 FIREBASE_CONFIG = {

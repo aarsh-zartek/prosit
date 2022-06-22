@@ -1,4 +1,4 @@
-from datetime import datetime
+from django.utils import timezone
 
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
@@ -54,7 +54,7 @@ class UserHealthReportSerializer(DynamicFieldsModelSerializer):
         user = self.context.get('user')
         pcod_pcos = attrs.get('pcod_pcos', None)
         if (pcod_pcos is None) and (user.profile.gender == GENDER.female):
-            raise serializers.ValidationError("You must provide `pcod_pcos` field for female user")
+            raise serializers.ValidationError("You must provide `pcod_pcos` field for the female user")
         elif pcod_pcos and (user.profile.gender == GENDER.male):
             attrs.pop('pcod_pcos')
         
@@ -78,8 +78,7 @@ class DailyActivitySerializer(DynamicFieldsModelSerializer):
     """
 
     def validate_date(self, date_value):
-        today = datetime.today().date()
-        if date_value > today:
+        if date_value > timezone.now():
             raise serializers.ValidationError("Date must be less than or equal to today's date")
         return date_value
     
