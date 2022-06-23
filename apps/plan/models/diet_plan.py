@@ -2,6 +2,7 @@ from django.core.validators import FileExtensionValidator as FEV
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from ckeditor.fields import RichTextField
 from multiselectfield import MultiSelectField
 
 from apps.core.models import BaseModel
@@ -15,6 +16,8 @@ from lib.utils import get_diet_plan_instruction_path, get_preparation_path
 
 class PlanCategory(BaseModel):
     name = models.CharField(verbose_name=_("Category Name"), max_length=FieldConstants.MAX_NAME_LENGTH)
+
+    per_day_instructions = RichTextField()
     instruction_text_english = models.TextField()
     instruction_text_malayalam = models.TextField()
 
