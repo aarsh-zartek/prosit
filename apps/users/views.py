@@ -76,6 +76,13 @@ class UserHealthReportViewSet(mixins.CreateModelMixin, GenericViewSet):
 		context['user'] = self.request.user
 		return context
 
+	def create(self, request, *args, **kwargs):
+		data = request.data
+		data['user'] = request.user.id
+		serializer = self.get_serializer(data=data)
+		serializer.is_valid(raise_exception=True)
+		serializer.save()
+		return Response(serializer.data, status=HTTP_201_CREATED)
 
 class CheckPhoneNumberExistsView(APIView):
 	
