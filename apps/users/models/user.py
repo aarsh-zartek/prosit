@@ -41,7 +41,7 @@ class UserHealthReport(LifecycleModelMixin, BaseModel):
     """Model which stores data for lab tests of a user"""
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="health_reports")
-    date = models.DateField(verbose_name=_("Reports Generated On"))
+    date = models.DateField(verbose_name=_("Reports Generated On"), auto_now_add=True)
     
     vitamin_b12 = models.BooleanField(verbose_name=_("Vitamin B12"))
     vitamin_d = models.BooleanField(verbose_name=_("Vitamin D"))

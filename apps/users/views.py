@@ -1,3 +1,7 @@
+from datetime import timedelta
+
+from django.utils import timezone
+
 from rest_framework import mixins
 from rest_framework.generics import CreateAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -9,7 +13,7 @@ from rest_framework.views import APIView
 # from django_filters.rest_framework import DjangoFilterBackend
 
 # from apps.users.filters import DailyActivityFilterSet
-from apps.users.models import User, DailyActivity
+from apps.users.models import User, DailyActivity, UserHealthReport
 from apps.users.serializers import UserSerializer, DailyActivitySerializer, UserHealthReportSerializer
 
 # Create your views here.
@@ -101,3 +105,18 @@ class CheckPhoneNumberExistsView(APIView):
 				"success": exists
 			}, status=HTTP_200_OK
 		)
+
+
+class CheckHealthReportExistsView(APIView):
+	permission_classes = (IsAuthenticated,)
+	
+	def get(self, request):
+
+		uploaded = UserHealthReport.objects.filter(
+				user=request.user,
+				date__gte=timezone.now() - timedelta(days=7)
+			).exists()
+
+		return Response({
+			"health_reports_uploaded": uploaded
+		}, status=HTTP_200_OK)

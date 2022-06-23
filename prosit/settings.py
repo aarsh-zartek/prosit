@@ -64,6 +64,7 @@ THIRD_PARTY_APPS = [
     'drf_yasg',
     'corsheaders',
     'phonenumber_field',
+    'ckeditor',
 ]
 
 LOCAL_APPS = [
@@ -191,7 +192,7 @@ LOG_FILE_NAME = os.path.join(BASE_DIR, "logs/prosit.log")
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': 'f:/Coding/zartek/prosit/prosit/cache' if DEBUG else '~/prosit',
+        'LOCATION': '.cache',
     }
 }
 
@@ -330,4 +331,40 @@ JAZZMIN_UI_TWEAKS = {
         "danger": "btn-outline-danger",
         "success": "btn-success"
     }
+}
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Prosit',
+        'toolbar_Prosit': [
+            {
+                'name': 'basicstyles',
+                'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']
+            },
+            {
+                'name': 'paragraph',
+                'items': [
+                    'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'
+                ]
+            },
+            {
+                'name': 'clipboard',
+                'items': [
+                    'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'
+                ]
+            },
+            {
+                'name': 'styles',
+                'items': ['Styles', 'Format', 'Font', 'FontSize']
+            },
+            '/',  # put this to force next toolbar on new line
+            {
+                'name': 'preview-maximize', 'items': [
+                    # put the name of your editor.ui.addButton here
+                    'Preview',
+                    'Maximize',
+                ]
+            },
+        ]
+    },
 }

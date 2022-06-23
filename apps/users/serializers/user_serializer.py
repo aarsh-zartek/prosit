@@ -63,7 +63,7 @@ class UserHealthReportSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = UserHealthReport
         fields = (
-            "user", "date", "vitamin_b12", "vitamin_d", "hemoglobin", "uric_acid",
+            "user", "vitamin_b12", "vitamin_d", "hemoglobin", "uric_acid",
             "creatin", "fasting_blood_sugar", "cholesterol", "thyroid_tsh", "pcod_pcos",
             "dry_skin", "image", "extra_info"
         )
