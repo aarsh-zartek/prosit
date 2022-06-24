@@ -17,7 +17,15 @@ from lib.utils import get_diet_plan_instruction_path, get_preparation_path
 class PlanCategory(BaseModel):
     name = models.CharField(verbose_name=_("Category Name"), max_length=FieldConstants.MAX_NAME_LENGTH)
 
-    per_day_instructions = RichTextField()
+    per_day_instructions_english = RichTextField(
+            verbose_name=_("Per Day Instructions English"), 
+            blank=True, null=True
+        )
+    per_day_instructions_malayalam = RichTextField(
+            verbose_name=_("Per Day Instructions Malayalam"), 
+            blank=True, null=True
+        )
+
     instruction_text_english = models.TextField()
     instruction_text_malayalam = models.TextField()
 
