@@ -11,7 +11,8 @@ class PlanCategorySerializer(DynamicFieldsModelSerializer):
 	class Meta:
 		model = PlanCategory
 		fields = (
-			"id", "name", "per_day_instructions",
+			"id", "name",
+			"per_day_instructions_english", "per_day_instructions_malayalam",
 			"instruction_text_english", "instruction_text_malayalam",
 			"instruction_audio_english", "instruction_audio_malayalam",
 			"instruction_pdf_english", "instruction_pdf_malayalam",
