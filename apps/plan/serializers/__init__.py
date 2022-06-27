@@ -1,1 +1,1 @@
-from .diet_plan_serializers import DietPlanSerializer, DietPlanListSerializer, PlanCategorySerializer, QuestionAnswerSerializer
+from .diet_plan_serializers import DietPlanSerializer, DietPlanListSerializer, PlanCategorySerializer, QuestionAnswerSerializer, SubscriptionSerializer
