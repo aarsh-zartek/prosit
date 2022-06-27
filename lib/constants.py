@@ -25,6 +25,27 @@ class DietPlanType:
     BALANCED_DIET_PLAN = "balanced_diet_plan"
 
 
+class Subscription:
+    class PaymentMethod:
+        WALLET = "Wallet"
+        CREDIT_CARD = "Credi Card"
+        DEBIT_CARD = "Debit Card"
+        UPI = "UPI"
+        NET_BANKING = "Net Banking"
+    
+    class PaymentStatus:
+        PENDING = "Pending"
+        PROCESSING = "Processing"
+        SUCCESSFUL = "Successful"
+        FAILED = "Failed"
+        REJECTED = "Rejected"
+
+    class SubscriptionStatus:
+        INACTIVE = "Inactive"
+        ACTIVE = "Active"
+        EXPIRED = "Expired"
+    
+
 class AudioFormats(Enum):
     MP3 = "mp3"
     AAC = "aac"

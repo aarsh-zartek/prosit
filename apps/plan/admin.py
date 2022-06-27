@@ -5,7 +5,7 @@ from django.utils.html import format_html
 
 # Register your models here.
 
-from apps.plan.models import DietPlan, PlanCategory, QuestionAnswer
+from apps.plan.models import DietPlan, PlanCategory, QuestionAnswer, Subscription
 
 
 class PlanCategoryAdmin(admin.ModelAdmin):
@@ -39,6 +39,12 @@ class DietPlanAdmin(admin.ModelAdmin):
 	get_category.short_description = "Plan Category"
 
 
+class SubscriptionAdmin(admin.ModelAdmin):
+	list_display = ("user", "plan", "amount_paid", "payment_status", "subscription_status", "expires_on")
+	readonly_fields=('expires_on',)
+
+
 admin.site.register(DietPlan, DietPlanAdmin)
 admin.site.register(PlanCategory, PlanCategoryAdmin)
 admin.site.register(QuestionAnswer, QuestionAnswerAdmin)
+admin.site.register(Subscription, SubscriptionAdmin)

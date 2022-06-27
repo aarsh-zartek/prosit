@@ -306,6 +306,7 @@ JAZZMIN_SETTINGS = {
         "plan.plantype": "fas fa-stream",
         "plan.plancategory": "fas fa-list",
         "plan.questionanswer": "fas fa-question",
+        "plan.subscription": "fas fa-rupee-sign",
 
         "users.user": "fas fa-user",
         "users.profile": "fas fa-id-card",
