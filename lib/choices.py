@@ -51,24 +51,24 @@ BLOOD_GROUP_CHOICES = Choices(
 
 
 PAYMENT_METHODS = Choices(
-    (_("wallet"), Subscription.PaymentMethod.WALLET),
-    (_("credit_card"), Subscription.PaymentMethod.CREDIT_CARD),
-    (_("debit_card"), Subscription.PaymentMethod.DEBIT_CARD),
-    (_("upi"), Subscription.PaymentMethod.UPI),
-    (_("wallet"), Subscription.PaymentMethod.WALLET),
+    (Subscription.PaymentMethod.WALLET, _("wallet")),
+    (Subscription.PaymentMethod.CREDIT_CARD, _("credit_card")),
+    (Subscription.PaymentMethod.DEBIT_CARD, _("debit_card")),
+    (Subscription.PaymentMethod.UPI, _("upi")),
+    (Subscription.PaymentMethod.WALLET, _("wallet")),
 )
 
 PAYMENT_STATUSES = Choices(
-    (_("pending"), Subscription.PaymentStatus.PENDING),
-    (_("processing"), Subscription.PaymentStatus.PROCESSING),
-    (_("successful"), Subscription.PaymentStatus.SUCCESSFUL),
-    (_("failed"), Subscription.PaymentStatus.FAILED),
-    (_("rejected"), Subscription.PaymentStatus.REJECTED),
+    (Subscription.PaymentStatus.PENDING, _("pending")),
+    (Subscription.PaymentStatus.PROCESSING, _("processing")),
+    (Subscription.PaymentStatus.SUCCESSFUL, _("successful")),
+    (Subscription.PaymentStatus.FAILED, _("failed")),
+    (Subscription.PaymentStatus.REJECTED, _("rejected")),
 )
 
 SUBSCRIPTION_STATUSES = Choices(
-    (_("inactive"), Subscription.SubscriptionStatus.INACTIVE),
-    (_("active"), Subscription.SubscriptionStatus.ACTIVE),
-    (_("expired"), Subscription.SubscriptionStatus.EXPIRED),
+    (Subscription.SubscriptionStatus.INACTIVE, _("inactive")),
+    (Subscription.SubscriptionStatus.ACTIVE, _("active")),
+    (Subscription.SubscriptionStatus.EXPIRED, _("expired")),
 
 )
