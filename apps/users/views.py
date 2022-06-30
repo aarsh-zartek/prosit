@@ -12,11 +12,11 @@ from rest_framework.views import APIView
 
 from django_filters.rest_framework import DjangoFilterBackend
 
-from apps.plan.serializers import DietPlanSerializer
-from apps.users.permissions import IsSubscribed, HasActivePlan
 from apps.users.filters import DailyActivityFilterSet
 from apps.users.models import User, DailyActivity, UserHealthReport
 from apps.users.serializers import DailyActivitySerializer, UserHealthReportSerializer, UserDietPlanSerializer
+
+from lib.constants import Subscription
 
 # Create your views here.
 
@@ -24,11 +24,28 @@ from apps.users.serializers import DailyActivitySerializer, UserHealthReportSeri
 class UserPlanView(APIView):
 
 	serializer_class = UserDietPlanSerializer
-	permission_classes = (IsAuthenticated, IsSubscribed, HasActivePlan)
+	permission_classes = (IsAuthenticated,)
 
 	def get(self, request, *args, **kwargs):
-		serializer = self.serializer_class(instance=request.user)
-		return Response(serializer.data, status=HTTP_200_OK)
+		active_subscription = request.user.subscriptions.filter(
+				subscription_status=Subscription.SubscriptionStatus.ACTIVE,
+			)
+		
+		if active_subscription:
+			active_plan = active_subscription.filter(plan__isnull=False)
+			if active_plan:
+				serializer = self.serializer_class(instance=request.user)
+				return Response(serializer.data, status=HTTP_200_OK)
+			else:
+				return Response({
+					"message": "Your plan is being generated"
+					}, status=HTTP_200_OK
+				)
+		else:
+			return Response({
+					"message": "No active subscription found"
+				}, status=HTTP_200_OK
+			)
 
 
 class DailyActivityView(CreateAPIView, RetrieveAPIView):
