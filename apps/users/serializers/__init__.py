@@ -1,2 +1,2 @@
-from .user_serializer import UserSerializer, DailyActivitySerializer, UserHealthReportSerializer
+from .user_serializer import UserSerializer, DailyActivitySerializer, UserHealthReportSerializer, UserDietPlanSerializer
 from .profile_serializer import ProfileSerializer

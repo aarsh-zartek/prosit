@@ -6,34 +6,29 @@ from rest_framework import mixins
 from rest_framework.generics import CreateAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_202_ACCEPTED, HTTP_422_UNPROCESSABLE_ENTITY
+from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_422_UNPROCESSABLE_ENTITY
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.views import APIView
 
 from django_filters.rest_framework import DjangoFilterBackend
 
+from apps.plan.serializers import DietPlanSerializer
+from apps.users.permissions import IsSubscribed, HasActivePlan
 from apps.users.filters import DailyActivityFilterSet
 from apps.users.models import User, DailyActivity, UserHealthReport
-from apps.users.serializers import UserSerializer, DailyActivitySerializer, UserHealthReportSerializer
+from apps.users.serializers import DailyActivitySerializer, UserHealthReportSerializer, UserDietPlanSerializer
 
 # Create your views here.
 
 
-class UserViewSet(mixins.UpdateModelMixin, GenericViewSet):
-	serializer_class = UserSerializer
-	permission_classes = (IsAuthenticated,)
-	queryset = User.objects.prefetch_related('profile').all()
-	
-	def update(self, request, *args, **kwargs):
-		serializer = self.serializer_class(instance=request.user, data=request.data)
-		serializer.is_valid(raise_exception=True)
-		serializer.save()
+class UserPlanView(APIView):
 
-		return Response(
-			data={
-				"data": serializer.data,
-			}, status=HTTP_202_ACCEPTED
-		)
+	serializer_class = UserDietPlanSerializer
+	permission_classes = (IsAuthenticated, IsSubscribed, HasActivePlan)
+
+	def get(self, request, *args, **kwargs):
+		serializer = self.serializer_class(instance=request.user)
+		return Response(serializer.data, status=HTTP_200_OK)
 
 
 class DailyActivityView(CreateAPIView, RetrieveAPIView):
@@ -78,6 +73,7 @@ class UserHealthReportViewSet(mixins.CreateModelMixin, GenericViewSet):
 		serializer.is_valid(raise_exception=True)
 		serializer.save()
 		return Response(serializer.data, status=HTTP_201_CREATED)
+
 
 class CheckPhoneNumberExistsView(APIView):
 	
