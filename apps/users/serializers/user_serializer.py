@@ -6,10 +6,12 @@ from rest_framework.validators import UniqueTogetherValidator
 from phonenumber_field.serializerfields import PhoneNumberField
 
 from apps.core.serializers import DynamicFieldsModelSerializer
+from apps.plan.serializers.diet_plan_serializers import DietPlanSerializer
 from apps.users.models import User, DailyActivity, UserHealthReport, Profile
 from apps.users.serializers.profile_serializer import ProfileSerializer
 
 from lib.choices import GENDER
+from lib.constants import Subscription
 
 
 class UserSerializer(DynamicFieldsModelSerializer):
@@ -18,13 +20,29 @@ class UserSerializer(DynamicFieldsModelSerializer):
     password = serializers.CharField(required=False, write_only=True)
     phone_number = PhoneNumberField(required=False)
     profile = ProfileSerializer(required=False)
+    active_subscription = serializers.SerializerMethodField()
+    active_plan = serializers.SerializerMethodField()
+
+    def get_active_subscription(self, instance: User) -> bool:
+        subscription = instance.subscriptions.filter(
+                    subscription_status=Subscription.SubscriptionStatus.ACTIVE
+                ).exists()
+        return True if subscription else False
+    
+    def get_active_plan(self, instance: User) -> bool:
+        plan = False
+        if self.get_active_subscription(instance):
+            plan = instance.subscriptions.filter(
+                    subscription_status=Subscription.SubscriptionStatus.ACTIVE
+                ).last().plan
+        return True if plan else False
 
     class Meta:
         model = User
         fields = (
             "id", "uid", "display_name", "password", "phone_number",
             "email", "first_name", "last_name", "profile",
-            "profile_picture",
+            "profile_picture", "active_subscription", "active_plan"
         )
 
     def create(self, validated_data):
@@ -67,7 +85,7 @@ class UserHealthReportSerializer(DynamicFieldsModelSerializer):
             "creatin", "fasting_blood_sugar", "cholesterol", "thyroid_tsh", "pcod_pcos",
             "dry_skin", "image", "extra_info"
         )
-    
+
 
 class DailyActivitySerializer(DynamicFieldsModelSerializer):
     """To track daily user activity
@@ -91,3 +109,22 @@ class DailyActivitySerializer(DynamicFieldsModelSerializer):
                 fields=["user", "date"]
             )
         ]
+
+
+class UserDietPlanSerializer(DynamicFieldsModelSerializer):
+    """Get User Subscribed Plan Details"""
+
+    my_plan = serializers.SerializerMethodField()
+    subscription_status = serializers.SerializerMethodField()
+
+    def get_my_plan(self, instance: User):
+        plan = instance.subscriptions.latest('created').plan
+        return DietPlanSerializer(plan, exclude=("queries", "parent", 'plan_type')).data
+    
+    def get_subscription_status(self, instance: User) -> str:
+        return instance.subscriptions.latest('created').get_subscription_status_display()
+
+    
+    class Meta:
+        model = User
+        fields = ("my_plan", "subscription_status")

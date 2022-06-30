@@ -191,7 +191,7 @@ class QuestionAnswer(BaseModel):
 class Subscription(BaseModel):
 
     user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="subscriptions")
-    plan = models.ForeignKey(to=DietPlan, on_delete=models.PROTECT, related_name="subscribers")
+    plan = models.ForeignKey(to=DietPlan, on_delete=models.PROTECT, related_name="subscribers", blank=True, null=True)
 
     amount_paid = models.PositiveIntegerField(verbose_name=_("Amount Paid"))
     transaction_id = models.CharField(
@@ -218,13 +218,12 @@ class Subscription(BaseModel):
     
     expires_on = models.DateTimeField(
         verbose_name=_("Subscription Expires On"),
-        default=timezone.now() + timedelta(days=30),
-        editable=False,
+        blank=True, null=True
     )
 
     class Meta:
-        verbose_name = _("Subscripton")
+        verbose_name = _("Subscription")
         verbose_name_plural = _("User Subscriptions")
     
     def __str__(self) -> str:
-        return f'{self.user.full_name} - {self.plan.name} - {self.get_subscription_status_display()}'
+        return f'{self.user.full_name} - {self.get_subscription_status_display()}'

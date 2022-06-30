@@ -1,6 +1,7 @@
 from enum import Enum
 from django.utils.translation import gettext_lazy as _
 
+from rest_framework import status
 
 class FieldConstants:
     MAX_UID_LENGTH = 48
@@ -27,23 +28,23 @@ class DietPlanType:
 
 class Subscription:
     class PaymentMethod:
-        WALLET = "Wallet"
-        CREDIT_CARD = "Credi Card"
-        DEBIT_CARD = "Debit Card"
-        UPI = "UPI"
-        NET_BANKING = "Net Banking"
+        WALLET = "wallet"
+        CREDIT_CARD = "credit_card"
+        DEBIT_CARD = "debit_card"
+        UPI = "upi"
+        NET_BANKING = "net_banking"
     
     class PaymentStatus:
-        PENDING = "Pending"
-        PROCESSING = "Processing"
-        SUCCESSFUL = "Successful"
-        FAILED = "Failed"
-        REJECTED = "Rejected"
+        PENDING = "pending"
+        PROCESSING = "processing"
+        SUCCESSFUL = "successful"
+        FAILED = "failed"
+        REJECTED = "rejected"
 
     class SubscriptionStatus:
-        INACTIVE = "Inactive"
-        ACTIVE = "Active"
-        EXPIRED = "Expired"
+        INACTIVE = "inactive"
+        ACTIVE = "active"
+        EXPIRED = "expired"
     
 
 class AudioFormats(Enum):
@@ -63,3 +64,22 @@ class DocumentFormats(Enum):
     @classmethod
     def all(document_types):
         return [document_type.value for document_type in list(document_types)]
+
+
+POSITIVE_RESPONSES = [
+    status.HTTP_200_OK,
+    status.HTTP_201_CREATED,
+    status.HTTP_202_ACCEPTED,
+    status.HTTP_204_NO_CONTENT
+]
+
+NEGATIVE_RESPONSES = [
+    status.HTTP_400_BAD_REQUEST,
+    status.HTTP_401_UNAUTHORIZED,
+    status.HTTP_403_FORBIDDEN,
+    status.HTTP_404_NOT_FOUND,
+    status.HTTP_405_METHOD_NOT_ALLOWED,
+    status.HTTP_418_IM_A_TEAPOT,
+    status.HTTP_422_UNPROCESSABLE_ENTITY,
+    status.HTTP_429_TOO_MANY_REQUESTS,
+]

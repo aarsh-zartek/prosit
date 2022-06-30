@@ -41,7 +41,8 @@ class DietPlanAdmin(admin.ModelAdmin):
 
 class SubscriptionAdmin(admin.ModelAdmin):
 	list_display = ("user", "plan", "amount_paid", "payment_status", "subscription_status", "expires_on")
-	readonly_fields=('expires_on',)
+	readonly_fields=('expires_on', "transaction_id")
+	list_filter = ("subscription_status", "payment_status")
 
 
 admin.site.register(DietPlan, DietPlanAdmin)
