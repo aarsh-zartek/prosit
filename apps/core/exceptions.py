@@ -8,7 +8,12 @@ from rest_framework.views import exception_handler
 
 from apps.core.renderers import CustomAPIRenderer
 
-def get_structured_response(message=None, result=None, success: bool=False, status_code: int=HTTP_200_OK):
+def get_structured_response(
+	message=None,
+	result=None,
+	success: bool=False,
+	status_code: int=HTTP_200_OK
+) -> dict:
 	return {
 		"message": message or str(),
 		"result": result or dict(),
