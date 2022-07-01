@@ -44,11 +44,17 @@ class AbstractFirebaseUser(AbstractBaseUser, PermissionsMixin):
         default=False,
         help_text="Designate whether the user can log into this admin site.",
     )
+    is_superuser = models.BooleanField(
+        verbose_name=_("Superuser Status"),
+        default=False,
+        help_text=_("Designates that this user has all permissions without "
+            "explicitly assigning them."),
+    )
     is_active = models.BooleanField(
         verbose_name=_("Active"),
         default=True,
-        help_text="Designates whether this use should be treated as active"
-        "unselect this instead of deleting accounts (soft delete)",
+        help_text="Designates whether this use should be treated as active. "
+        "Unselect this instead of deleting accounts (soft delete)",
     )
     date_joined = models.DateTimeField(verbose_name=_("date joined"), default=timezone.now)
     objects = UserManager()
