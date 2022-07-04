@@ -139,6 +139,8 @@ class DietPlan(BaseModel):
                 blank=True, null=True
             )
 
+    value = models.PositiveIntegerField(verbose_name=_("Plan Value"))
+
     def clean(self) -> None:
         from django.core.exceptions import ValidationError
 
