@@ -31,6 +31,7 @@ urlpatterns = [
     path("api/v1/prosit/", include(("apps.about.urls", "about"), namespace="about")),
     path("api/v1/user/", include(("apps.users.urls", "users"), namespace="users")),
     path("api/v1/plan/", include(("apps.plan.urls", "plan"), namespace="plan")),
+    path("api/v1/notification/", include(("apps.notification.urls", "notification"), namespace="notification")),
 ]
 
 schema_view = get_schema_view(
