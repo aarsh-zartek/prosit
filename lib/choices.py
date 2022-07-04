@@ -5,10 +5,6 @@ from model_utils import Choices
 from lib.constants import DietPlanCategory, Subscription
 
 
-PLAN_CATEGORIES = Choices(
-    (DietPlanCategory.MALYALAM_DIET, _("Malyalam Diet")),
-)
-
 PLAN_TYPES = Choices(
     (_("main_category"), ("Main Category")),
     (_("sub_category"), ("Sub Category")),

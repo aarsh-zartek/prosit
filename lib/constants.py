@@ -15,10 +15,6 @@ class FieldConstants:
     FULL_DATE_TIME_FORMAT = f"{DATE_FORMAT} %I:%S:%M %p"
 
 
-class DietPlanCategory:
-    MALYALAM_DIET = "malayalam_diet"
-
-
 class DietPlanType:
     WEIGHT_LOSS_PLAN = "weight_loss_plan"
     WEIGHT_GAIN_PLAN = "weight_gain_plan"

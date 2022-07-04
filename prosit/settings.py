@@ -76,6 +76,7 @@ LOCAL_APPS = [
     'apps.plan.apps.PlanConfig',
     'apps.about.apps.AboutConfig',
     'apps.notification.apps.NotificationConfig',
+    'apps.subscriptions.apps.SubscriptionsConfig',
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -284,6 +285,7 @@ FIREBASE_CONFIG = {
     "FIREBASE_WEBAPP_CONFIG": env.str("FIREBASE_WEBAPP_CONFIG"),
 }
 
+REVENUE_CAT_API_KEY = env.str("REVENUE_CAT_API_KEY")
 
 # Djoser Config
 DJOSER = {
