@@ -1,3 +1,4 @@
+from django.http import HttpRequest
 from django.contrib import admin
 from django.contrib.auth.models import Group
 
@@ -19,6 +20,14 @@ class ProfileAdmin(admin.ModelAdmin):
     def full_name(self, instance):
         return instance.user.full_name
 
+    def get_queryset(self, request: HttpRequest):
+        queryset = super().get_queryset(request)
+
+        if not request.user.is_superuser:
+            queryset = queryset.exclude(is_superuser=True)
+
+        return queryset
+
 
 class ProfileInline(admin.TabularInline):
     model = Profile
@@ -28,6 +37,14 @@ class UserAdmin(admin.ModelAdmin):
     list_filter = ("is_active", "is_staff")
     search_fields = ("phone_number", "uid", "first_name", "last_name", "display_name")
     inlines = [ProfileInline,]
+
+    def get_queryset(self, request: HttpRequest):
+        queryset = super().get_queryset(request)
+
+        if not request.user.is_superuser:
+            queryset = queryset.exclude(is_superuser=True)
+
+        return queryset
 
 
 class UserHealthReportAdmin(admin.ModelAdmin):
