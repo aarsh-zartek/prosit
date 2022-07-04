@@ -1,11 +1,19 @@
+amqp==5.1.1
 asgiref==3.5.0
 astroid==2.11.2
+async-timeout==4.0.2
 autopep8==1.6.0
+billiard==3.6.4.0
 CacheControl==0.12.10
 cachetools==5.0.0
+celery==5.2.7
 certifi==2021.10.8
 cffi==1.15.0
 charset-normalizer==2.0.12
+click==8.1.3
+click-didyoumean==0.3.0
+click-plugins==1.1.1
+click-repl==0.2.0
 colorama==0.4.4
 commonmark==0.9.1
 coreapi==2.3.3
@@ -13,8 +21,11 @@ coreschema==0.0.4
 cryptography==36.0.2
 datetime-truncate==1.1.1
 defusedxml==0.7.1
+Deprecated==1.2.13
 dill==0.3.4
 Django==4.0.5
+django-celery-beat==2.3.0
+django-celery-results==2.4.0
 django-ckeditor==6.4.2
 django-cors-headers==3.11.0
 django-environ==0.8.1
@@ -30,6 +41,7 @@ django-phonenumbers==1.0.1
 django-quill-editor==0.1.40
 django-split-settings==1.1.0
 django-templated-mail==1.1.1
+django-timezone-field==5.0
 djangorestframework==3.13.1
 djangorestframework-simplejwt==4.8.0
 djoser==2.1.0
@@ -53,6 +65,7 @@ inflection==0.5.1
 isort==5.10.1
 itypes==1.2.0
 Jinja2==3.1.1
+kombu==5.2.4
 lazy-object-proxy==1.7.1
 MarkupSafe==2.1.1
 mccabe==0.7.0
@@ -62,6 +75,7 @@ packaging==21.3
 phonenumbers==8.12.46
 Pillow==9.1.0
 platformdirs==2.5.1
+prompt-toolkit==3.0.30
 proto-plus==1.20.3
 protobuf==3.20.0
 pyasn1==0.4.8
@@ -72,11 +86,13 @@ Pygments==2.11.2
 PyJWT==2.3.0
 pylint==2.13.5
 pyparsing==3.0.8
+python-crontab==2.6.0
 python-dateutil==2.8.2
 python-memcached==1.59
 python-slugify==1.1.4
 python3-openid==3.2.0
 pytz==2022.1
+redis==4.3.4
 requests==2.27.1
 requests-oauthlib==1.3.1
 rich==12.2.0
@@ -94,4 +110,6 @@ Unidecode==1.3.4
 uritemplate==4.1.1
 urllib3==1.26.9
 urlman==2.0.1
+vine==5.0.0
+wcwidth==0.2.5
 wrapt==1.14.0

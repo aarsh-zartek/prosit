@@ -61,6 +61,8 @@ THIRD_PARTY_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_extensions',
+    'django_celery_beat',
+    'django_celery_results',
     'drf_yasg',
     'corsheaders',
     'phonenumber_field',
@@ -73,6 +75,7 @@ LOCAL_APPS = [
     'apps.users.apps.UsersConfig',
     'apps.plan.apps.PlanConfig',
     'apps.about.apps.AboutConfig',
+    'apps.notification.apps.NotificationConfig',
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -302,18 +305,27 @@ JAZZMIN_SETTINGS = {
         "about.company": "fas fa-building",
         "about.faq": "fas fa-meh",
 
+        "notification.notification": "fas fa-bell",
+        
         "plan.dietplan": "fas fa-calendar-alt",
         "plan.plantype": "fas fa-stream",
         "plan.plancategory": "fas fa-list",
         "plan.questionanswer": "fas fa-question",
         "plan.subscription": "fas fa-rupee-sign",
 
-        "users.user": "fas fa-user",
+        "users.user": "fas fa-users",
         "users.profile": "fas fa-id-card",
-        "users.medicalcondition": "fas fa-hand-holding-medical",
-        "users.foodallergy": "fas fa-utensils",
         "users.userhealthreport": "fas fa-file-medical",
         "users.dailyactivity": "fas fa-calendar-day",
+
+        "django_celery_beat.clockedschedule": "fas fa-alarm-clock",
+        "django_celery_beat.crontabschedule": "fas fa-stopwatch",
+        "django_celery_beat.intervalschedule": "fas fa-watch",
+        "django_celery_beat.periodictask": "fas fa-chess-clock",
+        "django_celery_beat.solarschedule": "fas fa-solar-system",
+
+        "django_celery_results.groupresult": "fas fa-poll",
+        "django_celery_results.taskresult": "fas fa-tasks",
     },
 
     # "changeform_format": "vertical_tabs"
@@ -369,3 +381,21 @@ CKEDITOR_CONFIGS = {
         ]
     },
 }
+
+
+# Celery Configuration
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+
+## Celery Results Configuration
+
+CELERY_RESULT_BACKEND = 'django-db'

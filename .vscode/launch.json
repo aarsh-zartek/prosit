@@ -16,6 +16,40 @@
 			"justMyCode": false
 		},
 		{
+			"name": "Celery App Windows",
+			"type": "python",
+			"request": "launch",
+			"module": "celery",
+			"cwd": "${workspaceFolder}",
+			"args": [
+				"-A",
+				"prosit.celery",
+				"worker",
+				"--pool=solo",
+				"--loglevel=INFO",
+				"-n",
+				"celery_worker"
+			]
+		},
+		{
+			"name": "Celery App + Beat",
+			"type": "python",
+			"request": "launch",
+			"module": "celery",
+			"cwd": "${workspaceFolder}",
+			"args": [
+				"-A",
+				"prosit.celery",
+				"worker",
+				"--scheduler",
+				"django_celery_beat.schedulers:DatabaseScheduler",
+				"--loglevel=INFO",
+				"-n",
+				"celery_worker"
+			]
+		},
+		
+		{
 			"name": "Django WAN Server",
 			"type": "python",
 			"request": "launch",
