@@ -54,8 +54,7 @@ class Subscription(BaseModel):
 	
 	expires_on = models.DateTimeField(
 		verbose_name=_("Subscription Expires On"),
-		default=timezone.now() + timedelta(days=30),
-		editable=False,
+		null=True, editable=False,
 	)
 
 	class Meta:

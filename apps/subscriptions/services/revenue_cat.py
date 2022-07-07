@@ -15,14 +15,13 @@ class RevenueCat:
 	def get_status(self):
 
 		response = requests.get(
-			url=f"{REVENUE_CAT_REST_URL}/{self.user_id}",
-			headers={
-				'Accept': 'application/json',
-				'Authorization': f'Bearer {settings.REVENUE_CAT_API_KEY}',
-				'Content-Type': 'application/json',
-			}
-		)
-
-		if response.status_code != 200:
-			return
+				url=f"{REVENUE_CAT_REST_URL}/{self.user_id}",
+				headers={
+					'Accept': 'application/json',
+					'Authorization': f'Bearer {settings.REVENUE_CAT_API_KEY}',
+					'Content-Type': 'application/json',
+				}
+			)
+		
+		return response
 
