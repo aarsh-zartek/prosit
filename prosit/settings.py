@@ -196,7 +196,7 @@ LOG_FILE_NAME = os.path.join(BASE_DIR, "logs/prosit.log")
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '.cache',
+        'LOCATION': f'{BASE_DIR}\\.cache',
     }
 }
 
