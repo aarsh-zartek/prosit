@@ -2,7 +2,7 @@ from django.utils.translation import gettext_lazy as _
 
 from model_utils import Choices
 
-from lib.constants import DietPlanCategory, Subscription
+from lib.constants import SubscriptionConstants
 
 
 PLAN_TYPES = Choices(
@@ -47,24 +47,24 @@ BLOOD_GROUP_CHOICES = Choices(
 
 
 PAYMENT_METHODS = Choices(
-    (Subscription.PaymentMethod.WALLET, _("Wallet")),
-    (Subscription.PaymentMethod.CREDIT_CARD, _("Credit Card")),
-    (Subscription.PaymentMethod.DEBIT_CARD, _("Debit Card")),
-    (Subscription.PaymentMethod.UPI, _("UPI")),
-    (Subscription.PaymentMethod.WALLET, _("Wallet")),
+    (SubscriptionConstants.PaymentMethod.WALLET, _("Wallet")),
+    (SubscriptionConstants.PaymentMethod.CREDIT_CARD, _("Credit Card")),
+    (SubscriptionConstants.PaymentMethod.DEBIT_CARD, _("Debit Card")),
+    (SubscriptionConstants.PaymentMethod.UPI, _("UPI")),
+    (SubscriptionConstants.PaymentMethod.WALLET, _("Wallet")),
 )
 
 PAYMENT_STATUSES = Choices(
-    (Subscription.PaymentStatus.PENDING, _("Pending")),
-    (Subscription.PaymentStatus.PROCESSING, _("Processing")),
-    (Subscription.PaymentStatus.SUCCESSFUL, _("Successful")),
-    (Subscription.PaymentStatus.FAILED, _("Failed")),
-    (Subscription.PaymentStatus.REJECTED, _("Rejected")),
+    (SubscriptionConstants.PaymentStatus.PENDING, _("Pending")),
+    (SubscriptionConstants.PaymentStatus.PROCESSING, _("Processing")),
+    (SubscriptionConstants.PaymentStatus.SUCCESSFUL, _("Successful")),
+    (SubscriptionConstants.PaymentStatus.FAILED, _("Failed")),
+    (SubscriptionConstants.PaymentStatus.REJECTED, _("Rejected")),
 )
 
 SUBSCRIPTION_STATUSES = Choices(
-    (Subscription.SubscriptionStatus.INACTIVE, _("Inactive")),
-    (Subscription.SubscriptionStatus.ACTIVE, _("Active")),
-    (Subscription.SubscriptionStatus.EXPIRED, _("Expired")),
+    (SubscriptionConstants.SubscriptionStatus.INACTIVE, _("Inactive")),
+    (SubscriptionConstants.SubscriptionStatus.ACTIVE, _("Active")),
+    (SubscriptionConstants.SubscriptionStatus.EXPIRED, _("Expired")),
 
 )
