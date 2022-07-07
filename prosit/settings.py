@@ -76,6 +76,7 @@ LOCAL_APPS = [
     'apps.plan.apps.PlanConfig',
     'apps.about.apps.AboutConfig',
     'apps.notification.apps.NotificationConfig',
+    'apps.subscriptions.apps.SubscriptionsConfig',
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -195,7 +196,7 @@ LOG_FILE_NAME = os.path.join(BASE_DIR, "logs/prosit.log")
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '.cache',
+        'LOCATION': f'{BASE_DIR}\\.cache',
     }
 }
 
@@ -284,6 +285,7 @@ FIREBASE_CONFIG = {
     "FIREBASE_WEBAPP_CONFIG": env.str("FIREBASE_WEBAPP_CONFIG"),
 }
 
+REVENUE_CAT_API_KEY = env.str("REVENUE_CAT_API_KEY")
 
 # Djoser Config
 DJOSER = {

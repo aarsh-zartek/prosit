@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.core.serializers import DynamicFieldsModelSerializer
-from apps.plan.models.diet_plan import DietPlan, PlanCategory, QuestionAnswer, Subscription
+from apps.plan.models.diet_plan import DietPlan, PlanCategory, QuestionAnswer
 
 from lib.choices import PLAN_TYPES
 
@@ -85,16 +85,4 @@ class DietPlanListSerializer(DynamicFieldsModelSerializer):
 		fields = (
 			"id", "name", "category_name",
 			"plan_type", "sub_categories",
-		)
-
-
-class SubscriptionSerializer(DynamicFieldsModelSerializer):
-
-	class Meta:
-		model = Subscription
-		fields = (
-			"user", "plan",
-			"amount_paid", "payment_method",
-			"payment_status", "subscripton_status",
-			"expires_on", "created"
 		)

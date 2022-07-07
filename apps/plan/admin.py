@@ -5,7 +5,7 @@ from django.utils.html import format_html
 
 # Register your models here.
 
-from apps.plan.models import DietPlan, PlanCategory, QuestionAnswer, Subscription
+from apps.plan.models import DietPlan, PlanCategory, QuestionAnswer
 
 
 class PlanCategoryAdmin(admin.ModelAdmin):
@@ -24,10 +24,13 @@ class QuestionAnswerInline(admin.TabularInline):
 
 
 class DietPlanAdmin(admin.ModelAdmin):
-	list_display = ("name", "get_category", "plan_type", "parent", "no_of_questions", "created")
+	list_display = ("name", "get_category", "get_plan_type", "parent", "no_of_questions", "created")
 	list_filter = ("plan_type",)
 	inlines = (QuestionAnswerInline,)
 
+	def get_plan_type(self, instance):
+		return instance.get_plan_type_display()
+	
 	def no_of_questions(self, instance):
 		return instance.question_answers.count()
 	
@@ -36,16 +39,11 @@ class DietPlanAdmin(admin.ModelAdmin):
 			reverse("admin:plan_plancategory_changelist")  + "?" + urlencode({"id": instance.category.id})
 		)
 		return format_html('<b><a href="{}">{}</a></b>', link, instance.category)
+	
+	get_plan_type.short_description = "Plan Type"
 	get_category.short_description = "Plan Category"
-
-
-class SubscriptionAdmin(admin.ModelAdmin):
-	list_display = ("user", "plan", "amount_paid", "payment_status", "subscription_status", "expires_on")
-	readonly_fields=('expires_on', "transaction_id")
-	list_filter = ("subscription_status", "payment_status")
 
 
 admin.site.register(DietPlan, DietPlanAdmin)
 admin.site.register(PlanCategory, PlanCategoryAdmin)
 admin.site.register(QuestionAnswer, QuestionAnswerAdmin)
-admin.site.register(Subscription, SubscriptionAdmin)
