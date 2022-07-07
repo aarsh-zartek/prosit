@@ -141,6 +141,12 @@ class DietPlan(BaseModel):
 
     value = models.PositiveIntegerField(verbose_name=_("Plan Value"))
 
+    revenue_cat_identifier = models.CharField(
+        verbose_name=_("Revenue Cat Identifier"),
+        max_length=FieldConstants.MAX_NAME_LENGTH,
+        null=True
+    )
+
     def clean(self) -> None:
         from django.core.exceptions import ValidationError
 
@@ -188,44 +194,3 @@ class QuestionAnswer(BaseModel):
 
     def __str__(self) -> str:
         return f"{self.diet_plan} || {self.question}"
-
-
-class Subscription(BaseModel):
-
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="subscriptions")
-    plan = models.ForeignKey(to=DietPlan, on_delete=models.PROTECT, related_name="subscribers", blank=True, null=True)
-
-    amount_paid = models.PositiveIntegerField(verbose_name=_("Amount Paid"))
-    transaction_id = models.CharField(
-        verbose_name=_("Transaction ID"),
-        max_length=FieldConstants.MAX_LENGTH,
-        editable=False
-    )
-
-    payment_method = models.CharField(
-        verbose_name=_("Payment Method"),
-        max_length=FieldConstants.MAX_NAME_LENGTH,
-        choices=PAYMENT_METHODS
-    )
-    payment_status = models.CharField(
-        verbose_name=_("Payment Status"),
-        max_length=FieldConstants.MAX_NAME_LENGTH,
-        choices=PAYMENT_STATUSES
-    )
-    subscription_status = models.CharField(
-        verbose_name=_("Subscription Status"),
-        max_length=FieldConstants.MAX_NAME_LENGTH,
-        choices=SUBSCRIPTION_STATUSES
-    )
-    
-    expires_on = models.DateTimeField(
-        verbose_name=_("Subscription Expires On"),
-        blank=True, null=True
-    )
-
-    class Meta:
-        verbose_name = _("Subscription")
-        verbose_name_plural = _("User Subscriptions")
-    
-    def __str__(self) -> str:
-        return f'{self.user.full_name} - {self.get_subscription_status_display()}'

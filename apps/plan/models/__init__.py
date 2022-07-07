@@ -1,1 +1,1 @@
-from apps.plan.models.diet_plan import DietPlan, PlanCategory, QuestionAnswer, Subscription
+from apps.plan.models.diet_plan import DietPlan, PlanCategory, QuestionAnswer
