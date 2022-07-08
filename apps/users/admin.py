@@ -13,7 +13,7 @@ from apps.users.models import User, Profile, UserHealthReport, DailyActivity
 admin.site.site_header = "Prosit Admin Panel"
 admin.site.site_title = "Prosit Site Administration"
 admin.site.index_title = "Admin Panel"
-admin.site.unregister(Group)
+# admin.site.unregister(Group)
 admin.site.unregister(TokenProxy)
 
 

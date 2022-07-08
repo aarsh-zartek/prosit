@@ -1,15 +1,15 @@
 from rest_framework import serializers
 
 from apps.core.serializers import DynamicFieldsModelSerializer
-from apps.notification.models import Notification
+from apps.notification.models import UserNotification
 
 
-class NotificationSerializer(DynamicFieldsModelSerializer):
+class UserNotificationSerializer(DynamicFieldsModelSerializer):
 
 	class Meta:
-		model = Notification
+		model = UserNotification
 		fields = (
-			"user", "title", "message",
+			"id", "user", "title", "message",
 			"read_at", "created"
 		)
-
+	

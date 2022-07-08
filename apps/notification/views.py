@@ -6,22 +6,24 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.status import HTTP_200_OK
 from rest_framework.viewsets import GenericViewSet
 
-from apps.notification.models import Notification
-from apps.notification.serializers import NotificationSerializer
+from firebase_admin.messaging import Message, Notification
+
+from apps.notification.models import UserNotification
+from apps.notification.serializers import UserNotificationSerializer
 from apps.notification.tasks import run_task
 
 # Create your views here.
 
 
-class NotificationViewSet(
+class UserNotificationViewSet(
 	mixins.ListModelMixin,
 	mixins.RetrieveModelMixin,
 	mixins.UpdateModelMixin,
 	GenericViewSet
 ):
 
-	serializer_class = NotificationSerializer
-	queryset = Notification.objects.all()
+	serializer_class = UserNotificationSerializer
+	queryset = UserNotification.objects.all()
 
 	permission_classes = (IsAuthenticated,)
 

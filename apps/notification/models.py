@@ -9,7 +9,7 @@ from lib.constants import FieldConstants
 # Create your models here.
 
 
-class Notification(BaseModel):
+class UserNotification(BaseModel):
 
 	user = models.ForeignKey(
 		to=User,
@@ -29,7 +29,7 @@ class Notification(BaseModel):
 
 
 	class Meta:
-		verbose_name = _('Notification')
+		verbose_name = _('User Notification')
 		verbose_name_plural = _('User Notifications')
 		ordering = ('-created',)
 	
