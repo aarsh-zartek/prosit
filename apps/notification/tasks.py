@@ -44,6 +44,6 @@ def send_push_notification(users, **kwargs):
 
     notifications = UserNotification.objects.bulk_create(user_notifications)
 
-    # user_notification = [ notification.users.add(user) for user in users]
+    # notifications = [ notification.users.add(user) for user in users]
 
     return "Notifications Sent to all the users."
