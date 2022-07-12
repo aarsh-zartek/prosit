@@ -8,7 +8,7 @@ router = DefaultRouter()
 
 
 router.register(
-    prefix="notifications",
+    prefix="notification",
     viewset=UserNotificationViewSet,
     basename="user-notifications",
 )
