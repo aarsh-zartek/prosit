@@ -30,9 +30,7 @@ class UserNotificationViewSet(
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        return UserNotification.objects.filter(
-            user=self.request.user, read_at__isnull=True
-        )
+        return UserNotification.objects.filter(user=self.request.user)[:25]
 
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)

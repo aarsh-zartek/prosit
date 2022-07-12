@@ -31,13 +31,13 @@ router = DefaultRouter()
 router.register("devices", FCMDeviceAuthorizedViewSet, basename="devices")
 
 
-url_patterns = [
+v1_url_patterns = [
     path("auth/", include("djoser.urls")),
     path("prosit/", include(("apps.about.urls", "about"), namespace="about")),
     path("user/", include(("apps.users.urls", "users"), namespace="users")),
     path("plan/", include(("apps.plan.urls", "plan"), namespace="plan")),
     path(
-        "notification/",
+        "",
         include(("apps.notification.urls", "notification"), namespace="notification"),
     ),
     path("", include(router.urls)),
@@ -45,7 +45,7 @@ url_patterns = [
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/v1/", include(url_patterns))
+    path("api/v1/", include(v1_url_patterns))
 ]
 
 schema_view = get_schema_view(
@@ -67,6 +67,6 @@ urlpatterns += [
 ]
 
 if settings.DEBUG:
-    urlpatterns += [path("api/v1/firebase/", include("apps.firebase.urls"))]
+    urlpatterns += [path("firebase/", include("apps.firebase.urls"))]
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
