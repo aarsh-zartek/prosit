@@ -34,7 +34,13 @@ class UserNotificationViewSet(
 
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
-        self.get_queryset().update(read_at=timezone.now())
+        user_notifications = list()
+        for notification in self.get_queryset():
+            notification.read_at = timezone.now()
+            user_notifications.append(notification)
+
+        UserNotification.objects.bulk_update(user_notifications, ['read_at',])
+        
         return response
 
     @action(methods=["patch"], detail=False)
