@@ -67,6 +67,7 @@ THIRD_PARTY_APPS = [
     'corsheaders',
     'phonenumber_field',
     'ckeditor',
+    'fcm_django',
 ]
 
 LOCAL_APPS = [
@@ -285,6 +286,25 @@ FIREBASE_CONFIG = {
     "FIREBASE_WEBAPP_CONFIG": env.str("FIREBASE_WEBAPP_CONFIG"),
 }
 
+FCM_DJANGO_SETTINGS = {
+     # default: _('FCM Django')
+    "APP_VERBOSE_NAME": "Firebase Cloud Messaging (FCM)",
+    
+     # true if you want to have only one active device per registered user at a time
+     # default: False
+    "ONE_DEVICE_PER_USER": True,
+
+    # devices to which notifications cannot be sent,
+    # are deleted upon receiving error response from FCM
+    # default: False
+    "DELETE_INACTIVE_DEVICES": True,
+
+    # Transform create of an existing Device (based on registration id) into
+    # an update. See the section
+    # "Update of device with duplicate registration ID" for more details.
+    "UPDATE_ON_DUPLICATE_REG_ID": True,
+}
+
 REVENUE_CAT_API_KEY = env.str("REVENUE_CAT_API_KEY")
 
 # Djoser Config
@@ -302,32 +322,37 @@ JAZZMIN_SETTINGS = {
     "welcome_sign": "Welcome to Prosit Admin Panel",
 
     "icons": {
+        "auth.group": "fas fa-users-cog",
+
         "authtoken.tokenproxy": "fas fa-coins",
         
         "about.company": "fas fa-building",
         "about.faq": "fas fa-meh",
 
-        "notification.notification": "fas fa-bell",
+        "notification.usernotification": "fas fa-bell",
         
         "plan.dietplan": "fas fa-calendar-alt",
         "plan.plantype": "fas fa-stream",
         "plan.plancategory": "fas fa-list",
         "plan.questionanswer": "fas fa-question",
-        "plan.subscription": "fas fa-rupee-sign",
+
+        "subscriptions.subscription": "fas fa-rupee-sign",
 
         "users.user": "fas fa-users",
         "users.profile": "fas fa-id-card",
         "users.userhealthreport": "fas fa-file-medical",
         "users.dailyactivity": "fas fa-calendar-day",
 
-        "django_celery_beat.clockedschedule": "fas fa-alarm-clock",
-        "django_celery_beat.crontabschedule": "fas fa-stopwatch",
-        "django_celery_beat.intervalschedule": "fas fa-watch",
-        "django_celery_beat.periodictask": "fas fa-chess-clock",
-        "django_celery_beat.solarschedule": "fas fa-solar-system",
+        "django_celery_beat.clockedschedule": "fas fa-clock",
+        "django_celery_beat.crontabschedule": "fas fa-stopwatch-20",
+        "django_celery_beat.intervalschedule": "fas fa-stopwatch",
+        "django_celery_beat.periodictask": "fas fa-history",
+        "django_celery_beat.solarschedule": "fas fa-cloud-sun",
 
         "django_celery_results.groupresult": "fas fa-poll",
         "django_celery_results.taskresult": "fas fa-tasks",
+
+        "fcm_django.fcmdevice": "fas fa-fire",
     },
 
     # "changeform_format": "vertical_tabs"

@@ -39,6 +39,7 @@ django-multiselectfield==0.1.12
 django-phonenumber-field==6.1.0
 django-phonenumbers==1.0.1
 django-quill-editor==0.1.40
+django-redis==5.2.0
 django-split-settings==1.1.0
 django-templated-mail==1.1.1
 django-timezone-field==5.0
@@ -46,6 +47,7 @@ djangorestframework==3.13.1
 djangorestframework-simplejwt==4.8.0
 djoser==2.1.0
 drf-yasg==1.20.0
+fcm-django==1.0.12
 firebase-admin==5.2.0
 google-api-core==2.7.2
 google-api-python-client==2.44.0
