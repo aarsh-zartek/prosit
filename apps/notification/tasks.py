@@ -2,8 +2,6 @@ from fcm_django.models import FCMDevice
 from firebase_admin.messaging import (
     Message,
     Notification as FCMNotification,
-    # MulticastMessage,
-    # send_multicast,
 )
 from prosit.celery import app
 
@@ -18,20 +16,11 @@ def send_push_notification(users, **kwargs):
     devices.send_message(
         Message(
             notification=FCMNotification(
-                title=kwargs.get("title", ""), body=kwargs("message", "")
+                title=kwargs.get("title", ""), body=kwargs.get("message", "")
             ),
             data=kwargs.get("data"),
         )
     )
-
-    # msg = MulticastMessage(
-    #     notification=FCMNotification(
-    #         title=kwargs.get("title", ""), body=kwargs("message", "")
-    #     ),
-    #     data={},
-    #     tokens=tokens,
-    # )
-    # res = send_multicast(msg)
 
     user_notifications = [
         UserNotification(
@@ -43,8 +32,6 @@ def send_push_notification(users, **kwargs):
     ]
 
     notifications = UserNotification.objects.bulk_create(user_notifications)
-
-    # notifications = [ notification.users.add(user) for user in users]
 
     return "Notifications Sent to all the users."
 
