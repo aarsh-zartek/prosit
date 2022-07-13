@@ -18,7 +18,7 @@ def send_push_notification(users, **kwargs):
     devices.send_message(
         Message(
             notification=FCMNotification(
-                title=kwargs.get("title", ""), body=kwargs("body", "")
+                title=kwargs.get("title", ""), body=kwargs("message", "")
             ),
             data=kwargs.get("data"),
         )
@@ -26,7 +26,7 @@ def send_push_notification(users, **kwargs):
 
     # msg = MulticastMessage(
     #     notification=FCMNotification(
-    #         title=kwargs.get("title", ""), body=kwargs("body", "")
+    #         title=kwargs.get("title", ""), body=kwargs("message", "")
     #     ),
     #     data={},
     #     tokens=tokens,
@@ -47,3 +47,9 @@ def send_push_notification(users, **kwargs):
     # notifications = [ notification.users.add(user) for user in users]
 
     return "Notifications Sent to all the users."
+
+
+@app.task
+def send_email_notificaton(*args, **kwargs) -> str:
+
+    return "Email Sent Successfully"

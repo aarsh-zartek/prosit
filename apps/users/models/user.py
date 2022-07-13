@@ -1,4 +1,3 @@
-from django.core.validators import validate_integer
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -77,8 +76,8 @@ class UserHealthReport(LifecycleModelMixin, BaseModel):
             health_code = self.assign_health_code()
             health_code_exists = User.objects.filter(profile__health_code=health_code).exists()
             if health_code_exists:
-                self.health_code = health_code
-                self.user.profile.health_code = health_code
+                # add plan to current user subscription
+                pass
             else:
                 # notify_admin?
                 pass
@@ -91,28 +90,23 @@ class UserHealthReport(LifecycleModelMixin, BaseModel):
         food_preference = profile.get_food_preference_display()[0]
         category = self.assign_category()
 
-        return f"{weight:03}{gender}{food_preference}{category}"
+        health_code = f"{weight:03}{gender}{food_preference}{category}"
+        self.health_code = health_code
+        # self.user.profile.health_code = health_code
+
+        return health_code
 
     def assign_category(self) -> str:
-        vitamin_b12 = self.vitamin_b12
-        vitamin_d = self.vitamin_d
-        uric_acid = self.uric_acid
-        creatin = self.creatin
-        fasting_blood_sugar = self.fasting_blood_sugar
-        hemoglobin = self.hemoglobin
-        thyroid_tsh = self.thyroid_tsh
-        pcod_pcos = self.pcod_pcos
-        gender = self.user.profile.gender
         category_data = {
-            "vitamin_b12": vitamin_b12,
-            "vitamin_d": vitamin_d,
-            "uric_acid": uric_acid,
-            "creatin": creatin,
-            "fasting_blood_sugar": fasting_blood_sugar,
-            "hemoglobin": hemoglobin,
-            "thyroid_tsh": thyroid_tsh,
-            "pcod_pcos": pcod_pcos,
-            "gender": gender,
+            "vitamin_b12": self.vitamin_b12,
+            "vitamin_d": self.vitamin_d,
+            "uric_acid": self.uric_acid,
+            "creatin": self.creatin,
+            "fasting_blood_sugar": self.fasting_blood_sugar,
+            "hemoglobin": self.hemoglobin,
+            "thyroid_tsh": self.thyroid_tsh,
+            "pcod_pcos": self.pcod_pcos,
+            "gender": self.user.profile.gender,
         }
 
         return get_category(category_data)
