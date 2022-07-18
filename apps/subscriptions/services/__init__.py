@@ -1,1 +1,1 @@
-from .revenue_cat import RevenueCat
+from .revenue_cat import RevenueCatService

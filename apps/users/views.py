@@ -16,7 +16,7 @@ from apps.users.filters import DailyActivityFilterSet
 from apps.users.models import User, DailyActivity, UserHealthReport
 from apps.users.serializers import DailyActivitySerializer, UserHealthReportSerializer, UserDietPlanSerializer
 
-from lib.constants import SubscriptionConstants
+# from lib.constants import SubscriptionConstants
 
 # Create your views here.
 
@@ -28,7 +28,7 @@ class UserPlanView(APIView):
 
 	def get(self, request, *args, **kwargs):
 		active_subscription = request.user.subscriptions.filter(
-				subscription_status=SubscriptionConstants.SubscriptionStatus.ACTIVE,
+				# subscription_status=SubscriptionConstants.SubscriptionStatus.ACTIVE,
 			)
 		
 		if active_subscription:

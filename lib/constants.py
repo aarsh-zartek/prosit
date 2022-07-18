@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import status
 
+
 class FieldConstants:
     MAX_UID_LENGTH = 48
     MAX_LENGTH = 255
@@ -15,26 +16,65 @@ class FieldConstants:
     FULL_DATE_TIME_FORMAT = f"{DATE_FORMAT} %I:%S:%M %p"
 
 
-class SubscriptionConstants:
-    class PaymentMethod:
-        WALLET = "wallet"
-        CREDIT_CARD = "credit_card"
-        DEBIT_CARD = "debit_card"
-        UPI = "upi"
-        NET_BANKING = "net_banking"
-    
-    class PaymentStatus:
-        PENDING = "pending"
-        PROCESSING = "processing"
-        SUCCESSFUL = "successful"
-        FAILED = "failed"
-        REJECTED = "rejected"
+class SubscriptionIdentifier:
+    ONE_MONTH_PLAN = "smart_plan_199"
 
-    class SubscriptionStatus:
-        INACTIVE = "inactive"
-        ACTIVE = "active"
-        EXPIRED = "expired"
-    
+
+class Device:
+    ANDROID = "android"
+    IOS = "ios"
+    WEB = "web"
+
+
+class SubscriptionPeriod:
+    MONTHLY = "monthly"
+    YEARLY = "yearly"
+
+
+class EventType:
+    TEST = "test"
+    INITIAL_PURCHASE = "initial_purchase"
+    NON_RENEWING_PURCHASE = "non_renewing_purchase"
+    RENEWAL = "renewal"
+    PRODUCT_CHANGE = "product_change"
+    CANCELLED = "cancelled"
+    BILLING_ISSUE = "billing_issue"
+    SUBSCRIBER_ALIAS = "subscriber_alias"
+
+
+class Environment:
+    SANDBOX = "sandbox"
+    PRODUCTION = "production"
+
+
+class Store:
+    PLAY_STORE = "play_store"
+    APP_STORE = "app_store"
+    STRIPE = "stripe"
+    MAC_APP_STORE = "mac_app_store"
+    PROMOTIONAL = "promotional"
+
+
+class PeriodType:
+    TRIAL = "trial"
+    INTRO = "intro"
+    NORMAL = "normal"
+    PROMOTIONAL = "promotional"
+
+
+class CancellationReason:
+    UNSUBSCRIBE = "unsubscribe"
+    BILLING_ERROR = "billing_error"
+    DEVELOPER_INITIATED = "developer_initiated"
+    PRICE_INCREASE = "price_increase"
+    CUSTOMER_SUPPORT = "customer_support"
+    UNKNOWN = "unknown"
+
+class SubscriptionStatus:
+    ACTIVE = "active"
+    EXPIRED = "expired"
+    CANCELLED = "cancelled"
+
 
 class AudioFormats(Enum):
     MP3 = "mp3"
@@ -59,7 +99,7 @@ POSITIVE_RESPONSES = [
     status.HTTP_200_OK,
     status.HTTP_201_CREATED,
     status.HTTP_202_ACCEPTED,
-    status.HTTP_204_NO_CONTENT
+    status.HTTP_204_NO_CONTENT,
 ]
 
 NEGATIVE_RESPONSES = [

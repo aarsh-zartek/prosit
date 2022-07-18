@@ -2,8 +2,16 @@ from django.utils.translation import gettext_lazy as _
 
 from model_utils import Choices
 
-from lib.constants import SubscriptionConstants
-
+from lib.constants import (
+    CancellationReason,
+    Device,
+    Environment,
+    EventType,
+    PeriodType,
+    Store,
+    SubscriptionPeriod,
+    SubscriptionStatus,
+)
 
 PLAN_TYPES = Choices(
     (_("main_category"), ("Main Category")),
@@ -45,26 +53,61 @@ BLOOD_GROUP_CHOICES = Choices(
     (_("ab-"), _("ab_negative"), _("AB -ve")),
 )
 
-
-PAYMENT_METHODS = Choices(
-    (SubscriptionConstants.PaymentMethod.WALLET, _("Wallet")),
-    (SubscriptionConstants.PaymentMethod.CREDIT_CARD, _("Credit Card")),
-    (SubscriptionConstants.PaymentMethod.DEBIT_CARD, _("Debit Card")),
-    (SubscriptionConstants.PaymentMethod.UPI, _("UPI")),
-    (SubscriptionConstants.PaymentMethod.WALLET, _("Wallet")),
+DEVICE_CHOICES = Choices(
+    (Device.ANDROID, _("Android")),
+    (Device.IOS, _("iOS")),
+    (Device.WEB, _("Web"))
 )
 
-PAYMENT_STATUSES = Choices(
-    (SubscriptionConstants.PaymentStatus.PENDING, _("Pending")),
-    (SubscriptionConstants.PaymentStatus.PROCESSING, _("Processing")),
-    (SubscriptionConstants.PaymentStatus.SUCCESSFUL, _("Successful")),
-    (SubscriptionConstants.PaymentStatus.FAILED, _("Failed")),
-    (SubscriptionConstants.PaymentStatus.REJECTED, _("Rejected")),
+SUBSCRIPTION_PERIOD_CHOICES = (
+    (SubscriptionPeriod.MONTHLY, _("monthly")),
+    (SubscriptionPeriod.YEARLY, _("yearly")),
 )
 
-SUBSCRIPTION_STATUSES = Choices(
-    (SubscriptionConstants.SubscriptionStatus.INACTIVE, _("Inactive")),
-    (SubscriptionConstants.SubscriptionStatus.ACTIVE, _("Active")),
-    (SubscriptionConstants.SubscriptionStatus.EXPIRED, _("Expired")),
+EVENT_TYPE_CHOICES = Choices(
+    (EventType.TEST, _("Test")),
+    (EventType.INITIAL_PURCHASE, _("Initial Purchase")),
+    (EventType.NON_RENEWING_PURCHASE, _("Non Renewing Purchase")),
+    (EventType.RENEWAL, _("Renewal")),
+    (EventType.PRODUCT_CHANGE, _("Product Change")),
+    (EventType.CANCELLED, _("Cancelled")),
+    (EventType.BILLING_ISSUE, _("Billing Issue")),
+    (EventType.SUBSCRIBER_ALIAS, _("Subscriber Alias")),
+)
 
+ENVIRONMENT_CHOICES = Choices(
+    (Environment.SANDBOX, _("Sandbox")),
+    (Environment.PRODUCTION, _("Production")),
+)
+
+
+STORE_CHOICES = Choices(
+    (Store.PLAY_STORE, _("Play Store")),
+    (Store.APP_STORE, _("App Store")),
+    (Store.STRIPE, _("Stripe")),
+    (Store.MAC_APP_STORE, _("Mac App Store")),
+    (Store.PROMOTIONAL, _("Promotional")),
+)
+
+
+PERIOD_TYPE_CHOICES = Choices(
+    (PeriodType.TRIAL, _("Trial")),
+    (PeriodType.INTRO, _("Intro")),
+    (PeriodType.NORMAL, _("Normal")),
+    (PeriodType.PROMOTIONAL, _("Promotional")),
+)
+
+CANCELLATION_REASON_CHOICES = Choices(
+    (CancellationReason.UNSUBSCRIBE, _("Unsubscribe")),
+    (CancellationReason.BILLING_ERROR, _("Billing Error")),
+    (CancellationReason.DEVELOPER_INITIATED, _("Developer Initiated")),
+    (CancellationReason.PRICE_INCREASE, _("Price Increase")),
+    (CancellationReason.CUSTOMER_SUPPORT, _("Customer Support")),
+    (CancellationReason.UNKNOWN, _("Unknown")),
+)
+
+SUBSCRIPTION_STATUS_CHOICES = Choices(
+    (SubscriptionStatus.ACTIVE, _("Active")),
+    (SubscriptionStatus.EXPIRED, _("Expired")),
+    (SubscriptionStatus.CANCELLED, _("Cancelled")),
 )

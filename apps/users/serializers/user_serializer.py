@@ -11,7 +11,7 @@ from apps.users.models import User, DailyActivity, UserHealthReport, Profile
 from apps.users.serializers.profile_serializer import ProfileSerializer
 
 from lib.choices import GENDER
-from lib.constants import SubscriptionConstants
+# from lib.constants import SubscriptionConstants
 
 
 class UserSerializer(DynamicFieldsModelSerializer):
@@ -25,7 +25,7 @@ class UserSerializer(DynamicFieldsModelSerializer):
 
     def get_active_subscription(self, instance: User) -> bool:
         subscription = instance.subscriptions.filter(
-                    subscription_status=SubscriptionConstants.SubscriptionStatus.ACTIVE
+                    # subscription_status=SubscriptionConstants.SubscriptionStatus.ACTIVE
                 ).exists()
         return True if subscription else False
     
@@ -33,7 +33,7 @@ class UserSerializer(DynamicFieldsModelSerializer):
         plan = False
         if self.get_active_subscription(instance):
             plan = instance.subscriptions.filter(
-                    subscription_status=SubscriptionConstants.SubscriptionStatus.ACTIVE
+                    # subscription_status=SubscriptionConstants.SubscriptionStatus.ACTIVE
                 ).last().plan
         return True if plan else False
 
