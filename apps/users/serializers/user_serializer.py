@@ -24,18 +24,10 @@ class UserSerializer(DynamicFieldsModelSerializer):
     active_plan = serializers.SerializerMethodField()
 
     def get_active_subscription(self, instance: User) -> bool:
-        subscription = instance.subscriptions.filter(
-                    # subscription_status=SubscriptionConstants.SubscriptionStatus.ACTIVE
-                ).exists()
-        return True if subscription else False
+        return True if instance.active_subscription else False
     
     def get_active_plan(self, instance: User) -> bool:
-        plan = False
-        if self.get_active_subscription(instance):
-            plan = instance.subscriptions.filter(
-                    # subscription_status=SubscriptionConstants.SubscriptionStatus.ACTIVE
-                ).last().plan
-        return True if plan else False
+        return True if instance.active_plan else False
 
     class Meta:
         model = User
@@ -118,11 +110,11 @@ class UserDietPlanSerializer(DynamicFieldsModelSerializer):
     subscription_status = serializers.SerializerMethodField()
 
     def get_my_plan(self, instance: User):
-        plan = instance.subscriptions.latest('created').plan
+        plan = instance.active_subscription.plan
         return DietPlanSerializer(plan, exclude=("queries", "parent", 'plan_type')).data
     
     def get_subscription_status(self, instance: User) -> str:
-        return instance.subscriptions.latest('created').get_subscription_status_display()
+        return instance.active_subscription.get_subscription_status_display()
 
     
     class Meta:

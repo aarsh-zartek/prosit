@@ -5,9 +5,10 @@ from django_lifecycle import LifecycleModelMixin, AFTER_CREATE, hook
 
 from apps.core.models import BaseModel
 from apps.firebase.models import AbstractFirebaseUser
+# from apps.notification.tasks import send_email_notificaton
 from apps.users.utils import get_category
 
-from lib.constants import FieldConstants
+from lib.constants import FieldConstants, SubscriptionStatus
 from lib.utils import get_user_health_image_path, get_profile_picture_path
 
 # Create your models here.
@@ -34,6 +35,16 @@ class User(LifecycleModelMixin, BaseModel, AbstractFirebaseUser):
     def delete(self):
         self.is_active = False
         self.save()
+
+    @property
+    def active_subscription(self):
+        if user_subscription := self.subscriptions.filter(SubscriptionStatus.ACTIVE):
+            return user_subscription.latest("created")
+        return None
+    
+    @property
+    def active_plan(self):
+        return self.active_subscription.plan if self.active_subscription else None
 
 
 class UserHealthReport(LifecycleModelMixin, BaseModel):
@@ -71,24 +82,24 @@ class UserHealthReport(LifecycleModelMixin, BaseModel):
 
     @hook(hook=AFTER_CREATE)
     def after_create(self):
-        if not self.user.profile.health_code:
-        # if not self.health_code:
-            health_code = self.assign_health_code()
-            health_code_exists = User.objects.filter(profile__health_code=health_code).exists()
-            if health_code_exists:
+        if not self.health_code:
+            health_code = self._assign_health_code()
+            if health_code_users := User.objects.filter(health_reports__health_code=health_code):
                 # add plan to current user subscription
                 pass
+                # self.user.active_subscription.plan = health_code_users.first().
             else:
                 # notify_admin?
                 pass
+                # send_email_notificaton(message="", admins=True)
 
-    def assign_health_code(self) -> str:
+    def _assign_health_code(self) -> str:
         profile = self.user.profile
         
         weight = round(profile.weight)
         gender = profile.get_gender_display()[0]
         food_preference = profile.get_food_preference_display()[0]
-        category = self.assign_category()
+        category = self._assign_category()
 
         health_code = f"{weight:03}{gender}{food_preference}{category}"
         self.health_code = health_code
@@ -96,7 +107,7 @@ class UserHealthReport(LifecycleModelMixin, BaseModel):
 
         return health_code
 
-    def assign_category(self) -> str:
+    def _assign_category(self) -> str:
         category_data = {
             "vitamin_b12": self.vitamin_b12,
             "vitamin_d": self.vitamin_d,
@@ -110,6 +121,14 @@ class UserHealthReport(LifecycleModelMixin, BaseModel):
         }
 
         return get_category(category_data)
+
+    def save(self, *args, **kwargs):
+        from django.core.exceptions import ValidationError
+
+        if not self.user.active_subscription:
+            raise ValidationError("No Active subscription found")
+        
+        return super().save(*args, **kwargs)
 
 
 class DailyActivity(BaseModel):
