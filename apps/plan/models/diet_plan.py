@@ -1,18 +1,14 @@
-from datetime import timedelta
-
 from django.core.validators import FileExtensionValidator as FEV
 from django.db import models
-from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from ckeditor.fields import RichTextField
 from multiselectfield import MultiSelectField
 
 from apps.core.models import BaseModel
-from apps.users.models import User
 
 from lib.constants import FieldConstants, AudioFormats, DocumentFormats
-from lib.choices import PLAN_TYPES, FIELDS_TO_SHOW, PAYMENT_METHODS, PAYMENT_STATUSES, SUBSCRIPTION_STATUSES
+from lib.choices import PLAN_TYPES, FIELDS_TO_SHOW
 from lib.utils import get_diet_plan_instruction_path, get_preparation_path
 
 # Create your models here
@@ -141,10 +137,10 @@ class DietPlan(BaseModel):
 
     value = models.PositiveIntegerField(verbose_name=_("Plan Value"))
 
-    revenue_cat_identifier = models.CharField(
-        verbose_name=_("Revenue Cat Identifier"),
+    product_identifier = models.SlugField(
+        verbose_name=_("Product Identifier"),
         max_length=FieldConstants.MAX_NAME_LENGTH,
-        null=True
+        unique=True
     )
 
     def clean(self) -> None:
@@ -167,6 +163,15 @@ class DietPlan(BaseModel):
             raise ValidationError("Sub category can't have other Sub Category as parent")
         
         return super().clean()
+    
+    def save(self, *args, **kwargs):
+        from django.core.exceptions import ValidationError
+        unique = DietPlan.objects.filter(product_identifier=self.product_identifier).exists()
+        
+        if not unique:
+            raise ValidationError("Product Identifier must be Unique")
+        return super().save(*args, **kwargs)
+
 
     class Meta:
         verbose_name = _("Diet Plan")

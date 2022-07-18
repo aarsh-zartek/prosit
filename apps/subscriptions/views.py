@@ -1,39 +1,42 @@
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.mixins import (
-    ListModelMixin,
     CreateModelMixin,
-    RetrieveModelMixin,
-    UpdateModelMixin,
 )
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
-from apps.subscriptions.models import Subscription
-from apps.subscriptions.serializers import SubscriptionSerializer
+from apps.subscriptions.models import UserSubscription
+from apps.subscriptions.serializers import (
+    VerifyPurchaseSerializer,
+    UserSubscriptionSerializer,
+)
 
-# Create your views here.
-
-
-class SubscriptionViewSet(
-    GenericViewSet,
-    ListModelMixin,
-    CreateModelMixin,
-    RetrieveModelMixin,
-    UpdateModelMixin,
-):
-
-    queryset = Subscription.objects.all()
-    serializer_class = SubscriptionSerializer
+# # Create your views here.
 
 
-class CheckPaymentStatus(APIView):
+class UserSubscriptionViewSet(GenericViewSet, CreateModelMixin):
+    queryset = UserSubscription.objects.select_related("user", "plan").all()
+    serializer_class = UserSubscriptionSerializer
 
-    permission_classes = (IsAuthenticated,)
 
-    def post(self, request, *args, **kwargs):
+# class CheckPaymentStatus(APIView):
+#     def post(self, request, *args, **kwargs):
+#         user = request.user
+#         subscriptions = user.subscriptions.all()
+#         return Response({"payment_status": "0"}, status=HTTP_200_OK)
 
-        user = request.user
-        subscriptions = user.subscriptions.all()
-        return Response({"payment_status": "0"}, status=HTTP_200_OK)
+
+# class VerifyPurchaseView(APIView):
+#     serializer_class = VerifyPurchaseSerializer
+
+#     def post(self, request, *args, **kwargs):
+#         serializer = self.serializer_class(request.data)
+
+#         return Response({"data": serializer.data}, status=HTTP_200_OK)
+
+
+"""
+Response
+D/[Purchases] - DEBUG(31146): :information_source: BillingWrapper purchases updated: skus: [smart_plan_199], orderId: GPA.3305-0609-9204-98023, purchaseToken: dnjgdllkapjbakjacapncjgj.AO-J1OxmqlbeTMbyeIjblFVEvkG6hsm3kI_b4D6uIVAkan-mIzNweNThoek7DgdZH20duN_S6WWK_qptBFbwAVLaxhx7Q-o62g
+"""

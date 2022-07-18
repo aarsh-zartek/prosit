@@ -278,6 +278,9 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'apps.core.renderers.CustomAPIRenderer',
     ),
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticated",
+    )
     # "DATE_TIME_FORMAT": FieldConstants.FULL_DATE_TIME_FORMAT
 }
 
@@ -309,11 +312,19 @@ REVENUE_CAT_API_KEY = env.str("REVENUE_CAT_API_KEY")
 
 # Djoser Config
 DJOSER = {
-    'SERIALIZERS': {
-        'current_user': 'apps.users.serializers.UserSerializer',
-        'user': 'apps.users.serializers.UserSerializer',
+    "SERIALIZERS": {
+        "current_user": "apps.users.serializers.UserSerializer",
+        "user": "apps.users.serializers.UserSerializer",
     },
 }
+
+SHELL_PLUS_DONT_LOAD = [
+    "django",
+]
+
+SHELL_PLUS_IMPORTS = [
+    "from datetime import datetime, timedelta",
+]
 
 JAZZMIN_SETTINGS = {
     "site_brand": "Prosit Health",

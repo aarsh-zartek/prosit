@@ -40,6 +40,10 @@ v1_url_patterns = [
         "",
         include(("apps.notification.urls", "notification"), namespace="notification"),
     ),
+    path(
+        "",
+        include(("apps.subscriptions.urls", "subscriptions"), namespace="subscriptions"),
+    ),
     path("", include(router.urls)),
 ]
 

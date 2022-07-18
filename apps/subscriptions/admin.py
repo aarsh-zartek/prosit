@@ -1,14 +1,14 @@
 from django.contrib import admin
 
-from apps.subscriptions.models import Subscription
+from apps.subscriptions.models import UserSubscription
 
 
 # Register your models here.
 
-class SubscriptionAdmin(admin.ModelAdmin):
-	list_display = ("user", "plan", "amount_paid", "payment_status", "subscription_status", "expires_on")
-	readonly_fields=('expires_on', "transaction_id")
-	list_filter = ("subscription_status", "payment_status")
+class UserSubscriptionAdmin(admin.ModelAdmin):
+	list_display = ("user", "plan", "amount_paid", "subscription_status", "expires_on")
+	readonly_fields=('expires_on', "receipt")
+	list_filter = ("subscription_status",)
 
 
-admin.site.register(Subscription, SubscriptionAdmin)
+admin.site.register(UserSubscription, UserSubscriptionAdmin)
