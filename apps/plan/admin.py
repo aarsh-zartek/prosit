@@ -26,6 +26,7 @@ class QuestionAnswerInline(admin.TabularInline):
 class DietPlanAdmin(admin.ModelAdmin):
 	list_display = ("name", "get_category", "get_plan_type", "parent", "no_of_questions", "created")
 	list_filter = ("plan_type",)
+	prepopulated_fields = {"product_identifier": ("name",)}
 	inlines = (QuestionAnswerInline,)
 
 	def get_plan_type(self, instance):
