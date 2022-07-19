@@ -4,7 +4,7 @@ from django.utils import timezone
 
 from rest_framework import mixins
 from rest_framework.generics import CreateAPIView, RetrieveAPIView
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_422_UNPROCESSABLE_ENTITY
 from rest_framework.viewsets import GenericViewSet
@@ -50,9 +50,7 @@ class DailyActivityView(CreateAPIView, RetrieveAPIView):
 		return DailyActivity.objects.filter(user=self.request.user).order_by('date')
 	
 	def create(self, request, *args, **kwargs):
-		data = request.data
-		data['user'] = request.user.id
-		serializer = self.get_serializer(data=data)
+		serializer = self.get_serializer(data=request.data)
 		serializer.is_valid(raise_exception=True)
 		serializer.save()
 		return Response(serializer.data, status=HTTP_201_CREATED)
@@ -76,9 +74,7 @@ class UserHealthReportViewSet(mixins.CreateModelMixin, GenericViewSet):
 		return context
 
 	def create(self, request, *args, **kwargs):
-		data = request.data
-		data['user'] = request.user.id
-		serializer = self.get_serializer(data=data)
+		serializer = self.get_serializer(data=request.data)
 		serializer.is_valid(raise_exception=True)
 		serializer.save()
 		return Response(serializer.data, status=HTTP_201_CREATED)
