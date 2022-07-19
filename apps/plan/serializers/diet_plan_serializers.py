@@ -60,7 +60,7 @@ class DietPlanSerializer(DynamicFieldsModelSerializer):
 		model = DietPlan
 		fields = (
 			"id", "name", "category", "plan_type", "parent",
-			"queries"
+			"queries", "value", "product_identifer"
 		)
 	
 	def create(self, validated_data):
