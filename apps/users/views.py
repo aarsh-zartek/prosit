@@ -61,7 +61,8 @@ class DailyActivityView(CreateAPIView, RetrieveAPIView):
 		queryset = self.filter_queryset(self.get_queryset())
 		serializer = self.get_serializer(queryset, many=True, exclude=["user"])
 		return Response({
-			"activity_data": serializer.data
+				"activity_data": serializer.data,
+				"diet_plan_active": True if request.user.active_plan else False
 			}, status=HTTP_200_OK
 		)
 
