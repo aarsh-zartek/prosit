@@ -16,7 +16,6 @@ from apps.users.filters import DailyActivityFilterSet
 from apps.users.models import User, DailyActivity, UserHealthReport
 from apps.users.serializers import DailyActivitySerializer, UserHealthReportSerializer, UserDietPlanSerializer
 
-# from lib.constants import SubscriptionConstants
 
 # Create your views here.
 
@@ -24,18 +23,12 @@ from apps.users.serializers import DailyActivitySerializer, UserHealthReportSeri
 class UserPlanView(APIView):
 
 	serializer_class = UserDietPlanSerializer
-	permission_classes = (IsAuthenticated,)
 
 	def get(self, request, *args, **kwargs):
-		active_subscription = request.user.subscriptions.filter(
-				# subscription_status=SubscriptionConstants.SubscriptionStatus.ACTIVE,
-			)
-		
-		if active_subscription:
-			active_plan = active_subscription.filter(plan__isnull=False)
-			if active_plan:
+		if request.user.active_subscription:
+			if request.user.active_plan:
 				serializer = self.serializer_class(instance=request.user)
-				return Response(serializer.data, status=HTTP_200_OK)
+				return Response(data=serializer.data, status=HTTP_200_OK)
 			else:
 				return Response({
 						"message": "Your plan is being generated"
@@ -50,7 +43,6 @@ class UserPlanView(APIView):
 
 class DailyActivityView(CreateAPIView, RetrieveAPIView):
 	serializer_class = DailyActivitySerializer
-	permission_classes = (IsAuthenticated,)
 	filter_backends = (DjangoFilterBackend,)
 	filterset_class = DailyActivityFilterSet
 	
@@ -76,7 +68,6 @@ class DailyActivityView(CreateAPIView, RetrieveAPIView):
 
 class UserHealthReportViewSet(mixins.CreateModelMixin, GenericViewSet):
 	serializer_class = UserHealthReportSerializer
-	permission_classes = (IsAuthenticated,)
 
 	def get_serializer_context(self):
 		context = super().get_serializer_context()
@@ -112,7 +103,6 @@ class CheckPhoneNumberExistsView(APIView):
 
 
 class CheckHealthReportExistsView(APIView):
-	permission_classes = (IsAuthenticated,)
 	
 	def get(self, request):
 

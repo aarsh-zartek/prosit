@@ -1,42 +1,38 @@
-from rest_framework.mixins import (
-    CreateModelMixin,
-)
+from rest_framework.decorators import action
+from rest_framework.mixins import CreateModelMixin
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK
-from rest_framework.views import APIView
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.viewsets import GenericViewSet
 
 from apps.subscriptions.models import UserSubscription
-from apps.subscriptions.serializers import (
-    VerifyPurchaseSerializer,
-    UserSubscriptionSerializer,
-)
+from apps.subscriptions.serializers import UserSubscriptionSerializer
+from apps.subscriptions.services import RevenueCatService
 
-# # Create your views here.
+# Create your views here.
 
 
 class UserSubscriptionViewSet(GenericViewSet, CreateModelMixin):
     queryset = UserSubscription.objects.select_related("user", "plan").all()
     serializer_class = UserSubscriptionSerializer
 
+    @action(methods=["post",], detail=False)
+    def verify_purchase(self, request, *args, **kwargs):
+        data = request.data
+        product_identifier = data.get("product_identifier", None)
+        rc_id = data.get("revenuecat_id", None)
+        purchase_date = data.get("purchase_date", None)
 
-# class CheckPaymentStatus(APIView):
-#     def post(self, request, *args, **kwargs):
-#         user = request.user
-#         subscriptions = user.subscriptions.all()
-#         return Response({"payment_status": "0"}, status=HTTP_200_OK)
+        if not all([product_identifier, rc_id, purchase_date]):
+            return Response(
+                data={
+                    "error": "All fields product_identifier, revenuecat_id, purchase_date must be provided"
+                },
+                status=HTTP_400_BAD_REQUEST,
+            )
 
+        rc = RevenueCatService(request.user.uid)
+        verified = rc.verify_non_subscription_payment(
+            product_identifier, rc_id, purchase_date
+        )
 
-# class VerifyPurchaseView(APIView):
-#     serializer_class = VerifyPurchaseSerializer
-
-#     def post(self, request, *args, **kwargs):
-#         serializer = self.serializer_class(request.data)
-
-#         return Response({"data": serializer.data}, status=HTTP_200_OK)
-
-
-"""
-Response
-D/[Purchases] - DEBUG(31146): :information_source: BillingWrapper purchases updated: skus: [smart_plan_199], orderId: GPA.3305-0609-9204-98023, purchaseToken: dnjgdllkapjbakjacapncjgj.AO-J1OxmqlbeTMbyeIjblFVEvkG6hsm3kI_b4D6uIVAkan-mIzNweNThoek7DgdZH20duN_S6WWK_qptBFbwAVLaxhx7Q-o62g
-"""
+        return Response(data={"purchase_verified": verified}, status=HTTP_200_OK)

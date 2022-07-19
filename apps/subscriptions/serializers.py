@@ -29,17 +29,6 @@ class UserSubscriptionSerializer(DynamicFieldsModelSerializer):
             return super().create(validated_data)
 
 
-class VerifyPurchaseSerializer(serializers.Serializer):
-    purchase_verified = serializers.SerializerMethodField()
-
-    def get_purchase_verified(self, instance: UserSubscription) -> bool:
-        return instance.user.uid
-
-    class Meta:
-        model = UserSubscription
-        fields = ("purchase_verified",)
-
-
 class RevenueCatHistorySerializer(DynamicFieldsModelSerializer):
 
     class Meta:

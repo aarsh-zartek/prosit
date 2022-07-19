@@ -8,10 +8,7 @@ class IsSubscribed(BasePermission):
 	message = "No active subscription found"
 
 	def has_permission(self, request, view):
-		user = request.user
-		return user.subscriptions.filter(
-				subscription_status=SubscriptionConstants.SubscriptionStatus.ACTIVE
-			).exists()
+		return True if request.user.active_subscription else False
 
 
 class HasActivePlan(BasePermission):
@@ -19,7 +16,4 @@ class HasActivePlan(BasePermission):
 	
 	def has_permission(self, request, view):
 
-		return request.user.subscriptions.filter(
-				subscription_status=SubscriptionConstants.SubscriptionStatus.ACTIVE,
-				plan__isnull=False
-			).exists()
+		return True if request.user.active_plan else False
