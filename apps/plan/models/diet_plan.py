@@ -164,14 +164,6 @@ class DietPlan(BaseModel):
         
         return super().clean()
     
-    def save(self, *args, **kwargs):
-        from django.core.exceptions import ValidationError
-        unique = DietPlan.objects.filter(product_identifier=self.product_identifier).exists()
-        
-        if not unique:
-            raise ValidationError("Product Identifier must be Unique")
-        return super().save(*args, **kwargs)
-
 
     class Meta:
         verbose_name = _("Diet Plan")
