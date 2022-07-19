@@ -14,7 +14,7 @@ class UserSubscriptionSerializer(DynamicFieldsModelSerializer):
             "subscription_type",
             "subscription_status", "expires_on",
         )
-        read_only_fields = ("plan",)
+        read_only_fields = ("plan", "expires_on", "subscription_status")
 
     def create(self, validated_data):
         try:

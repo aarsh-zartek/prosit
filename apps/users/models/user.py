@@ -38,7 +38,7 @@ class User(LifecycleModelMixin, BaseModel, AbstractFirebaseUser):
 
     @property
     def active_subscription(self):
-        if user_subscription := self.subscriptions.filter(SubscriptionStatus.ACTIVE):
+        if user_subscription := self.subscriptions.filter(subscription_status=SubscriptionStatus.ACTIVE):
             return user_subscription.latest("created")
         return None
     
