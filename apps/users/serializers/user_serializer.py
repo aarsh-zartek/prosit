@@ -11,7 +11,6 @@ from apps.users.models import User, DailyActivity, UserHealthReport, Profile
 from apps.users.serializers.profile_serializer import ProfileSerializer
 
 from lib.choices import GENDER
-# from lib.constants import SubscriptionConstants
 
 
 class UserSerializer(DynamicFieldsModelSerializer):
@@ -55,6 +54,8 @@ class UserSerializer(DynamicFieldsModelSerializer):
 
 class UserHealthReportSerializer(DynamicFieldsModelSerializer):
 
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
     def validate_hemoglobin(self, hemoglobin):
         if not 1 < int(hemoglobin) < 30:
             raise serializers.ValidationError("Enter a value between 1 and 30")
@@ -86,6 +87,8 @@ class DailyActivitySerializer(DynamicFieldsModelSerializer):
     
     `date` must be less than or equal to today's date
     """
+
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     def validate_date(self, date_value):
         if date_value > timezone.now():
