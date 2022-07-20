@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.core.models import BaseModel
+from apps.users.models import User
 
 from lib.constants import FieldConstants
 
@@ -47,4 +48,17 @@ class FAQ(BaseModel):
     
     def __str__(self):
         return self.company.__str__()
-        
+
+
+class ContactForm(BaseModel):
+
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=FieldConstants.MAX_NAME_LENGTH)
+
+    email = models.EmailField()
+    phone_number = PhoneNumberField()
+    message = models.TextField()
+    
+    class Meta:
+        verbose_name = _("Contact Form")
+        verbose_name_plural = _("Contact Forms")
