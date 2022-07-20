@@ -122,13 +122,13 @@ class UserHealthReport(LifecycleModelMixin, BaseModel):
 
         return get_category(category_data)
 
-    def save(self, *args, **kwargs):
+    def clean(self) -> None:
         from django.core.exceptions import ValidationError
 
         if not self.user.active_subscription:
-            raise ValidationError("No Active subscription found")
-        
-        return super().save(*args, **kwargs)
+            raise ValidationError("No Active Subscription found for this user")
+
+        return super().clean()
 
 
 class DailyActivity(BaseModel):

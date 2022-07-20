@@ -4,7 +4,7 @@ from django.utils import timezone
 
 from rest_framework import mixins
 from rest_framework.generics import CreateAPIView, RetrieveAPIView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_422_UNPROCESSABLE_ENTITY
 from rest_framework.viewsets import GenericViewSet
@@ -23,6 +23,7 @@ from apps.users.serializers import DailyActivitySerializer, UserHealthReportSeri
 class UserPlanView(APIView):
 
 	serializer_class = UserDietPlanSerializer
+	permission_classes = (IsAuthenticated,)
 
 	def get(self, request, *args, **kwargs):
 		if request.user.active_subscription:
@@ -42,6 +43,7 @@ class UserPlanView(APIView):
 
 
 class DailyActivityView(CreateAPIView, RetrieveAPIView):
+	permission_classes = (IsAuthenticated,)
 	serializer_class = DailyActivitySerializer
 	filter_backends = (DjangoFilterBackend,)
 	filterset_class = DailyActivityFilterSet
@@ -67,6 +69,7 @@ class DailyActivityView(CreateAPIView, RetrieveAPIView):
 
 class UserHealthReportViewSet(mixins.CreateModelMixin, GenericViewSet):
 	serializer_class = UserHealthReportSerializer
+	permission_classes = (IsAuthenticated,)
 
 	def get_serializer_context(self):
 		context = super().get_serializer_context()
@@ -100,9 +103,9 @@ class CheckPhoneNumberExistsView(APIView):
 
 
 class CheckHealthReportExistsView(APIView):
+	permission_classes = (IsAuthenticated,)
 	
 	def get(self, request):
-
 		uploaded = UserHealthReport.objects.filter(
 				user=request.user,
 				date__gte=timezone.now() - timedelta(days=7)
