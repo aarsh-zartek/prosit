@@ -64,6 +64,14 @@ class UserHealthReportSerializer(DynamicFieldsModelSerializer):
     def validate(self, attrs):
         user = self.context.get('user')
         pcod_pcos = attrs.get('pcod_pcos', None)
+        image = attrs.get("image", "not_present")
+
+        if not user.active_subscription:
+            raise serializers.ValidationError("No Active Subscription found for this user")
+
+        if image is None:
+            attrs.pop("image")
+
         if (pcod_pcos is None) and (user.profile.gender == GENDER.female):
             raise serializers.ValidationError("You must provide `pcod_pcos` field for the female user")
         elif pcod_pcos and (user.profile.gender == GENDER.male):
