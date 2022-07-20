@@ -25,10 +25,3 @@ class DietPlanView(SerializerActionClassMixin, ReadOnlyModelViewSet):
 		if self.action == 'list':
 			queryset = queryset.filter(plan_type=PLAN_TYPES.main_category)
 		return queryset
-
-
-class PlanCategoryView(ReadOnlyModelViewSet):
-	serializer_class = PlanCategorySerializer
-	queryset = PlanCategory.objects.all()
-	permission_classes = (AllowAny,)
-
