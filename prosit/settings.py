@@ -278,9 +278,9 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'apps.core.renderers.CustomAPIRenderer',
     ),
-    "DEFAULT_PERMISSION_CLASSES": (
-        "rest_framework.permissions.IsAuthenticated",
-    )
+    "DEFAULT_THROTTLE_RATES": {
+        "contact_form": "5/day"
+    }
     # "DATE_TIME_FORMAT": FieldConstants.FULL_DATE_TIME_FORMAT
 }
 

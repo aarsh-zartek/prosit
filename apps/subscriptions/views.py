@@ -1,5 +1,6 @@
 from rest_framework.decorators import action
 from rest_framework.mixins import CreateModelMixin
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.viewsets import GenericViewSet
@@ -14,6 +15,7 @@ from apps.subscriptions.services import RevenueCatService
 class UserSubscriptionViewSet(GenericViewSet, CreateModelMixin):
     queryset = UserSubscription.objects.select_related("user", "plan").all()
     serializer_class = UserSubscriptionSerializer
+    permission_classes = (IsAuthenticated,)
 
     @action(methods=["post",], detail=False)
     def verify_purchase(self, request, *args, **kwargs):
