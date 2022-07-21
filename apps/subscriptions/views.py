@@ -66,7 +66,7 @@ class UserSubscriptionViewSet(GenericViewSet, CreateModelMixin):
 class MySubscriptionView(APIView):
 
     serializer_class = MySubscriptionSerializer
-    permission_classes = (IsAuthenticated, IsSubscribed, HasActivePlan)
+    permission_classes = (IsAuthenticated, IsSubscribed)
 
     def get(self, request, *args, **kwargs):
         serializer = self.serializer_class(instance=request.user.active_subscription)
