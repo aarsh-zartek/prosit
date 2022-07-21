@@ -278,12 +278,12 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'apps.core.renderers.CustomAPIRenderer',
     ),
-    # 'DEFAULT_THROTTLE_CLASSES': (
-    #     'rest_framework.throttling.ScopedRateThrottle',
-    # ),
-    # "DEFAULT_THROTTLE_RATES": {
-    #     "contact_form": "5/day"
-    # }
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.ScopedRateThrottle',
+    ),
+    "DEFAULT_THROTTLE_RATES": {
+        "contact_form": "2/hour"
+    }
     # "DATE_TIME_FORMAT": FieldConstants.FULL_DATE_TIME_FORMAT
 }
 
