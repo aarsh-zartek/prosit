@@ -278,6 +278,9 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'apps.core.renderers.CustomAPIRenderer',
     ),
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.ScopedRateThrottle',
+    ),
     "DEFAULT_THROTTLE_RATES": {
         "contact_form": "5/day"
     }
