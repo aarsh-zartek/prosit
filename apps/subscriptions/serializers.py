@@ -48,3 +48,15 @@ class RevenueCatHistorySerializer(DynamicFieldsModelSerializer):
             "cancel_reason",
             "is_trial_conversion",
         )
+
+
+class MySubscriptionSerializer(serializers.Serializer):
+
+    status = serializers.CharField(source="get_subscription_status_display")
+    plan_name = serializers.CharField(source="plan.name")
+    expires_on = serializers.DateTimeField()
+    amount_paid = serializers.IntegerField()
+    subscribed_on = serializers.DateTimeField(source="created")
+
+    class Meta:
+        model = UserSubscription
