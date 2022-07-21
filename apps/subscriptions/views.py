@@ -12,7 +12,6 @@ from apps.subscriptions.serializers import (
     UserSubscriptionSerializer
 )
 from apps.subscriptions.services import RevenueCatService
-from apps.users.permissions import HasActivePlan, IsSubscribed
 
 from lib.constants import SubscriptionStatus
 
@@ -46,13 +45,18 @@ class UserSubscriptionViewSet(GenericViewSet, CreateModelMixin):
 
         return Response(data={"purchase_verified": verified}, status=HTTP_200_OK)
 
-    @action(methods=["patch",], detail=False, permission_classes=(IsSubscribed,))
+    @action(methods=["patch",], detail=False)
     def revoke(self, request, *args, **kwargs) -> Response:
         """Revokes a user subscription by setting the 
         `subscription_status` to Cancelled
         """
 
-        subscription: UserSubscription = request.user.active_subscription
+        subscription = request.user.active_subscription
+        if not subscription:
+            return Response({
+                    "message": "No Active Subscription found"
+                }, status=HTTP_200_OK
+            )
         subscription.subscription_status = SubscriptionStatus.CANCELLED
         subscription.save()
         
@@ -66,9 +70,15 @@ class UserSubscriptionViewSet(GenericViewSet, CreateModelMixin):
 class MySubscriptionView(APIView):
 
     serializer_class = MySubscriptionSerializer
-    permission_classes = (IsAuthenticated, IsSubscribed)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
-        serializer = self.serializer_class(instance=request.user.active_subscription)
+        subscription = request.user.active_subscription
+        if not subscription:
+            return Response({
+                    "message": "No Active Subscription found"
+                }, status=HTTP_200_OK
+            )
+        serializer = self.serializer_class(instance=subscription)
         
         return Response(data=serializer.data, status=HTTP_200_OK)
