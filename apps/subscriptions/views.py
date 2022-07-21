@@ -46,7 +46,7 @@ class UserSubscriptionViewSet(GenericViewSet, CreateModelMixin):
 
         return Response(data={"purchase_verified": verified}, status=HTTP_200_OK)
 
-    @action(methods=["patch",], detail=False, permission_classes=(IsSubscribed, HasActivePlan))
+    @action(methods=["patch",], detail=False, permission_classes=(IsSubscribed,))
     def revoke(self, request, *args, **kwargs) -> Response:
         """Revokes a user subscription by setting the 
         `subscription_status` to Cancelled
