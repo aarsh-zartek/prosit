@@ -32,9 +32,17 @@ class User(LifecycleModelMixin, BaseModel, AbstractFirebaseUser):
     def full_name(self) -> str:
         return self.__str__()
 
-    def delete(self):
-        self.is_active = False
-        self.save()
+    def delete(self, hard=False):
+        """Deletes a user object
+
+        Args:
+            hard (bool, optional): To hard delete User. Defaults to False.
+        """
+        if hard:
+            super().delete()
+        else:
+            self.is_active = False
+            self.save()
 
     @property
     def active_subscription(self):
