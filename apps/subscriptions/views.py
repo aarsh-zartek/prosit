@@ -73,10 +73,10 @@ class MySubscriptionView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
-        subscription = request.user.active_subscription
+        subscription = request.user.subscriptions.order_by('-created').first()
         if not subscription:
             return Response({
-                    "message": "No Active Subscription found"
+                    "message": "No Subscriptions found"
                 }, status=HTTP_200_OK
             )
         serializer = self.serializer_class(instance=subscription)

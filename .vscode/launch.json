@@ -16,7 +16,7 @@
 			"justMyCode": false
 		},
 		{
-			"name": "Celery App Windows",
+			"name": "Celery App",
 			"type": "python",
 			"request": "launch",
 			"module": "celery",
@@ -25,11 +25,15 @@
 				"-A",
 				"prosit.celery",
 				"worker",
-				"--pool=solo",
 				"--loglevel=INFO",
 				"-n",
 				"celery_worker"
-			]
+			],
+			"windows": {
+				"args": [
+					"--pool=solo",
+				]
+			}
 		},
 		{
 			"name": "Celery App + Beat",
