@@ -30,3 +30,6 @@ def get_profile_picture_path(instance, filename, **kwargs) -> str:
 
 def one_month_from_today(days=30) -> datetime:
     return timezone.now() + timedelta(days=days)
+
+def last_month_from_today(days=30) -> datetime:
+    return timezone.now() - timedelta(days=days)

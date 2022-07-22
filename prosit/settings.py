@@ -278,8 +278,11 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'apps.core.renderers.CustomAPIRenderer',
     ),
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.ScopedRateThrottle',
+    ),
     "DEFAULT_THROTTLE_RATES": {
-        "contact_form": "5/day"
+        "contact_form": "2/hour"
     }
     # "DATE_TIME_FORMAT": FieldConstants.FULL_DATE_TIME_FORMAT
 }
@@ -338,16 +341,16 @@ JAZZMIN_SETTINGS = {
         "authtoken.tokenproxy": "fas fa-coins",
         
         "about.company": "fas fa-building",
+        "about.contactform": "fas fa-headset",
         "about.faq": "fas fa-meh",
 
         "notification.usernotification": "fas fa-bell",
         
         "plan.dietplan": "fas fa-calendar-alt",
-        "plan.plantype": "fas fa-stream",
-        "plan.plancategory": "fas fa-list",
+        "plan.plancategory": "fas fa-stream",
         "plan.questionanswer": "fas fa-question",
 
-        "subscriptions.subscription": "fas fa-rupee-sign",
+        "subscriptions.usersubscription": "fas fa-rupee-sign",
 
         "users.user": "fas fa-users",
         "users.profile": "fas fa-id-card",

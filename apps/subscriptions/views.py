@@ -3,11 +3,17 @@ from rest_framework.mixins import CreateModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
+from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
 from apps.subscriptions.models import UserSubscription
-from apps.subscriptions.serializers import UserSubscriptionSerializer
+from apps.subscriptions.serializers import (
+    MySubscriptionSerializer,
+    UserSubscriptionSerializer
+)
 from apps.subscriptions.services import RevenueCatService
+
+from lib.constants import SubscriptionStatus
 
 # Create your views here.
 
@@ -38,3 +44,41 @@ class UserSubscriptionViewSet(GenericViewSet, CreateModelMixin):
         )
 
         return Response(data={"purchase_verified": verified}, status=HTTP_200_OK)
+
+    @action(methods=["patch",], detail=False)
+    def revoke(self, request, *args, **kwargs) -> Response:
+        """Revokes a user subscription by setting the 
+        `subscription_status` to Cancelled
+        """
+
+        subscription = request.user.active_subscription
+        if not subscription:
+            return Response({
+                    "message": "No Active Subscription found"
+                }, status=HTTP_200_OK
+            )
+        subscription.subscription_status = SubscriptionStatus.CANCELLED
+        subscription.save()
+        
+        return Response(data={
+                "message": "Subscription Cancelled Successfully",
+                "status": SubscriptionStatus.CANCELLED.capitalize()
+            }, status=HTTP_200_OK
+        )
+
+
+class MySubscriptionView(APIView):
+
+    serializer_class = MySubscriptionSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, *args, **kwargs):
+        subscription = request.user.active_subscription
+        if not subscription:
+            return Response({
+                    "message": "No Active Subscription found"
+                }, status=HTTP_200_OK
+            )
+        serializer = self.serializer_class(instance=subscription)
+        
+        return Response(data=serializer.data, status=HTTP_200_OK)
