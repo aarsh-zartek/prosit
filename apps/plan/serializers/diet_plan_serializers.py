@@ -8,6 +8,15 @@ from lib.choices import PLAN_TYPES
 
 class PlanCategorySerializer(DynamicFieldsModelSerializer):
 
+	instruction_audio_english = serializers.FileField(use_url=True)
+	instruction_audio_malayalam = serializers.FileField(use_url=True)
+	instruction_pdf_english = serializers.FileField(use_url=True)
+	instruction_pdf_malayalam = serializers.FileField(use_url=True)
+	preparation_audio_english = serializers.FileField(use_url=True)
+	preparation_audio_malayalam = serializers.FileField(use_url=True)
+	preparation_pdf_english = serializers.FileField(use_url=True)
+	preparation_pdf_malayalam = serializers.FileField(use_url=True)
+			
 	class Meta:
 		model = PlanCategory
 		fields = (

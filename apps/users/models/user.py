@@ -65,9 +65,18 @@ class UserHealthReport(LifecycleModelMixin, BaseModel):
     vitamin_d = models.BooleanField(verbose_name=_("Vitamin D"))
     uric_acid = models.BooleanField(verbose_name=_("Uric Acid"))
     creatin = models.BooleanField(verbose_name=_("Creatin"))
-    fasting_blood_sugar = models.PositiveSmallIntegerField(verbose_name=_("Fasting Blood Sugar"))
-    cholesterol = models.PositiveSmallIntegerField(verbose_name=_("Cholesterol"))
-    hemoglobin = models.PositiveSmallIntegerField(verbose_name=_("Hemoglobin"))
+    fasting_blood_sugar = models.DecimalField(
+        verbose_name=_("Fasting Blood ,Sugar"),
+        max_digits=4, decimal_places=2
+    )
+    cholesterol = models.DecimalField(
+        verbose_name=_("Cholesterol"),
+        max_digits=5, decimal_places=2
+    )
+    hemoglobin = models.DecimalField(
+        verbose_name=_("Hemoglobin"),
+        max_digits=4, decimal_places=2
+    )
     thyroid_tsh = models.BooleanField(verbose_name=_("Thyroid (TSH)"))
     dry_skin = models.BooleanField(verbose_name=_("Dry Skin"), default=False)
     pcod_pcos = models.BooleanField(
