@@ -283,8 +283,9 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_THROTTLE_RATES": {
         "contact_form": "2/hour"
-    }
+    },
     # "DATE_TIME_FORMAT": FieldConstants.FULL_DATE_TIME_FORMAT
+    "UPLOADED_FILES_USE_URL": True
 }
 
 FIREBASE_CONFIG = {
