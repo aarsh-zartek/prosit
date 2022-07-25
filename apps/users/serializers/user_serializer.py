@@ -122,7 +122,11 @@ class UserDietPlanSerializer(DynamicFieldsModelSerializer):
 
     def get_my_plan(self, instance: User):
         plan = instance.active_subscription.plan
-        return DietPlanSerializer(plan, exclude=("queries", "parent", 'plan_type')).data
+        return DietPlanSerializer(
+            instance=plan,
+            exclude=("queries", "parent", 'plan_type'),
+            context=self.context
+        ).data
     
     def get_subscription_status(self, instance: User) -> str:
         return instance.active_subscription.get_subscription_status_display()
