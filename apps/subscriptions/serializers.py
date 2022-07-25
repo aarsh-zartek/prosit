@@ -11,7 +11,7 @@ class UserSubscriptionSerializer(DynamicFieldsModelSerializer):
         model = UserSubscription
         fields = (
             "user", "plan", "receipt",
-            "subscription_type",
+            "subscription_type", "amount",
             "subscription_status", "expires_on",
         )
         read_only_fields = ("plan", "expires_on", "subscription_status")

@@ -2,10 +2,14 @@ from django.contrib.auth import get_user_model
 from django.db import IntegrityError
 
 from rest_framework import authentication
-from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.exceptions import AuthenticationFailed, NotFound
 
 from firebase_admin import auth as firebase_auth
 from .firebase_app import firebase_app
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 User = get_user_model()
 
@@ -64,6 +68,10 @@ class FirebaseAuthentication(authentication.BaseAuthentication):
         except firebase_auth.CertificateFetchError:
             msg = "Temporarily unable to verify the ID token."
             raise AuthenticationFailed(msg)
+        except firebase_auth.UserNotFoundError as e:
+            logger.exception(e)
+            msg = "User not found on firebase, contact Admin"
+            raise NotFound(msg)
 
         firebase_user_record = firebase_auth.get_user(
             decoded_token["uid"],
