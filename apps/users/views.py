@@ -28,7 +28,9 @@ class UserPlanView(APIView):
 	def get(self, request, *args, **kwargs):
 		if request.user.active_subscription:
 			if request.user.active_plan:
-				serializer = self.serializer_class(instance=request.user)
+				serializer = self.serializer_class(
+					instance=request.user, context={"request": self.request}
+				)
 				return Response(data=serializer.data, status=HTTP_200_OK)
 			else:
 				return Response({

@@ -7,16 +7,64 @@ from lib.choices import PLAN_TYPES
 
 
 class PlanCategorySerializer(DynamicFieldsModelSerializer):
-
-	instruction_audio_english = serializers.FileField(use_url=True)
-	instruction_audio_malayalam = serializers.FileField(use_url=True)
-	instruction_pdf_english = serializers.FileField(use_url=True)
-	instruction_pdf_malayalam = serializers.FileField(use_url=True)
-	preparation_audio_english = serializers.FileField(use_url=True)
-	preparation_audio_malayalam = serializers.FileField(use_url=True)
-	preparation_pdf_english = serializers.FileField(use_url=True)
-	preparation_pdf_malayalam = serializers.FileField(use_url=True)
 			
+	instruction_audio_english = serializers.SerializerMethodField()
+	instruction_audio_malayalam = serializers.SerializerMethodField()
+	instruction_pdf_english = serializers.SerializerMethodField()
+	instruction_pdf_malayalam = serializers.SerializerMethodField()
+	preparation_audio_english = serializers.SerializerMethodField()
+	preparation_audio_malayalam = serializers.SerializerMethodField()
+	preparation_pdf_english = serializers.SerializerMethodField()
+	preparation_pdf_malayalam = serializers.SerializerMethodField()
+
+	def get_instruction_audio_english(self, instance: PlanCategory):
+		if not instance.instruction_audio_english:
+			return None
+		request = self.context.get("request")
+		return request.build_absolute_uri(instance.instruction_audio_english.url)
+
+	def get_instruction_audio_malayalam(self, instance: PlanCategory):
+		if not instance.instruction_audio_malayalam:
+			return None
+		request = self.context.get("request")
+		return request.build_absolute_uri(instance.instruction_audio_malayalam.url)
+
+	def get_instruction_pdf_english(self, instance: PlanCategory):
+		if not instance.instruction_pdf_english:
+			return None
+		request = self.context.get("request")
+		return request.build_absolute_uri(instance.instruction_pdf_english.url)
+
+	def get_instruction_pdf_malayalam(self, instance: PlanCategory):
+		if not instance.instruction_pdf_malayalam:
+			return None
+		request = self.context.get("request")
+		return request.build_absolute_uri(instance.instruction_pdf_malayalam.url)
+
+	def get_preparation_audio_english(self, instance: PlanCategory):
+		if not instance.preparation_audio_english:
+			return None
+		request = self.context.get("request")
+		return request.build_absolute_uri(instance.preparation_audio_english.url)
+
+	def get_preparation_audio_malayalam(self, instance: PlanCategory):
+		if not instance.preparation_audio_malayalam:
+			return None
+		request = self.context.get("request")
+		return request.build_absolute_uri(instance.preparation_audio_malayalam.url)
+
+	def get_preparation_pdf_english(self, instance: PlanCategory):
+		if not instance.preparation_pdf_english:
+			return None
+		request = self.context.get("request")
+		return request.build_absolute_uri(instance.preparation_pdf_english.url)
+
+	def get_preparation_pdf_malayalam(self, instance: PlanCategory):
+		if not instance.preparation_pdf_malayalam:
+			return None
+		request = self.context.get("request")
+		return request.build_absolute_uri(instance.preparation_pdf_malayalam.url)
+
 	class Meta:
 		model = PlanCategory
 		fields = (
@@ -41,9 +89,15 @@ class QuestionAnswerSerializer(DynamicFieldsModelSerializer):
 
 class DietPlanSerializer(DynamicFieldsModelSerializer):
 
-	category = PlanCategorySerializer(read_only=True)
+	category = serializers.SerializerMethodField()
 	queries = serializers.SerializerMethodField()
 	
+	def get_category(self, instance: DietPlan):
+		return PlanCategorySerializer(
+			instance=instance.category,
+			context=self.context
+		).data
+		
 	def get_queries(self, instance: DietPlan):
 		serializer = QuestionAnswerSerializer(
 			instance.question_answers.all(),
