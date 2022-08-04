@@ -420,7 +420,8 @@ CKEDITOR_CONFIGS = {
                     'Maximize',
                 ]
             },
-        ]
+        ],
+        "width": "100%"
     },
 }
 
