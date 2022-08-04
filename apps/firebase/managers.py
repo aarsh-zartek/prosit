@@ -5,7 +5,7 @@ from django.contrib.auth.models import BaseUserManager
 class UserManager(BaseUserManager):
     def _create_user(self, uid, password, **extra_fields):
         if not uid:
-            raise ValueError("The uid must be set")
+            raise ValueError("UID must be set")
         user = self.model(uid=uid, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
@@ -22,8 +22,10 @@ class UserManager(BaseUserManager):
 
         if extra_fields.get("is_staff") is not True:
             raise ValueError("Superuser must have is_staff=True")
+        
         if extra_fields.get("is_superuser") is not True:
             raise ValueError("Superuser must have is_superuser=True")
+        
         return self._create_user(uid, password, **extra_fields)
 
     def get_by_natural_key(self, login_field):

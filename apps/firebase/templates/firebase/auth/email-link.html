@@ -15,18 +15,22 @@
         <p>Enter your email below and sign in to your account through a link sent to you via email. This will
           automatically create an account if you do not have one already.</p>
         <form onsubmit="return false">
-          <input class="mdl-textfield__input" style="display:inline;width:50%;padding: 3px;" type="text" id="email"
-            name="email" placeholder="Email" />
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" id="email" name="email">
+            <label class="mdl-textfield__label" for="verification-code">Email</label>
+          </div>
           &nbsp;&nbsp;&nbsp;
-          <button disabled class="mdl-button mdl-js-button mdl-button--raised" id="quickstart-sign-in"
+          <button disabled class="mdl-button mdl-js-button mdl-button--raised" id="sign-in"
             name="signin">Sign In without password</button>
         </form>
 
         <!-- Container where we'll display the user details -->
-        <div class="quickstart-user-details-container">
-          Firebase sign-in status: <span id="quickstart-sign-in-status">Unknown</span>
+        <div class="user-details-container">
+          Firebase sign-in status: <span id="sign-in-status">Unknown</span>
           <div>Firebase auth <code>currentUser</code> object value:</div>
-          <pre><code id="quickstart-account-details">null</code></pre>
+          <pre><code id="account-details">
+            <div class="mdl-spinner mdl-js-spinner is-active"></div>
+          </code></pre>
         </div>
       </div>
     </div>
@@ -44,7 +48,7 @@
    */
   function toggleSignIn() {
     // Disable the sign-in button during async sign-in tasks.
-    document.getElementById('quickstart-sign-in').disabled = true;
+    document.getElementById('sign-in').disabled = true;
 
     if (firebase.auth().currentUser) {
       // [START signout]
@@ -76,7 +80,7 @@
         alert('An email was sent to ' + email + '. Please use the link in the email to sign-in.');
         // [START_EXCLUDE]
         // Re-enable the sign-in button.
-        document.getElementById('quickstart-sign-in').disabled = false;
+        document.getElementById('sign-in').disabled = false;
         // [END_EXCLUDE]
       }).catch(function (error) {
         // Handle Errors here.
@@ -98,7 +102,7 @@
     alert('Error: ' + error.message);
     console.log(error);
     // Re-enable the sign-in button.
-    document.getElementById('quickstart-sign-in').disabled = false;
+    document.getElementById('sign-in').disabled = false;
   }
 
   /**
@@ -109,7 +113,7 @@
     if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
       // [START_EXCLUDE]
       // Disable the sign-in button during async sign-in tasks.
-      document.getElementById('quickstart-sign-in').disabled = true;
+      document.getElementById('sign-in').disabled = true;
       // [END_EXCLUDE]
 
       // You can also get the other parameters passed in the query string such as state=STATE.
@@ -173,26 +177,26 @@
         var providerData = user.providerData;
         // Update UI.
         // [START_EXCLUDE]
-        document.getElementById('quickstart-sign-in-status').textContent = 'Signed in';
-        document.getElementById('quickstart-sign-in').textContent = 'Sign out';
-        document.getElementById('quickstart-account-details').textContent = JSON.stringify(user, null, '  ');
+        document.getElementById('sign-in-status').textContent = 'Signed in';
+        document.getElementById('sign-in').textContent = 'Sign out';
+        document.getElementById('account-details').textContent = JSON.stringify(user, null, '  ');
         // [END_EXCLUDE]
       } else {
         // User is signed out.
         // Update UI.
         // [START_EXCLUDE]
-        document.getElementById('quickstart-sign-in-status').textContent = 'Signed out';
-        document.getElementById('quickstart-sign-in').textContent = 'Sign In without password';
-        document.getElementById('quickstart-account-details').textContent = 'null';
+        document.getElementById('sign-in-status').textContent = 'Signed out';
+        document.getElementById('sign-in').textContent = 'Sign In without password';
+        document.getElementById('account-details').textContent = 'null';
         // [END_EXCLUDE]
       }
       // [START_EXCLUDE silent]
-      document.getElementById('quickstart-sign-in').disabled = false;
+      document.getElementById('sign-in').disabled = false;
       // [END_EXCLUDE]
     });
     // [END authstatelistener]
 
-    document.getElementById('quickstart-sign-in').addEventListener('click', toggleSignIn, false);
+    document.getElementById('sign-in').addEventListener('click', toggleSignIn, false);
   }
 
   window.onload = initApp;

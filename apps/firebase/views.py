@@ -1,26 +1,24 @@
-from django.http import JsonResponse
 from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
+from django.template.exceptions import TemplateDoesNotExist
 from django.views.generic import TemplateView
-from .settings import FIREBASE_CONFIG
 
-from firebase_admin.auth import create_custom_token
+from .settings import FIREBASE_CONFIG, FIREBASE_PRIMARY_COLOR, FIREBASE_ACCENT_COLOR
 
-from rest_framework.views import APIView
-from rest_framework.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED
 
-from apps.users.models import User
-from apps.users.serializers.user_serializer import UserSerializer
+CONTEXT = {
+    "FIREBASE_CONFIG": FIREBASE_CONFIG['FIREBASE_WEBAPP_CONFIG'],
+    "FIREBASE_PRIMARY_COLOR": FIREBASE_PRIMARY_COLOR,
+    "FIREBASE_ACCENT_COLOR": FIREBASE_ACCENT_COLOR
+}
 
 class Index(TemplateView):
     template_name = "firebase/auth/index.html"
-    extra_context = {
-        "FIREBASE_CONFIG": FIREBASE_CONFIG['FIREBASE_WEBAPP_CONFIG'],
-    }
+    extra_context = CONTEXT
 
 
-def passthought(request, page):
-    context = {
-        "FIREBASE_CONFIG": FIREBASE_CONFIG['FIREBASE_WEBAPP_CONFIG'],
-    }
-    return render(request, f"firebase/auth/{page}", context=context)
+def passthough(request, page):
+    try:
+        context = CONTEXT
+        return render(request, f"firebase/auth/{page}", context=context)
+    except TemplateDoesNotExist as e:
+        return render(request, f"firebase/auth/404.html", context=context)

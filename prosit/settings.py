@@ -442,3 +442,7 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 ## Celery Results Configuration
 
 CELERY_RESULT_BACKEND = 'django-db'
+
+# https://getmdl.io/customize/index.html
+FIREBASE_PRIMARY_COLOR = "Orange"
+FIREBASE_ACCENT_COLOR = "Blue"
