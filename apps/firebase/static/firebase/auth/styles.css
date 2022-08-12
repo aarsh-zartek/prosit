@@ -65,6 +65,13 @@ h3 {
   color: white;
 }
 
+.footer-h4, .firebase-docs {
+  background: url('firebase-logo.png') no-repeat;
+  background-size: 24px;
+  padding-left: 24px;
+  color: white;
+}
+
 #verification-code-form {
   display: none;
 }

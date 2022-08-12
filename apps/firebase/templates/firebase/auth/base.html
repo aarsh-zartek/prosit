@@ -46,10 +46,10 @@ limitations under the License.
 
 <body>
 
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <div class="mdl-layout mdl-js-layout">
 
         <!-- Header section containing title -->
-        <header class="mdl-layout__header mdl-color-text--white mdl-color--light-blue-600">
+        <header class="mdl-layout__header mdl-layout__header--scroll mdl-color-text--white mdl-color--light-blue-600">
             <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-grid">
                 <div
                     class="mdl-layout__header-row mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--8-col-desktop">
@@ -63,6 +63,24 @@ limitations under the License.
         {% block content %}
 
         {% endblock content %}
+    
+        <footer class="mdl-mini-footer">
+            <div class="mdl-mini-footer__left-section">
+                <div class="mdl-logo">
+                    <h4 class="footer-h4">Firebase Authentication</h4>
+                </div>
+            </div>
+            <div class="mdl-mini-footer__right-section">
+                <a class="mdl-button mdl-js-button mdl-js-ripple-effect" style="color: white;" href="https://firebase.google.com/docs/auth/admin/create-custom-tokens" target="_blank">
+                    <img src="{% static 'firebase/auth/firebase-logo.png' %}" height="20px">
+                    Firebase Docs
+                </a>
+                <a class="mdl-button mdl-js-button mdl-js-ripple-effect" style="color: white;" href="https://github.com/wh0th3h3llam1/drf-firebase-auth" target="_blank">
+                    <img src="{% static 'firebase/auth/github-mark-light-32px.png' %}" height="20px">
+                    GitHub
+                </a>
+            </div>
+        </footer>
     </div>
 
     <!-- Import and configure the Firebase SDK -->
