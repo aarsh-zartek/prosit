@@ -77,7 +77,6 @@
 				]
 			}
 		},
-		
 		{
 			"name": "Django WAN Server",
 			"type": "python",
