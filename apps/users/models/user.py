@@ -5,7 +5,6 @@ from django_lifecycle import LifecycleModelMixin, AFTER_CREATE, hook
 
 from apps.core.models import BaseModel
 from apps.firebase.models import AbstractFirebaseUser
-# from apps.notification.tasks import send_email_notificaton
 from apps.users.utils import get_category
 
 from lib.constants import FieldConstants, SubscriptionStatus
@@ -99,18 +98,23 @@ class UserHealthReport(LifecycleModelMixin, BaseModel):
 
     @hook(hook=AFTER_CREATE)
     def after_create(self):
-        if not self.health_code:
-            health_code = self._assign_health_code()
-            if health_code_users := User.objects.filter(health_reports__health_code=health_code):
-                # add plan to current user subscription
-                pass
-                # self.user.active_subscription.plan = health_code_users.first().
-            else:
-                # notify_admin?
-                pass
-                # send_email_notificaton(message="", admins=True)
+        health_code = self._assign_health_code()
+        if health_code_users := User.objects.filter(health_reports__health_code=health_code):
+            # add plan to current user subscription
+            self.user.active_subscription.plan = health_code_users.last().subscriptions.last().plan
+        else:
+            # notify_admin
+            from apps.notification.tasks import send_email_notificaton
+            data = {
+                "id": self.user.id,
+                "name": self.user.display_name or self.user.full_name,
+                "phone_number": self.user.phone_number.as_international,
+                "health_code": health_code
+            }
+            send_email_notificaton.apply_async(args=(data,), kwargs={"admin": True})
 
     def _assign_health_code(self) -> str:
+        """Assigns a health code to user based on profile """
         profile = self.user.profile
         
         weight = round(profile.weight)
@@ -120,7 +124,6 @@ class UserHealthReport(LifecycleModelMixin, BaseModel):
 
         health_code = f"{weight:03}{gender}{food_preference}{category}"
         self.health_code = health_code
-        # self.user.profile.health_code = health_code
 
         return health_code
 
