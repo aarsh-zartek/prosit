@@ -2,11 +2,13 @@ from lib.choices import GENDER
 
 
 def has_fasting_blood_sugar(fasting_blood_sugar) -> bool:
+    """Returns True if `fasting_blood_sugar` is more than 95"""
     if fasting_blood_sugar < 95:
         return False
     return True
 
 def has_hemoglobin(hemoglobin) -> bool:
+    """Returns True if `hemoglobin` is less than or equal to 11"""
     if 11 < hemoglobin:
         return False
     return True
@@ -135,6 +137,7 @@ def category_l(data: dict) -> bool:
         ])
 
 def get_category(category_data: dict) -> str:
+    """Returns a category from the provided `category_data`"""
 
     if category_l(category_data):
         return "L"
