@@ -1,3 +1,4 @@
+from django.core.validators import FileExtensionValidator as FEV
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -6,7 +7,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from apps.core.models import BaseModel
 from apps.users.models import User
 
-from lib.constants import FieldConstants
+from lib.constants import FieldConstants, DocumentFormats
 
 # Create your models here.
 
@@ -27,6 +28,16 @@ class Company(BaseModel):
     banner_text = models.TextField(verbose_name=_("Banner Text"))
 
     # image = models.ImageField(verbose_name=_("Image"))
+
+    stop_plan_pdf = models.FileField(
+                verbose_name=_("Stop Plan PDF"),
+                upload_to="stop_plan/",
+                validators=[
+                    FEV(allowed_extensions=DocumentFormats.all())
+                ],
+                blank=True,
+                null=True
+            )
 
     class Meta:
         verbose_name = _("Company Config")
