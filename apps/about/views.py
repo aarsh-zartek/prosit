@@ -15,7 +15,7 @@ class CompanyView(APIView):
 	permission_classes = (AllowAny,)
 	def get(self, request, *args, **kwargs):
 		instance = Company.objects.first()
-		serializer = CompanySerializer(instance)
+		serializer = CompanySerializer(instance, context={"request": request})
 		return Response(serializer.data, status=HTTP_200_OK)
 
 class FAQView(ListAPIView):
