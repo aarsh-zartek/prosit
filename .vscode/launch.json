@@ -21,16 +21,25 @@
 			"request": "launch",
 			"module": "celery",
 			"cwd": "${workspaceFolder}",
-			"args": [
-				"-A",
-				"prosit.celery",
-				"worker",
-				"--loglevel=INFO",
-				"-n",
-				"celery_worker"
-			],
+			"linux": {
+				"args": [
+					"-A",
+					"prosit.celery",
+					"worker",
+					"--loglevel=INFO",
+					"-n",
+					"celery_worker",
+					"--pool=solo",
+				]
+			},
 			"windows": {
 				"args": [
+					"-A",
+					"prosit.celery",
+					"worker",
+					"--loglevel=INFO",
+					"-n",
+					"celery_worker",
 					"--pool=solo",
 				]
 			}
