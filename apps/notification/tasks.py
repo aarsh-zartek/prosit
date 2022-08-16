@@ -60,7 +60,7 @@ def send_email_notificaton(data, *args, **kwargs) -> str:
                 'email.html',
                 {
                     "message": mail_msg,
-                    "url": f"{DOMAIN_IP}/admin/users/{data['id']}"
+                    "url": f"{DOMAIN_IP}/admin/users/user{data['id']}"
                 }
             )
     msg = strip_tags(html_msg)

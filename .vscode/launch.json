@@ -50,18 +50,33 @@
 			"request": "launch",
 			"module": "celery",
 			"cwd": "${workspaceFolder}",
-			"args": [
-				"-A",
-				"prosit.celery",
-				"worker",
-				"--scheduler",
-				"django_celery_beat.schedulers:DatabaseScheduler",
-				"--loglevel=INFO",
-				"-n",
-				"celery_worker"
-			]
+			"linux": {
+				"args": [
+					"-A",
+					"prosit.celery",
+					"worker",
+					"--scheduler",
+					"django_celery_beat.schedulers:DatabaseScheduler",
+					"--loglevel=INFO",
+					"-n",
+					"celery_worker",
+					"--pool=solo"
+				]
+			},
+			"windows": {
+				"args": [
+					"-A",
+					"prosit.celery",
+					"worker",
+					"--scheduler",
+					"django_celery_beat.schedulers:DatabaseScheduler",
+					"--loglevel=INFO",
+					"-n",
+					"celery_worker",
+					"--pool=solo"
+				]
+			}
 		},
-		
 		{
 			"name": "Django WAN Server",
 			"type": "python",
