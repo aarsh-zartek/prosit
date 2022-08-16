@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="x-apple-disable-message-reformatting">
+  <title></title>
+  <style>
+    table, td, div, h1, p {font-family: Arial, sans-serif;}   
+  </style>
+</head>
+
+<body style="margin:0;padding:0;">
+  <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;background:#ffffff;">
+    <tr>
+      <td align="center" style="padding:0;">
+        <table role="presentation" style="width:602px;border-collapse:collapse;border:1px solid #cccccc;border-spacing:0;text-align:left;">
+          <tr>
+            <td style="padding:36px 30px 42px 30px;">
+              <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;">
+                <tr>
+                  <td style="padding:0 0 36px 0;color:#153643;">
+                    <p style="margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;">Hello Admin, A User has signed up on the app and he's awaiting a Diet Plan.</p>
+                    <p style="margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;">
+                      {% autoescape off %}
+                      {{ message }}
+                      {% endautoescape %}
+                    </p>
+
+                    <a rel="noopener" target="_blank" href="{{ url }}" style="background-color: #00A68C; font-size: 16px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; text-decoration: none; padding: 12px 16px; color: #ffffff; border-radius: 5px; display: inline-block;">
+                      <span>View User &rarr;</span>
+                  </a
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
