@@ -67,8 +67,13 @@ h3 {
     background: url('firebase-logo.png') no-repeat;
     background-size: 40px;
     padding-left: 50px;
-    color: white;
     text-decoration: none;
+}
+
+h4 {
+    background: url('firebase-logo.png') no-repeat;
+    background-size: 24px;
+    padding-left: 30px;
 }
 
 #verification-code-form {
@@ -98,4 +103,8 @@ h3 {
     transform-origin: 0 0;
     -webkit-transform: scale(0.9);
     -webkit-transform-origin: 0 0;
+}
+
+.white-font {
+    color: white !important;
 }
