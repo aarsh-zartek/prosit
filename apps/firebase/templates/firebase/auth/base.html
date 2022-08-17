@@ -58,19 +58,21 @@ limitations under the License.
 
         {% endblock content %}
 
-        <footer class="mdl-mini-footer">
+        <footer id="footer" class="mdl-mini-footer" style="padding: 16px;">
             <div class="mdl-mini-footer__left-section">
                 <div class="mdl-logo">
                     <h4 class="white-font">Firebase Authentication</h4>
                 </div>
             </div>
             <div class="mdl-mini-footer__right-section">
-                <button class="mdl-button mdl-js-button white-font">
+                <a class="mdl-button mdl-js-button mdl-js-ripple-effect white-font" href="https://firebase.google.com/docs/auth/web/start" target="_blank">
+                    <img src="{% static 'firebase/auth/firebase_logo.ico' %}" alt="" width="20px">
                     Firebase Documentation
-                </button>
-                <button class="mdl-button mdl-js-button white-font">
-                    Github
-                </button>
+                </a>
+                <a class="mdl-button mdl-js-button white-font" href="#footer" target="_blank">
+                    <img src="{% static 'firebase/auth/github-icon-white.png' %}" alt="" width="20px">
+                    GitHub
+                </a>
             </div>
           </footer>
     </div>
