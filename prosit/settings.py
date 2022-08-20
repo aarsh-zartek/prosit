@@ -196,63 +196,6 @@ CACHES = {
     }
 }
 
-logging.config.dictConfig({
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'default': {
-            # exact format is not important, this is the minimum information
-            'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
-        },
-        'django.server': DEFAULT_LOGGING['formatters']['django.server'],
-    },
-    'handlers': {
-        # console logs to stderr
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'default',
-        },
-        # Add Handler for Sentry for `warning` and above
-        'file': {
-            'level': 'WARNING',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': LOG_FILE_NAME,
-            'maxBytes': 1024 * 1024 * 10,  # 10MB
-            'backupCount': 10,
-            'formatter': 'default',
-        },
-        'django.server': DEFAULT_LOGGING['handlers']['django.server'],
-    },
-    'loggers': {
-        # default for all undefined Python modules
-        '': {
-            'level': 'INFO',
-            'handlers': ['console', 'file'],
-        },
-        # Our application code
-        'apps.firebase': {
-            'level': LOGLEVEL,
-            'handlers': ['console', 'file'],
-            # Avoid double logging because of root logger
-            'propagate': False,
-        },
-        'apps.plan': {
-            'level': LOGLEVEL,
-            'handlers': ['console', 'file'],
-            # Avoid double logging because of root logger
-            'propagate': False,
-        },
-        # # Prevent noisy modules from logging to Sentry
-        # 'noisy_module': {
-        #     'level': 'ERROR',
-        #     'handlers': ['console'],
-        #     'propagate': False,
-        # },
-        # Default runserver request logging
-        'django.server': DEFAULT_LOGGING['loggers']['django.server'],
-    },
-})
-
 
 # CORS
 CORS_ORIGIN_ALLOW_ALL = True
