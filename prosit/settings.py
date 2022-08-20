@@ -37,9 +37,9 @@ SECRET_KEY = env.str('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False)
 
-DOMAIN = env.str('DOMAIN', "localhost")
-DOMAIN_IP = env.str('DOMAIN_IP', "127.0.0.1")
-TESTING_DOMAIN = env.str('TESTING_DOMAIN', "*")
+DOMAIN = env.str('DOMAIN')
+DOMAIN_IP = env.str('DOMAIN_IP')
+TESTING_DOMAIN = env.str('TESTING_DOMAIN')
 
 ALLOWED_HOSTS = [DOMAIN, DOMAIN_IP, TESTING_DOMAIN]
 
@@ -167,12 +167,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-if DEBUG:
-    STATICFILES_DIRS = (
-        os.path.join(BASE_DIR, 'static/'),
-    )
-else:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Media Files
 MEDIA_URL = '/media/'
