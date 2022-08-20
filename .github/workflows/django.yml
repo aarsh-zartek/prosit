@@ -28,7 +28,7 @@ jobs:
     - name: Run Tests
       env: 
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
+        FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         FIREBASE_WEBAPP_CONFIG: ${{ secrets.FIREBASE_WEBAPP_CONFIG }}
         REVENUE_CAT_API_KEY: ${{ secrets.REVENUE_CAT_API_KEY }}
         
