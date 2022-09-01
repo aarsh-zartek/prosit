@@ -9,7 +9,7 @@ CONTEXT = {
 }
 
 class Index(TemplateView):
-    template_name = "firebase/auth/index.html"
+    template_name = "firebase/auth/index_new.html"
     extra_context = CONTEXT
 
 

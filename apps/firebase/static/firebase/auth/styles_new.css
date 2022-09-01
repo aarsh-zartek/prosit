@@ -43,9 +43,22 @@ li a, em a {
     padding: 0;
 }
 
+.table-of-contents {
+    width: 80%;
+    max-width: 1024px;
+    margin: auto;
+}
+
+.not-found-card {
+    width: 50%;
+    max-width: 512px;
+    margin: auto;
+}
+
 .user-details-container {
-    margin-top: 20px;
     line-height: 25px;
+    margin: auto;
+    margin-top: 24px;
 }
 
 #sign-in-status {
@@ -61,11 +74,12 @@ code {
     word-break: break-all;
 }
 
-h3 {
-    background: url('firebase-logo.png') no-repeat;
-    background-size: 40px;
-    padding-left: 50px;
-    text-decoration: none;
+.page-title-logo {
+    padding-left: 64px;
+}
+
+.page-title-logo-drawer {
+    color: black;
 }
 
 h4 {
@@ -94,6 +108,7 @@ h4 {
 
 #sign-in-card {
     z-index: 2;
+    margin: auto;
 }
 
 .recaptcha-container {
@@ -107,8 +122,69 @@ h4 {
     color: white !important;
 }
 
+.black-font {
+    color: black !important;
+}
+
+footer {
+    margin-top: 24px;
+}
+
 .firebase-docs {
     background: url('firebase-logo.png') no-repeat;
     background-size: 32px;
     padding-right: 12px;
+}
+
+
+/* Bootstrap Container Class */
+.container,
+.container-fluid,
+.container-xxl,
+.container-xl,
+.container-lg,
+.container-md,
+.container-sm {
+	--bs-gutter-x: 1.5rem;
+	width: 100%;
+	padding-right: var(--bs-gutter-x, 0.75rem);
+	padding-left: var(--bs-gutter-x, 0.75rem);
+	margin-right: auto;
+	margin-left: auto;
+}
+
+@media (min-width: 576px) {
+	.container-sm, .container {
+		max-width: 540px;
+	}
+}
+
+@media (min-width: 768px) {
+	.container-md, .container-sm, .container {
+		max-width: 720px;
+	}
+}
+
+@media (min-width: 992px) {
+	.container-lg, .container-md, .container-sm, .container {
+		max-width: 960px;
+	}
+}
+
+@media (min-width: 1200px) {
+	.container-xl, .container-lg, .container-md, .container-sm, .container {
+		max-width: 1140px;
+	}
+}
+
+@media (min-width: 1400px) {
+	.container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
+		max-width: 1320px;
+	}
+}
+
+.center {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
