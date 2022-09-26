@@ -24,14 +24,11 @@ limitations under the License.
     <title>{% block title %}{% endblock title %}</title>
 
     <!-- Material Design Theming -->
-    <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.{{ FIREBASE_PRIMARY_COLOR }}-{{ FIREBASE_ACCENT_COLOR }}.min.css">
-    
+    <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.orange-blue.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
 
     <link rel="stylesheet" href="{% static 'firebase/auth/styles.css' %}">
-
-    <link rel="shortcut icon" href="{% static 'firebase/auth/firebase_logo.ico' %}" type="image/x-icon">
 
     {% block pretty_print_json %}
         <link rel=stylesheet href=https://cdn.jsdelivr.net/npm/pretty-print-json@1.2/dist/pretty-print-json.css>
@@ -53,8 +50,8 @@ limitations under the License.
             <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-grid">
                 <div
                     class="mdl-layout__header-row mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--8-col-desktop">
-                    <a href="{% url 'firebase:index' %}">
-                        <h3>Firebase Authentication</h3>
+                    <a href="{% url 'firebase:index' %}" style="color: white; text-decoration: none;">
+                        <h3 class="white-font">Firebase Authentication</h3>
                     </a>
                 </div>
             </div>
@@ -63,24 +60,24 @@ limitations under the License.
         {% block content %}
 
         {% endblock content %}
-    
-        <footer class="mdl-mini-footer">
+
+        <footer id="footer" class="mdl-mini-footer" style="padding: 16px;">
             <div class="mdl-mini-footer__left-section">
                 <div class="mdl-logo">
-                    <h4 class="footer-h4">Firebase Authentication</h4>
+                    <h4 class="white-font">Firebase Authentication</h4>
                 </div>
             </div>
             <div class="mdl-mini-footer__right-section">
-                <a class="mdl-button mdl-js-button mdl-js-ripple-effect" style="color: white;" href="https://firebase.google.com/docs/auth/admin/create-custom-tokens" target="_blank">
-                    <img src="{% static 'firebase/auth/firebase-logo.png' %}" height="20px">
-                    Firebase Docs
+                <a class="mdl-button mdl-js-button mdl-js-ripple-effect white-font" href="https://firebase.google.com/docs/auth/web/start" target="_blank">
+                    <img src="{% static 'firebase/auth/firebase_logo.ico' %}" alt="" width="20px">
+                    Firebase Documentation
                 </a>
-                <a class="mdl-button mdl-js-button mdl-js-ripple-effect" style="color: white;" href="https://github.com/wh0th3h3llam1/drf-firebase-auth" target="_blank">
-                    <img src="{% static 'firebase/auth/github-mark-light-32px.png' %}" height="20px">
+                <a class="mdl-button mdl-js-button white-font" href="https://github.com/firebase/firebaseui-web" target="_blank">
+                    <img src="{% static 'firebase/auth/github-icon-white.png' %}" alt="" width="20px">
                     GitHub
                 </a>
             </div>
-        </footer>
+          </footer>
     </div>
 
     <!-- Import and configure the Firebase SDK -->

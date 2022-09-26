@@ -446,3 +446,16 @@ CELERY_RESULT_BACKEND = 'django-db'
 # https://getmdl.io/customize/index.html
 FIREBASE_PRIMARY_COLOR = "Orange"
 FIREBASE_ACCENT_COLOR = "Blue"
+
+# Email Configuration
+
+EMAIL_HOST = env.str('EMAIL_HOST', default='smtp.gmail.com')
+EMAIL_PORT = env.int('EMAIL_PORT', default=587)
+
+EMAIL_HOST_USER = env.str("EMAIL_HOST_USER", default='')
+EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD", default='')
+EMAIL_USE_TLS = True
+
+PROSIT_ADMIN_EMAIL = env.list("PROSIT_ADMIN_EMAIL", default=list())
+
+NOTIFICATION_COUNT = 25

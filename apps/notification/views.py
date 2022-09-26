@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.conf import settings
 from django.utils import timezone
 
 from rest_framework import mixins
@@ -7,8 +7,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.viewsets import GenericViewSet
-
-from firebase_admin import get_app
 
 from apps.notification.models import UserNotification
 from apps.notification.serializers import UserNotificationSerializer
@@ -30,12 +28,12 @@ class UserNotificationViewSet(
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        return UserNotification.objects.filter(user=self.request.user)[:25]
+        return UserNotification.objects.filter(user=self.request.user)
 
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
         user_notifications = list()
-        for notification in self.get_queryset():
+        for notification in self.get_queryset()[:int(settings.NOTIFICATION_COUNT)]:
             if not notification.read_at:
                 notification.read_at = timezone.now()
                 user_notifications.append(notification)
@@ -46,6 +44,7 @@ class UserNotificationViewSet(
 
     @action(methods=["patch"], detail=False)
     def mark_read(self, request, *args, **kwargs):
+        """Marks All notifications as `read`"""
         try:
             notifications = self.get_queryset().update(read_at=timezone.now())
         except Exception as e:

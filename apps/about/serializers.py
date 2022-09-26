@@ -14,6 +14,7 @@ class FAQSerializer(DynamicFieldsModelSerializer):
 
 
 class CompanySerializer(DynamicFieldsModelSerializer):
+	stop_plan_pdf = serializers.FileField(use_url=True)
 	faqs = serializers.SerializerMethodField()
 
 	def get_faqs(self, instance: Company):
@@ -28,7 +29,7 @@ class CompanySerializer(DynamicFieldsModelSerializer):
 		fields = (
 			"home_page_title", "home_page_text",
 			"contact_number", "about_the_company",
-			"address", "faqs",
+			"address", "faqs", "stop_plan_pdf",
 			"terms_and_conditions", "privacy_policy",
 			"banner_title", "banner_text"
 		)

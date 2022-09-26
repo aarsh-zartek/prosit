@@ -53,7 +53,7 @@ class RevenueCatHistorySerializer(DynamicFieldsModelSerializer):
 class MySubscriptionSerializer(serializers.Serializer):
 
     plan_name = serializers.CharField(source="plan.name", default=None)
-    status = serializers.CharField(source="get_subscription_status_display")
+    status = serializers.CharField(source="subscription_status")
     receipt = serializers.JSONField()
     amount_paid = serializers.IntegerField()
     subscribed_on = serializers.DateTimeField(source="created")
