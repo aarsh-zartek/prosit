@@ -1,3 +1,4 @@
+from typing import List
 from rest_framework import serializers
 
 from apps.core.serializers import DynamicFieldsModelSerializer
@@ -16,6 +17,12 @@ class PlanCategorySerializer(DynamicFieldsModelSerializer):
 	preparation_audio_malayalam = serializers.FileField(use_url=True)
 	preparation_pdf_english = serializers.FileField(use_url=True)
 	preparation_pdf_malayalam = serializers.FileField(use_url=True)
+	fields_required = serializers.SerializerMethodField()
+
+	def get_fields_required(self, instance: PlanCategory) -> List[str]:
+		fields: str = instance.get_fields_required_display().split(",")
+		required_fields = [ f.strip() for f in fields ]
+		return required_fields
 
 	class Meta:
 		model = PlanCategory
