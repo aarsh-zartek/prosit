@@ -2,7 +2,6 @@ import json
 import requests
 
 from django.conf import settings
-from requests.sessions import _Data
 
 
 class DynamicLinks:
