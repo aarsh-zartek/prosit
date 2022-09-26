@@ -9,7 +9,7 @@ from apps.core.models import BaseModel
 
 from lib.constants import FieldConstants, AudioFormats, DocumentFormats
 from lib.choices import PLAN_TYPES, FIELDS_TO_SHOW
-from lib.utils import get_diet_plan_instruction_path, get_preparation_path
+from lib.utils import get_diet_plan_image_path, get_diet_plan_instruction_path, get_preparation_path
 
 # Create your models here
 
@@ -137,6 +137,11 @@ class DietPlan(BaseModel):
 
     value = models.PositiveIntegerField(verbose_name=_("Plan Value"))
 
+    image = models.ImageField(
+                verbose_name=_("Image"),
+                upload_to=get_diet_plan_image_path,
+                blank=True, null=True
+            )
     product_identifier = models.SlugField(
         verbose_name=_("Product Identifier"),
         max_length=FieldConstants.MAX_NAME_LENGTH,
@@ -163,7 +168,6 @@ class DietPlan(BaseModel):
             raise ValidationError("Sub category can't have other Sub Category as parent")
         
         return super().clean()
-    
 
     class Meta:
         verbose_name = _("Diet Plan")

@@ -43,6 +43,7 @@ class DietPlanSerializer(DynamicFieldsModelSerializer):
 
 	category = serializers.SerializerMethodField()
 	queries = serializers.SerializerMethodField()
+	image = serializers.ImageField(use_url=True)
 	
 	def get_category(self, instance: DietPlan):
 		return PlanCategorySerializer(
@@ -75,7 +76,7 @@ class DietPlanSerializer(DynamicFieldsModelSerializer):
 		model = DietPlan
 		fields = (
 			"id", "name", "category", "plan_type", "parent",
-			"queries", "value", "product_identifier"
+			"queries", "value", "image", "product_identifier"
 		)
 	
 	def create(self, validated_data):
