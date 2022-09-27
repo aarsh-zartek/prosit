@@ -27,12 +27,7 @@ class DietPlanView(SerializerActionClassMixin, ReadOnlyModelViewSet):
 			queryset = queryset.filter(plan_type=PLAN_TYPES.main_category)
 		return queryset
 
-	def get_serializer(self, *args, **kwargs):
-		if self.action == "retrieve":
-			exclude = ["category",]
-			user = self.request.user
-			if user.is_authenticated and user.active_plan:
-				pass
-			else:
-				kwargs["exclude"] = exclude
-		return super().get_serializer(*args, **kwargs)
+	def get_serializer_context(self):
+		context = super().get_serializer_context()
+		context["user"] = self.request.user
+		return context

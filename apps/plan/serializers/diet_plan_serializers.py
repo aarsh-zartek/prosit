@@ -1,3 +1,4 @@
+from csv import excel
 from typing import List
 from rest_framework import serializers
 
@@ -53,9 +54,16 @@ class DietPlanSerializer(DynamicFieldsModelSerializer):
 	image = serializers.ImageField(use_url=True)
 	
 	def get_category(self, instance: DietPlan):
+		user = self.context.get("user")
+		if user.is_authenticated and user.active_plan:
+			return PlanCategorySerializer(
+				instance=instance.category,
+				context=self.context
+			).data
 		return PlanCategorySerializer(
 			instance=instance.category,
-			context=self.context
+			context=self.context,
+			fields=("fields_required",)
 		).data
 		
 	def get_queries(self, instance: DietPlan):
