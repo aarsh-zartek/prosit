@@ -144,8 +144,7 @@ class DietPlan(BaseModel):
             )
     product_identifier = models.SlugField(
         verbose_name=_("Product Identifier"),
-        max_length=FieldConstants.MAX_NAME_LENGTH,
-        unique=True
+        max_length=FieldConstants.MAX_NAME_LENGTH
     )
 
     def clean(self) -> None:
