@@ -15,6 +15,12 @@ def get_preparation_path(instance, filename, **kwargs) -> str:
     file_path = f'{instance.name}/preparation/{file}'
     return file_path
 
+def get_diet_plan_image_path(instance, filename, **kwargs) -> str:
+    name, ext = filename.rsplit('.', 1)
+    file = f"{name.lower().replace(' ', '_')}_{uuid.uuid4()}.{ext}"
+    file_path = f'{instance.name}/{file}'
+    return file_path
+
 def get_user_health_image_path(instance, filename, **kwargs) -> str:
     name, ext = filename.rsplit('.', 1)
     file = f"{name.lower().replace(' ', '_')}_{uuid.uuid4()}.{ext}"

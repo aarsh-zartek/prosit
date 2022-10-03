@@ -1,3 +1,5 @@
+from csv import excel
+from typing import List
 from rest_framework import serializers
 
 from apps.core.serializers import DynamicFieldsModelSerializer
@@ -16,6 +18,12 @@ class PlanCategorySerializer(DynamicFieldsModelSerializer):
 	preparation_audio_malayalam = serializers.FileField(use_url=True)
 	preparation_pdf_english = serializers.FileField(use_url=True)
 	preparation_pdf_malayalam = serializers.FileField(use_url=True)
+	fields_required = serializers.SerializerMethodField()
+
+	def get_fields_required(self, instance: PlanCategory) -> List[str]:
+		fields: str = instance.get_fields_required_display().split(",")
+		required_fields = [ f.strip() for f in fields ]
+		return required_fields
 
 	class Meta:
 		model = PlanCategory
@@ -43,11 +51,19 @@ class DietPlanSerializer(DynamicFieldsModelSerializer):
 
 	category = serializers.SerializerMethodField()
 	queries = serializers.SerializerMethodField()
+	image = serializers.ImageField(use_url=True)
 	
 	def get_category(self, instance: DietPlan):
+		user = self.context.get("user")
+		if user.is_authenticated and user.active_plan:
+			return PlanCategorySerializer(
+				instance=instance.category,
+				context=self.context
+			).data
 		return PlanCategorySerializer(
 			instance=instance.category,
-			context=self.context
+			context=self.context,
+			fields=("fields_required",)
 		).data
 		
 	def get_queries(self, instance: DietPlan):
@@ -75,7 +91,7 @@ class DietPlanSerializer(DynamicFieldsModelSerializer):
 		model = DietPlan
 		fields = (
 			"id", "name", "category", "plan_type", "parent",
-			"queries", "value", "product_identifier"
+			"queries", "value", "image", "product_identifier"
 		)
 	
 	def create(self, validated_data):
