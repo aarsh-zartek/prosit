@@ -70,8 +70,9 @@ class UserHealthReportAdmin(admin.ModelAdmin):
     list_display = (
         "user", "date", "vitamin_b12", "vitamin_d",
         "creatin", "fasting_blood_sugar",
-        "hemoglobin", "thyroid_tsh", "dry_skin",
+        "hemoglobin", "thyroid_tsh", "health_code",
     )
+    readonly_fields = ("health_code",)
 
 class DailyActvityAdmin(admin.ModelAdmin):
     list_display = ("user", "weight", "date")

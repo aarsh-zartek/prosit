@@ -54,12 +54,6 @@ class DailyActivityView(CreateAPIView, RetrieveAPIView):
 	def get_queryset(self):
 		return DailyActivity.objects.filter(user=self.request.user).order_by('date')
 	
-	def create(self, request, *args, **kwargs):
-		serializer = self.get_serializer(data=request.data)
-		serializer.is_valid(raise_exception=True)
-		serializer.save()
-		return Response(serializer.data, status=HTTP_201_CREATED)
-	
 	def retrieve(self, request, *args, **kwargs):
 		queryset = self.filter_queryset(self.get_queryset())
 		serializer = self.get_serializer(queryset, many=True, exclude=["user"])
@@ -76,14 +70,8 @@ class UserHealthReportViewSet(mixins.CreateModelMixin, GenericViewSet):
 
 	def get_serializer_context(self):
 		context = super().get_serializer_context()
-		context['user'] = self.request.user
+		context.update({"user" : self.request.user})
 		return context
-
-	def create(self, request, *args, **kwargs):
-		serializer = self.get_serializer(data=request.data)
-		serializer.is_valid(raise_exception=True)
-		serializer.save()
-		return Response(serializer.data, status=HTTP_201_CREATED)
 
 
 class CheckPhoneNumberExistsView(APIView):
