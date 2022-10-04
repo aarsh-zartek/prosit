@@ -69,6 +69,9 @@ class UserHealthReportSerializer(DynamicFieldsModelSerializer):
         if not user.active_subscription:
             raise serializers.ValidationError("No Active Subscription found for this user")
 
+        if user.active_subscription.health_report:
+            raise serializers.ValidationError("You already have an active subscription")
+
         if image is None:
             attrs.pop("image")
 
@@ -86,6 +89,15 @@ class UserHealthReportSerializer(DynamicFieldsModelSerializer):
             "creatin", "fasting_blood_sugar", "cholesterol", "thyroid_tsh", "pcod_pcos",
             "dry_skin", "image", "extra_info"
         )
+
+    def create(self, validated_data: dict):
+        user = validated_data.pop("user")
+        user_health_report, created = UserHealthReport.objects.update_or_create(
+            user=user,
+            date=timezone.now().date(),
+            defaults=validated_data
+        )
+        return user_health_report
 
 
 class DailyActivitySerializer(DynamicFieldsModelSerializer):
