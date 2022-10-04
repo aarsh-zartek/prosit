@@ -173,7 +173,8 @@ class UserHealthReport(LifecycleModelMixin, BaseModel):
         ).exclude(
             id=self.id
         ).filter(
-            health_code=self.health_code
+            health_code=self.health_code,
+            subscription__receipt__plan_id=self.subscription.receipt["plan_id"]
         )
         return reports
 
