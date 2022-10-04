@@ -97,10 +97,10 @@ class CheckHealthReportExistsView(APIView):
 	permission_classes = (IsAuthenticated,)
 	
 	def get(self, request):
-		uploaded = UserHealthReport.objects.filter(
-				user=request.user,
-				date__gte=timezone.now() - timedelta(days=7)
-			).exists()
+		uploaded = False
+		subscription = request.user.active_subscription
+		if subscription and subscription.health_report:
+			uploaded = True
 
 		return Response({
 			"health_reports_uploaded": uploaded
