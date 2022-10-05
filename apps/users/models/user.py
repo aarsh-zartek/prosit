@@ -102,7 +102,6 @@ class UserHealthReport(LifecycleModelMixin, BaseModel):
     class Meta:
         verbose_name = _('User Health Report')
         verbose_name_plural = _('User Health Reports')
-        unique_together = ("user", "date")
 
     def __str__(self) -> str:
         return f'{self.user} - {self.date}'
@@ -183,6 +182,9 @@ class UserHealthReport(LifecycleModelMixin, BaseModel):
 
         if not self.user.active_subscription:
             raise ValidationError("No Active Subscription found for this user")
+
+        if self.user.active_subscription.health_report:
+            raise ValidationError("You already have an active subscription")
 
         return super().clean()
 
