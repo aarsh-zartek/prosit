@@ -63,6 +63,7 @@ THIRD_PARTY_APPS = [
     'django_extensions',
     'django_celery_beat',
     'django_celery_results',
+    "django_json_widget",
     'drf_yasg',
     'corsheaders',
     'phonenumber_field',

@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -23,7 +24,12 @@ from lib.choices import (
     SUBSCRIPTION_STATUS_CHOICES,
 )
 
-from lib.constants import FieldConstants, SubscriptionIdentifier, SubscriptionPeriod
+from lib.constants import (
+    FieldConstants,
+    SubscriptionIdentifier,
+    SubscriptionPeriod,
+    SubscriptionStatus,
+)
 
 # Create your models here.
 
@@ -95,12 +101,25 @@ class UserSubscription(LifecycleModelMixin, BaseModel):
         subscriptions = UserSubscription.objects.exclude(
             health_report__isnull=True
         ).filter(
+            subscription_status=SubscriptionStatus.ACTIVE,
             health_report__health_code=health_code,
             plan__isnull=True,
             receipt__plan_id=self.plan.id
         )
         if subscriptions:
             subscriptions.update(plan=self.plan)
+
+    def clean(self) -> None:
+        initial_status: str = self.initial_value("subscription_status")
+        if initial_status != SubscriptionStatus.ACTIVE:
+            raise ValidationError(
+                f"Can't edit {initial_status} subscriptions"
+            )
+        
+        if not self.health_report_uploaded:
+            raise ValidationError("No Health Report uploaded for this user.")
+
+        return super().clean()
 
 
 class RevenueCatHistory(BaseModel):
