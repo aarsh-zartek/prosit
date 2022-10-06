@@ -16,13 +16,14 @@ class UserSubscriptionAdmin(admin.ModelAdmin):
         "amount_paid",
         "subscription_status",
         "expires_on",
-        "health_report_uploaded",
+        "get_health_report_uploaded",
     )
     readonly_fields = ("expires_on",)
     list_filter = ("subscription_status",)
     formfield_overrides = {
         models.JSONField: {'widget': JSONEditorWidget},
     }
+    # form = UserSubscriptionForm
 
     def get_readonly_fields(self, request, obj):
         read_only_fields = super().get_readonly_fields(request, obj)
@@ -30,6 +31,10 @@ class UserSubscriptionAdmin(admin.ModelAdmin):
             read_only_fields += ("receipt",)
 
         return read_only_fields
+    
+    @admin.display(boolean=True, description="Health Reports Uploaded?")
+    def get_health_report_uploaded(self, instance: UserSubscription):
+        return instance.health_report_uploaded
 
 
 admin.site.register(UserSubscription, UserSubscriptionAdmin)

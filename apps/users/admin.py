@@ -7,6 +7,7 @@ from django.contrib.auth.models import Group
 from rest_framework.authtoken.models import TokenProxy
 
 from apps.users.models import User, Profile, UserHealthReport, DailyActivity
+from lib.admin_utils import FieldSets
 
 # Register your models here.
 
@@ -37,10 +38,19 @@ class ProfileInline(admin.TabularInline):
     model = Profile
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('full_name', 'uid', 'phone_number', 'email', 'is_active')
+    list_display = ('__str__', 'uid', 'phone_number', 'email', "has_active_subscription", 'is_active')
     list_filter = ("is_active", "is_staff")
     search_fields = ("phone_number", "uid", "first_name", "last_name", "display_name")
     inlines = [ProfileInline,]
+
+    fieldsets = FieldSets(
+        none=("uid", "password"),
+        personal_info=("first_name", "last_name", "email", "phone_number"),
+        permissions=("is_staff", "user_permissions", "groups")
+    )
+    add_fieldsets = FieldSets(
+        none=("phone_number", "first_name", "last_name",)
+    )
 
     def get_form(self, request: Any, obj: Optional[User]=..., change: bool=..., **kwargs: Any):
 
@@ -64,6 +74,14 @@ class UserAdmin(admin.ModelAdmin):
             read_only_fields += ("is_staff",)
         
         return read_only_fields
+    
+    @admin.display(boolean=True, description="Has Active Subscription?")
+    def has_active_subscription(self, instance):
+        return True if instance.active_subscription else False
+    
+    # https://docs.djangoproject.com/en/4.1/ref/contrib/admin/#django.contrib.admin.ModelAdmin.list_display
+    # has_active_subscription.short_description = "Has Active Subscription"
+    # has_active_subscription.boolean = True
 
 
 class UserHealthReportAdmin(admin.ModelAdmin):
