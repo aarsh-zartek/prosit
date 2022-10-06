@@ -101,6 +101,7 @@ class UserSubscription(LifecycleModelMixin, BaseModel):
         subscriptions = UserSubscription.objects.exclude(
             health_report__isnull=True
         ).filter(
+            subscription_status=SubscriptionStatus.ACTIVE,
             health_report__health_code=health_code,
             plan__isnull=True,
             receipt__plan_id=self.plan.id
