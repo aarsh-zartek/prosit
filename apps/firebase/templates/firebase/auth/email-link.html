@@ -75,10 +75,6 @@
       </button>
     </div>
 
-    <div id="snackbar" class="mdl-js-snackbar mdl-snackbar">
-      <div class="mdl-snackbar__text"></div>
-      <button class="mdl-snackbar__action" type="button"></button>
-    </div>
   </div>
 
 </div>
@@ -213,10 +209,9 @@
 
   function copyApiKey() {
     'use strict';
-    let user = firebase.auth().currentUser;
-    let api_key = user.stsTokenManager.apiKey
+    let api_key = getValue("apiKey");
     let snackBarmessage = "API Key Copied!"
-    if(api_key) {
+    if (api_key) {
       copy(api_key);
     } else {
       snackBarmessage = "No Key Found!"
@@ -226,10 +221,9 @@
 
   function copyRefreshToken() {
     'use strict';
-    let user = firebase.auth().currentUser;
-    let token = user.stsTokenManager.refreshToken
+    let token = getValue("refreshToken");
     let snackBarmessage = "Refresh Token Copied!"
-    if(token) {
+    if (token) {
       copy(token);
     } else {
       snackBarmessage = "No Token Found!"
@@ -239,10 +233,9 @@
 
   function copyAccessToken() {
     'use strict';
-    let user = firebase.auth().currentUser;
-    let token = user.stsTokenManager.accessToken
+    let token = getValue("accessToken");
     let snackBarmessage = "Access Token Copied!"
-    if(token) {
+    if (token) {
       copy(token);
     } else {
       snackBarmessage = "No Token Found!"
@@ -253,10 +246,9 @@
 
   function copyUserObject() {
     'use strict';
-    let user = firebase.auth().currentUser;
-    let token = user
+    let token = getValue("user");
     let snackBarmessage = "User Object Copied!"
-    if(token) {
+    if (token) {
       copyJSON(user)
     } else {
       snackBarmessage = "No User Object Found!"
@@ -293,20 +285,6 @@
     return true
   }
 
-  function showSnackBar(snackBarmessage) {
-    'use strict';
-    let snackbarContainer = document.querySelector("#snackbar");
-
-    let handler = function(event) { }
-    
-    let data = {
-      message: snackBarmessage,
-      timeout: 5000,
-      actionHandler: handler,
-      actionText: "Okay!",
-    };
-    snackbarContainer.MaterialSnackbar.showSnackbar(data);
-  }
 
   function disableButtons() {
     var user = firebase.auth().currentUser;
@@ -354,6 +332,7 @@
         document.getElementById('sign-in-status').textContent = 'Signed in';
         document.getElementById('sign-in').textContent = 'Sign out';
         document.getElementById('account-details').innerHTML = prettyPrintJson.toHtml(user, prettyPrintJsonOptions);
+        localStorage.setItem("user_account_details", JSON.stringify(user));
         // [END_EXCLUDE]
       } else {
         // User is signed out.
@@ -362,6 +341,7 @@
         document.getElementById('sign-in-status').textContent = 'Signed out';
         document.getElementById('sign-in').textContent = 'Sign In without password';
         document.getElementById('account-details').textContent = 'Not Available';
+        localStorage.removeItem("user_account_details");
         // [END_EXCLUDE]
       }
       // [START_EXCLUDE silent]
