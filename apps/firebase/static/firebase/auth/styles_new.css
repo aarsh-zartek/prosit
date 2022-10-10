@@ -126,6 +126,21 @@ h4 {
     color: black !important;
 }
 
+.red-font {
+    color: red;
+}
+
+.regular-case {
+    text-transform: none;
+}
+
+.django {
+    color: #44B78B;
+}
+
+.django-rest-framework {
+    color: #A30000;
+}
 footer {
     margin-top: 24px;
 }
