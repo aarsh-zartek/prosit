@@ -1,13 +1,16 @@
 from datetime import datetime
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from django_lifecycle import LifecycleModelMixin, hook, AFTER_UPDATE
+
 from apps.core.models import BaseModel
 from apps.plan.models import DietPlan
 from apps.subscriptions.services import RevenueCatService
-from apps.users.models import User
+from apps.users.models import User, UserHealthReport
 
 from lib.utils import one_month_from_today
 
@@ -21,12 +24,17 @@ from lib.choices import (
     SUBSCRIPTION_STATUS_CHOICES,
 )
 
-from lib.constants import FieldConstants, SubscriptionIdentifier, SubscriptionPeriod
+from lib.constants import (
+    FieldConstants,
+    SubscriptionIdentifier,
+    SubscriptionPeriod,
+    SubscriptionStatus,
+)
 
 # Create your models here.
 
 
-class UserSubscription(BaseModel):
+class UserSubscription(LifecycleModelMixin, BaseModel):
     """Model definition for saving Subscription details locally."""
 
     user = models.ForeignKey(
@@ -38,6 +46,13 @@ class UserSubscription(BaseModel):
         related_name="subscribers",
         blank=True,
         null=True,
+    )
+    health_report = models.OneToOneField(
+        to=UserHealthReport,
+        related_name="subscription",
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
     )
     receipt = models.JSONField(verbose_name=_("Subscription Receipt"))
     subscription_type = models.CharField(
@@ -75,6 +90,36 @@ class UserSubscription(BaseModel):
         user_plan = self.plan.name if self.plan else "Not Assigned"
         sub_status = self.get_subscription_status_display()
         return f"{name} - {user_plan} - {sub_status}"
+    
+    @property
+    def health_report_uploaded(self):
+        return True if self.health_report else False
+
+    @hook(hook=AFTER_UPDATE, when="plan", has_changed=True, is_not=None)
+    def after_update(self):
+        health_code = self.health_report.health_code
+        subscriptions = UserSubscription.objects.exclude(
+            health_report__isnull=True
+        ).filter(
+            subscription_status=SubscriptionStatus.ACTIVE,
+            health_report__health_code=health_code,
+            plan__isnull=True,
+            receipt__plan_id=self.plan.id
+        )
+        if subscriptions:
+            subscriptions.update(plan=self.plan)
+
+    def clean(self) -> None:
+        initial_status: str = self.initial_value("subscription_status")
+        if initial_status != SubscriptionStatus.ACTIVE:
+            raise ValidationError(
+                f"Can't edit {initial_status} subscriptions"
+            )
+        
+        if not self.health_report_uploaded:
+            raise ValidationError("No Health Report uploaded for this user.")
+
+        return super().clean()
 
 
 class RevenueCatHistory(BaseModel):

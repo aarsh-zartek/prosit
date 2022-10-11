@@ -69,6 +69,9 @@ class UserHealthReportSerializer(DynamicFieldsModelSerializer):
         if not user.active_subscription:
             raise serializers.ValidationError("No Active Subscription found for this user")
 
+        if user.active_subscription.health_report:
+            raise serializers.ValidationError("You already have an active subscription")
+
         if image is None:
             attrs.pop("image")
 

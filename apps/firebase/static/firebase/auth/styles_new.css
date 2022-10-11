@@ -29,10 +29,10 @@ a {
     text-decoration: none;
 }
 
-li a, em a {
+/* li a, em a {
     text-decoration: underline;
     color: #0288d1;
-}
+} */
 
 .mdl-grid {
     max-width: 1024px;
