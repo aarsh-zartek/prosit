@@ -29,6 +29,7 @@ class CompanySerializer(DynamicFieldsModelSerializer):
 		fields = (
 			"home_page_title", "home_page_text",
 			"contact_number", "about_the_company",
+			"help_number",
 			"address", "faqs", "stop_plan_pdf",
 			"terms_and_conditions", "privacy_policy",
 			"banner_title", "banner_text"
