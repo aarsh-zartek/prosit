@@ -1,4 +1,7 @@
 from django.contrib import admin
+from django.db import models
+
+from django_json_widget.widgets import JSONEditorWidget
 
 from apps.subscriptions.models import UserSubscription
 
@@ -17,6 +20,9 @@ class UserSubscriptionAdmin(admin.ModelAdmin):
     )
     readonly_fields = ("expires_on",)
     list_filter = ("subscription_status",)
+    formfield_overrides = {
+        models.JSONField: {'widget': JSONEditorWidget},
+    }
 
     def get_readonly_fields(self, request, obj):
         read_only_fields = super().get_readonly_fields(request, obj)

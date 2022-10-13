@@ -90,15 +90,6 @@ class UserHealthReportSerializer(DynamicFieldsModelSerializer):
             "dry_skin", "image", "extra_info"
         )
 
-    def create(self, validated_data: dict):
-        user = validated_data.pop("user")
-        user_health_report, created = UserHealthReport.objects.update_or_create(
-            user=user,
-            date=timezone.now().date(),
-            defaults=validated_data
-        )
-        return user_health_report
-
 
 class DailyActivitySerializer(DynamicFieldsModelSerializer):
     """To track daily user activity
