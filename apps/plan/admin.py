@@ -36,6 +36,9 @@ class DietPlanAdmin(admin.ModelAdmin):
 		return instance.question_answers.count()
 	
 	def get_category(self, instance: DietPlan):
+		if not instance.category:
+			return None
+
 		link = (
 			reverse("admin:plan_plancategory_changelist")  + "?" + urlencode({"id": instance.category.id})
 		)
