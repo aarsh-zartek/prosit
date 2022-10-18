@@ -12,7 +12,7 @@ from firebase_admin.messaging import (
 from smtplib import SMTPAuthenticationError, SMTPConnectError
 
 from prosit.celery import app
-from prosit.settings import EMAIL_HOST_USER, PROSIT_ADMIN_EMAIL, DOMAIN_IP
+from prosit.settings import EMAIL_HOST_USER, PROSIT_ADMIN_EMAIL, STAGING_DOMAIN
 
 from apps.notification.models import UserNotification
 
@@ -60,7 +60,7 @@ def send_email_notificaton(data, *args, **kwargs) -> str:
                 'email.html',
                 {
                     "message": mail_msg,
-                    "url": f"{DOMAIN_IP}/admin/users/user{data['id']}"
+                    "url": f"{STAGING_DOMAIN}/admin/users/user{data['id']}"
                 }
             )
     msg = strip_tags(html_msg)
