@@ -14,11 +14,6 @@ from pathlib import Path
 from environ import environ
 import os
 
-import logging.config
-from django.utils.log import DEFAULT_LOGGING
-
-from lib.constants import FieldConstants
-
 env = environ.Env()
 environ.Env.read_env()
 
@@ -37,13 +32,9 @@ SECRET_KEY = env.str('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False)
 
-DOMAIN = env.str('DOMAIN')
-DOMAIN_IP = env.str('DOMAIN_IP')
-TESTING_DOMAIN = env.str('TESTING_DOMAIN')
-STAGING_DOMAIN = env.str('STAGING_DOMAIN')
+DOMAIN = env.list('DOMAIN', default="localhost")
 
-ALLOWED_HOSTS = [DOMAIN, DOMAIN_IP, TESTING_DOMAIN, STAGING_DOMAIN]
-
+ALLOWED_HOSTS = DOMAIN
 
 # Application definition
 
@@ -169,12 +160,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-if DEBUG:
-    STATICFILES_DIRS = (
-        os.path.join(BASE_DIR, 'static/'),
-    )
-else:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Media Files
 MEDIA_URL = '/media/'
@@ -202,63 +188,6 @@ CACHES = {
         'LOCATION': f'{BASE_DIR}\\.cache',
     }
 }
-
-logging.config.dictConfig({
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'default': {
-            # exact format is not important, this is the minimum information
-            'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
-        },
-        'django.server': DEFAULT_LOGGING['formatters']['django.server'],
-    },
-    'handlers': {
-        # console logs to stderr
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'default',
-        },
-        # Add Handler for Sentry for `warning` and above
-        'file': {
-            'level': 'WARNING',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': LOG_FILE_NAME,
-            'maxBytes': 1024 * 1024 * 10,  # 10MB
-            'backupCount': 10,
-            'formatter': 'default',
-        },
-        'django.server': DEFAULT_LOGGING['handlers']['django.server'],
-    },
-    'loggers': {
-        # default for all undefined Python modules
-        '': {
-            'level': 'INFO',
-            'handlers': ['console', 'file'],
-        },
-        # Our application code
-        'apps.firebase': {
-            'level': LOGLEVEL,
-            'handlers': ['console', 'file'],
-            # Avoid double logging because of root logger
-            'propagate': False,
-        },
-        'apps.plan': {
-            'level': LOGLEVEL,
-            'handlers': ['console', 'file'],
-            # Avoid double logging because of root logger
-            'propagate': False,
-        },
-        # # Prevent noisy modules from logging to Sentry
-        # 'noisy_module': {
-        #     'level': 'ERROR',
-        #     'handlers': ['console'],
-        #     'propagate': False,
-        # },
-        # Default runserver request logging
-        'django.server': DEFAULT_LOGGING['loggers']['django.server'],
-    },
-})
 
 
 # CORS

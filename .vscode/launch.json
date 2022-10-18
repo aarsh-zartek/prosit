@@ -60,7 +60,6 @@
 					"--loglevel=INFO",
 					"-n",
 					"celery_worker",
-					"--pool=solo"
 				]
 			},
 			"windows": {
