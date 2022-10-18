@@ -112,4 +112,5 @@ class FirebaseAuthentication(authentication.BaseAuthentication):
                 display_name=firebase_user_record.display_name,
             )
         except IntegrityError as e:
-            raise AuthenticationFailed(e.args)
+            msg = "Firebase User Error Occured. Contact Admin"
+            raise AuthenticationFailed(msg, code="firebase_user_error")

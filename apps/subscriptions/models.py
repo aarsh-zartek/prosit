@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
@@ -90,8 +91,8 @@ class UserSubscription(LifecycleModelMixin, BaseModel):
         user_plan = self.plan.name if self.plan else "Not Assigned"
         sub_status = self.get_subscription_status_display()
         return f"{name} - {user_plan} - {sub_status}"
-    
-    @property
+
+    @admin.display(boolean=True, description="Health Report Uploaded")
     def health_report_uploaded(self):
         return True if self.health_report else False
 
@@ -104,7 +105,7 @@ class UserSubscription(LifecycleModelMixin, BaseModel):
             subscription_status=SubscriptionStatus.ACTIVE,
             health_report__health_code=health_code,
             plan__isnull=True,
-            receipt__plan_id=self.plan.id
+            receipt__plan_id=self.plan.id,
         )
         if subscriptions:
             subscriptions.update(plan=self.plan)
@@ -112,11 +113,9 @@ class UserSubscription(LifecycleModelMixin, BaseModel):
     def clean(self) -> None:
         initial_status: str = self.initial_value("subscription_status")
         if initial_status != SubscriptionStatus.ACTIVE:
-            raise ValidationError(
-                f"Can't edit {initial_status} subscriptions"
-            )
-        
-        if not self.health_report_uploaded:
+            raise ValidationError(f"Can't edit {initial_status} subscriptions")
+
+        if not self.health_report_uploaded():
             raise ValidationError("No Health Report uploaded for this user.")
 
         return super().clean()
