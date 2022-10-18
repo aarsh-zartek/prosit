@@ -40,6 +40,7 @@ DOMAIN = env.list("DOMAIN", default="localhost")
 
 ALLOWED_HOSTS = DOMAIN
 
+STAGING_DOMAIN = env.str("STAGING_DOMAIN")
 
 # Application definition
 
