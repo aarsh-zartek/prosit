@@ -33,6 +33,13 @@
           Sign In without password
         </button>
       </form>
+
+      <!-- Button that handles sign-out -->
+      <button class="mdl-button mdl-js-button mdl-button--primary mdl-button--raised mdl-js-ripple-effect white-font"
+        id="sign-out-button">
+        <i class="material-icons">logout</i>
+        Sign Out
+      </button>
     </div>
   </div>
 
@@ -79,10 +86,6 @@
       </button>
     </div>
 
-    <div id="snackbar" class="mdl-js-snackbar mdl-snackbar">
-      <div class="mdl-snackbar__text"></div>
-      <button class="mdl-snackbar__action" type="button"></button>
-    </div>
   </div>
 </div>
 {% endblock content %}
@@ -91,7 +94,7 @@
 {% block headScript %}
 
 <script type="text/javascript">
-  window.onload = initApp();
+  window.onload = initApp;
 
   /**
    * initApp handles setting up UI event listeners and registering Firebase auth listeners:
@@ -121,26 +124,33 @@
         var providerData = user.providerData;
         // Update UI.
         // [START_EXCLUDE]
+        /*
         document.getElementById('sign-in-status').textContent = 'Signed in';
         document.getElementById('sign-in').textContent = 'Sign out';
-        document.getElementById('account-details').textContent = JSON.stringify(user, null, '  ');
+        document.getElementById('account-details').innerHTML = prettyPrintJson.toHtml(user, prettyPrintJsonOptions);
+        localStorage.setItem("user_account_details", JSON.stringify(user));
+        */
         // [END_EXCLUDE]
-      } else {
+      // } else {
         // User is signed out.
         // Update UI.
         // [START_EXCLUDE]
+        /*
         document.getElementById('sign-in-status').textContent = 'Signed out';
         document.getElementById('sign-in').textContent = 'Sign In without password';
-        document.getElementById('account-details').textContent = 'null';
+        document.getElementById('account-details').textContent = 'Not Available';
+        localStorage.removeItem("user_account_details");
+        */
         // [END_EXCLUDE]
       }
       // [START_EXCLUDE silent]
       document.getElementById('sign-in').disabled = false;
+      updateSignedInUserStatusUI();
+      disableButtons();
       // [END_EXCLUDE]
       updateProgressBar();
     });
     // [END authstatelistener]
-    disableButtons();
     registerEventBindings();
   }
   /**
@@ -251,10 +261,52 @@
   }
 
   /**
+   * Updates the state of the Sign-in form.
+   */
+   function updateSignInFormUI() {
+    if (firebase.auth().currentUser || window.confirmationResult) {
+      document.getElementById('sign-in-form').style.display = 'none';
+    } else {
+      resetReCaptcha();
+      document.getElementById('sign-in-form').style.display = 'block';
+    }
+  }
+  
+  /**
+   * Updates the state of the Sign out button.
+   */
+  function updateSignOutButtonUI() {
+    if (firebase.auth().currentUser) {
+      document.getElementById('sign-out-button').style.display = 'block';
+    } else {
+      document.getElementById('sign-out-button').style.display = 'none';
+    }
+  }
+
+  /**
+   * Updates the Signed in user status panel.
+   */
+  function updateSignedInUserStatusUI() {
+    var user = firebase.auth().currentUser;
+    if (user) {
+      document.getElementById('sign-in-status').textContent = 'Signed in';
+      document.getElementById('sign-in').textContent = 'Sign out';
+      document.getElementById('account-details').innerHTML = prettyPrintJson.toHtml(user, prettyPrintJsonOptions);
+      localStorage.setItem("user_account_details", JSON.stringify(user));
+    } else {
+      document.getElementById('sign-in-status').textContent = 'Signed out';
+      document.getElementById('sign-in').textContent = 'Sign In without password';
+      document.getElementById('account-details').textContent = 'Not Available';
+      localStorage.removeItem("user_account_details");
+    }
+  }
+  
+  /**
    * Registers all required event bindings
    */
   function registerEventBindings(){
-    // document.getElementById('sign-in').addEventListener('click', toggleSignIn, false);
+    document.getElementById('sign-in').addEventListener('click', toggleSignIn, false);
+    // document.getElementById('sign-out-button').addEventListener('click', onSignOutClick);
     document.getElementById('copy-accessToken-button').addEventListener('click', copyAccessToken);
     document.getElementById('copy-refreshToken-button').addEventListener('click', copyRefreshToken);
     document.getElementById('copy-apiKey-button').addEventListener('click', copyApiKey);
@@ -279,10 +331,9 @@
 
   function copyApiKey() {
     'use strict';
-    var user = firebase.auth().currentUser;
-    let api_key = user.stsTokenManager.apiKey
-    var snackBarmessage = "API Key Copied!"
-    if(api_key) {
+    let api_key = getValue("apiKey");
+    let snackBarmessage = "API Key Copied!"
+    if (api_key) {
       copy(api_key);
     } else {
       snackBarmessage = "No Key Found!"
@@ -292,10 +343,9 @@
 
   function copyRefreshToken() {
     'use strict';
-    var user = firebase.auth().currentUser;
-    let token = user.stsTokenManager.refreshToken
-    var snackBarmessage = "Refresh Token Copied!"
-    if(token) {
+    let token = getValue("refreshToken");
+    let snackBarmessage = "Refresh Token Copied!"
+    if (token) {
       copy(token);
     } else {
       snackBarmessage = "No Token Found!"
@@ -305,10 +355,9 @@
 
   function copyAccessToken() {
     'use strict';
-    var user = firebase.auth().currentUser;
-    let token = user.stsTokenManager.accessToken
-    var snackBarmessage = "Access Token Copied!"
-    if(token) {
+    let token = getValue("accessToken");
+    let snackBarmessage = "Access Token Copied!"
+    if (token) {
       copy(token);
     } else {
       snackBarmessage = "No Token Found!"
@@ -319,10 +368,9 @@
 
   function copyUserObject() {
     'use strict';
-    var user = firebase.auth().currentUser;
-    let token = user
-    var snackBarmessage = "User Object Copied!"
-    if(token) {
+    let token = getValue("user");
+    let snackBarmessage = "User Object Copied!"
+    if (token) {
       copyJSON(user)
     } else {
       snackBarmessage = "No User Object Found!"
@@ -357,21 +405,6 @@
     document.body.removeChild(selBox);
 
     return true
-  }
-
-  function showSnackBar(snackBarmessage) {
-    'use strict';
-    var snackbarContainer = document.querySelector("#snackbar");
-
-    var handler = function(event) { }
-
-    var data = {
-      message: snackBarmessage,
-      timeout: 5000,
-      actionHandler: handler,
-      actionText: "Okay!",
-    };
-    snackbarContainer.MaterialSnackbar.showSnackbar(data);
   }
 
 </script>
