@@ -33,6 +33,13 @@
           Sign In without password
         </button>
       </form>
+
+      <!-- Button that handles sign-out -->
+      <button class="mdl-button mdl-js-button mdl-button--primary mdl-button--raised mdl-js-ripple-effect white-font"
+        id="sign-out-button">
+        <i class="material-icons">logout</i>
+        Sign Out
+      </button>
     </div>
   </div>
 
@@ -117,23 +124,28 @@
         var providerData = user.providerData;
         // Update UI.
         // [START_EXCLUDE]
+        /*
         document.getElementById('sign-in-status').textContent = 'Signed in';
         document.getElementById('sign-in').textContent = 'Sign out';
         document.getElementById('account-details').innerHTML = prettyPrintJson.toHtml(user, prettyPrintJsonOptions);
         localStorage.setItem("user_account_details", JSON.stringify(user));
+        */
         // [END_EXCLUDE]
-      } else {
+      // } else {
         // User is signed out.
         // Update UI.
         // [START_EXCLUDE]
+        /*
         document.getElementById('sign-in-status').textContent = 'Signed out';
         document.getElementById('sign-in').textContent = 'Sign In without password';
         document.getElementById('account-details').textContent = 'Not Available';
         localStorage.removeItem("user_account_details");
+        */
         // [END_EXCLUDE]
       }
       // [START_EXCLUDE silent]
       document.getElementById('sign-in').disabled = false;
+      updateSignedInUserStatusUI();
       disableButtons();
       // [END_EXCLUDE]
       updateProgressBar();
@@ -249,10 +261,52 @@
   }
 
   /**
+   * Updates the state of the Sign-in form.
+   */
+   function updateSignInFormUI() {
+    if (firebase.auth().currentUser || window.confirmationResult) {
+      document.getElementById('sign-in-form').style.display = 'none';
+    } else {
+      resetReCaptcha();
+      document.getElementById('sign-in-form').style.display = 'block';
+    }
+  }
+  
+  /**
+   * Updates the state of the Sign out button.
+   */
+  function updateSignOutButtonUI() {
+    if (firebase.auth().currentUser) {
+      document.getElementById('sign-out-button').style.display = 'block';
+    } else {
+      document.getElementById('sign-out-button').style.display = 'none';
+    }
+  }
+
+  /**
+   * Updates the Signed in user status panel.
+   */
+  function updateSignedInUserStatusUI() {
+    var user = firebase.auth().currentUser;
+    if (user) {
+      document.getElementById('sign-in-status').textContent = 'Signed in';
+      document.getElementById('sign-in').textContent = 'Sign out';
+      document.getElementById('account-details').innerHTML = prettyPrintJson.toHtml(user, prettyPrintJsonOptions);
+      localStorage.setItem("user_account_details", JSON.stringify(user));
+    } else {
+      document.getElementById('sign-in-status').textContent = 'Signed out';
+      document.getElementById('sign-in').textContent = 'Sign In without password';
+      document.getElementById('account-details').textContent = 'Not Available';
+      localStorage.removeItem("user_account_details");
+    }
+  }
+  
+  /**
    * Registers all required event bindings
    */
   function registerEventBindings(){
     document.getElementById('sign-in').addEventListener('click', toggleSignIn, false);
+    // document.getElementById('sign-out-button').addEventListener('click', onSignOutClick);
     document.getElementById('copy-accessToken-button').addEventListener('click', copyAccessToken);
     document.getElementById('copy-refreshToken-button').addEventListener('click', copyRefreshToken);
     document.getElementById('copy-apiKey-button').addEventListener('click', copyApiKey);
