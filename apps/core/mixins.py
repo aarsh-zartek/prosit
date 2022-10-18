@@ -25,9 +25,9 @@ class SerializerActionClassMixin(object):
 	`lookup`: self.serializer_class, DefaultSerializer.
 	"""
 
-	def get_serializer_class(self):
+	def get_serializer_class(self, *args, **kwargs):
 		try:
 			return self.serializer_action_classes[self.action]
 		except (KeyError, AttributeError):
-			return super().get_serializer_class()
+			return super().get_serializer_class(*args, **kwargs)
 

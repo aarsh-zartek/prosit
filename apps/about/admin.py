@@ -13,7 +13,7 @@ class FAQInline(admin.TabularInline):
 
 
 class CompanyAdmin(admin.ModelAdmin):
-	list_display = ("home_page_title", "home_page_text", "contact_number")
+	list_display = ("home_page_title", "home_page_text", "contact_number", "help_number")
 	inlines = (FAQInline,)
 
 class ContactFormAdmin(admin.ModelAdmin):

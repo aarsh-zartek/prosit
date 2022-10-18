@@ -2,6 +2,7 @@ from django.core.validators import FileExtensionValidator as FEV
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from ckeditor.fields import RichTextField
 from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.core.models import BaseModel
@@ -18,11 +19,12 @@ class Company(BaseModel):
     home_page_text = models.TextField(verbose_name=_("Home Page Text"))
 
     contact_number = PhoneNumberField(verbose_name=_("Company Contact Number"))
-    about_the_company = models.TextField(verbose_name=_("About The Company"))
+    help_number = PhoneNumberField(verbose_name=_("Help Number for Doubt"))
+    about_the_company = RichTextField(verbose_name=_("About The Company"))
     address = models.TextField(verbose_name=_("Company Address"))
     
-    terms_and_conditions = models.TextField(verbose_name=_("Terms And Conditions"))
-    privacy_policy = models.TextField(verbose_name=_("Privacy Policy"))
+    terms_and_conditions = RichTextField(verbose_name=_("Terms And Conditions"))
+    privacy_policy = RichTextField(verbose_name=_("Privacy Policy"))
 
     banner_title = models.TextField(verbose_name=_("Banner"))
     banner_text = models.TextField(verbose_name=_("Banner Text"))
@@ -73,3 +75,6 @@ class ContactForm(BaseModel):
     class Meta:
         verbose_name = _("Contact Form")
         verbose_name_plural = _("Contact Forms")
+    
+    def __str__(self) -> str:
+        return f"{self.user} - {self.created}"

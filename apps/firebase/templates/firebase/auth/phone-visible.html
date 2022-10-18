@@ -1,93 +1,113 @@
-{% extends 'firebase/auth/base.html' %}
+{% extends 'firebase/auth/base_new.html' %}
 
-{% block title %} Phone Authentication with visible ReCaptcha {% endblock title %}
+{% block title %} Phone Authentication with Visible ReCaptcha {% endblock title %}
 
 {% block content %}
 
+<div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-grid">
 
-<main class="mdl-layout__content mdl-color--grey-100">
-  <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-grid">
-
-    <!-- Container for the demo -->
-    <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
-      <div class="mdl-card__title mdl-color--light-blue-600 mdl-color-text--white">
-        <h2 class="mdl-card__title-text">Phone number authentication with visible ReCaptcha</h2>
-      </div>
-      <div class="mdl-card__supporting-text mdl-color-text--grey-600">
-        <p>Sign in with your phone number below.</p>
-
-        <form id="sign-in-form" action="#">
-          <!-- Input to enter the phone number -->
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <input class="mdl-textfield__input" type="text" pattern="\+[0-9\s\-\(\)]+" id="phone-number">
-            <label class="mdl-textfield__label" for="phone-number">Enter your phone number...</label>
-            <span class="mdl-textfield__error">Input is not an international phone number!</span>
-          </div>
-
-          <!-- Container to display the re-captcha check -->
-          <div id="recaptcha-container"></div>
-
-          <!-- Button that handles sign-in -->
-          <input type="submit" disabled class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised mdl-js-ripple-effect" id="sign-in-button"
-            value="Sign-in" style="color: white;"/>
-        </form>
-
-        <!-- Button that handles sign-out -->
-        <button class="mdl-button mdl-js-button mdl-button--accent mdl-button--raised mdl-js-ripple-effect" id="sign-out-button">Sign-out</button>
-
-        <form id="verification-code-form" action="#">
-          <!-- Input to enter the verification code -->
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <input class="mdl-textfield__input" type="text" id="verification-code">
-            <label class="mdl-textfield__label" for="verification-code">Enter the verification code...</label>
-          </div>
-
-          <!-- Button that triggers code verification -->
-          <input type="submit" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised mdl-js-ripple-effect" id="verify-code-button"
-            value="Verify Code" style="color: white;"/>
-          <!-- Button to cancel code verification -->
-          <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" id="cancel-verify-code-button">Cancel</button>
-        </form>
-      </div>
+  <!-- Container for the demo -->
+  <div id="sign-in-card"
+    class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
+    <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
+      <h2 class="mdl-card__title-text">Phone Number Authentication with Visible ReCaptcha</h2>
     </div>
+    <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+      <p>Sign in with your phone number below.</p>
 
-    <!-- Container for the sign in status and user info -->
-    <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
-      <div class="mdl-card__title mdl-color--light-blue-600 mdl-color-text--white">
-        <h2 class="mdl-card__title-text">User Status</h2>
-      </div>
-      <div class="mdl-card__supporting-text mdl-color-text--grey-600">
-        <!-- Container where we'll display the user details -->
-        <div class="user-details-container">
-          Firebase sign-in status: <span id="sign-in-status">Unknown</span>
-          <div>Firebase auth <code>currentUser</code> object value:</div>
-          <pre><code id="account-details">null</code></pre>
+      <form id="sign-in-form" action="#">
+        <!-- Input to enter the phone number -->
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+          <input class="mdl-textfield__input" type="text" pattern="\+[0-9\s\-\(\)]+" id="phone-number">
+          <label class="mdl-textfield__label" for="phone-number">Enter your phone number...</label>
+          <span class="mdl-textfield__error">Input is not an international phone number!</span>
         </div>
-      </div>
-      <div class="mdl-card__menu">
-        <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--primary" id="refresh-button" style="color: white;" onclick="window.location.reload()">
-          <i class="material-icons">refresh</i>
+
+        <!-- Container to display the re-captcha check -->
+        <div id="recaptcha-container"></div>
+
+        <!-- Button that handles sign-in -->
+        <button disabled class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised mdl-js-ripple-effect white-font" id="sign-in-button">
+          <i class="material-icons">login</i>
+          Sign In
         </button>
-      </div>
-      <div class="mdl-card__actions mdl-card--border">
-        <button class="mdl-button mdl-js-button mdl-button--colored mdl-js-ripple-effect mdl-button--raised" id="copy-accessToken-button" style="color: white;">
-          <i class="material-icons">copy_all</i>
-          Copy Access Token
+      </form>
+
+      <!-- Button that handles sign-out -->
+      <button class="mdl-button mdl-js-button mdl-button--primary mdl-button--raised mdl-js-ripple-effect white-font" id="sign-out-button">
+        <i class="material-icons">logout</i>
+        Sign Out
+      </button>
+
+      <form id="verification-code-form" action="#">
+        <!-- Input to enter the verification code -->
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+          <input class="mdl-textfield__input" type="text" id="verification-code">
+          <label class="mdl-textfield__label" for="verification-code">Enter the verification code...</label>
+        </div>
+
+        <!-- Button that triggers code verification -->
+        <button class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised mdl-js-ripple-effect white-font" id="verify-code-button">
+          <i class="material-icons">done</i>
+          Verify Code
         </button>
-        &nbsp;
-        <button class="mdl-button mdl-js-button mdl-button--accent mdl-js-ripple-effect mdl-button--raised" id="copy-refreshToken-button" style="color: white;">
-          <i class="material-icons">autorenew</i>
-          Copy Refresh Token
+        <!-- Button to cancel code verification -->
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" id="cancel-verify-code-button">
+          <i class="material-icons">close</i>
+          Cancel
         </button>
-        &nbsp;
-        <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised" id="copy-apiKey-button">
-          <i class="material-icons">api</i>
-          Copy API Key
-        </button>
-      </div>
+      </form>
     </div>
   </div>
-</main>
+
+  <!-- Container for the sign in status and user info -->
+  <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
+    <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
+      <h2 class="mdl-card__title-text">User Status</h2>
+    </div>
+    <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+      <!-- Container where we'll display the user details -->
+      <div class="user-details-container">
+        Firebase sign-in status: <span id="sign-in-status">Unknown</span>
+        <div>Firebase auth <code>currentUser</code> object value:</div>
+        <pre><code id="account-details">
+          <div class="mdl-spinner mdl-js-spinner is-active"></div>
+        </code></pre>
+
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="user-object-button">
+          <i class="material-icons">code</i>
+          Copy User Object
+        </button>
+      </div>
+    </div>
+    <div class="mdl-card__menu">
+      <button class="mdl-button mdl-js-button mdl-button--icon white-font" id="refresh-button" onclick="window.location.reload()">
+        <i class="material-icons">refresh</i>
+      </button>
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+      <button class="mdl-button mdl-js-button mdl-button--colored mdl-js-ripple-effect mdl-button--raised white-font" id="copy-accessToken-button">
+        <i class="material-icons">copy_all</i>
+        Copy Access Token
+      </button>
+      &nbsp;
+      <button class="mdl-button mdl-js-button mdl-button--accent mdl-js-ripple-effect mdl-button--raised white-font" id="copy-refreshToken-button">
+        <i class="material-icons">autorenew</i>
+        Copy Refresh Token
+      </button>
+      &nbsp;
+      <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised" id="copy-apiKey-button">
+        <i class="material-icons">api</i>
+        Copy API Key
+      </button>
+    </div>
+
+    <div id="snackbar" class="mdl-js-snackbar mdl-snackbar">
+      <div class="mdl-snackbar__text"></div>
+      <button class="mdl-snackbar__action" type="button"></button>
+    </div>
+  </div>
+</div>
 {% endblock content %}
 
 
@@ -97,7 +117,10 @@
   /**
    * Set up UI event listeners and registering Firebase auth listeners.
    */
-  window.onload = function () {
+  window.onload = initApp();
+
+  function initApp() {
+    updateProgressBar("block");
     // Listening for auth state changes.
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
@@ -117,7 +140,14 @@
       updateSignedInUserStatusUI();
       updateVerificationCodeFormUI();
       disableButtons();
+      updateProgressBar();
     });
+
+    registerEventBindings();
+    initReCaptcha();
+  };
+
+  function registerEventBindings() {
 
     // Event bindings.
     document.getElementById('sign-in-form').addEventListener('submit', onSignInSubmit);
@@ -131,7 +161,10 @@
     document.getElementById('copy-accessToken-button').addEventListener('click', copyAccessToken);
     document.getElementById('copy-refreshToken-button').addEventListener('click', copyRefreshToken);
     document.getElementById('copy-apiKey-button').addEventListener('click', copyApiKey);
+    document.getElementById('user-object-button').addEventListener('click', copyUserObject);
+  }
 
+  function initReCaptcha() {
     // [START appVerifier]
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
       'size': 'normal',
@@ -155,7 +188,7 @@
       window.recaptchaWidgetId = widgetId;
     });
     // [END renderCaptcha]
-  };
+  }
 
   /**
    * Function called when clicking the Login/Logout button.
@@ -163,6 +196,7 @@
   function onSignInSubmit(e) {
     e.preventDefault();
     if (isCaptchaOK() && isPhoneNumberValid()) {
+      updateProgressBar("block");
       window.signingIn = true;
       updateSignInButtonUI();
       // [START signin]
@@ -190,6 +224,8 @@
           updateSignInFormUI();
           updateSignInButtonUI();
           // [END_EXCLUDE]
+        }).finally(() => {
+          updateProgressBar();
         });
       // [END signin]
     }
@@ -201,6 +237,7 @@
   function onVerifyCodeSubmit(e) {
     e.preventDefault();
     if (!!getCodeFromUserInput()) {
+      updateProgressBar("block");
       window.verifyingCode = true;
       updateVerifyCodeButtonUI();
       // [START verifyCode]
@@ -223,6 +260,8 @@
         updateSignInButtonUI();
         updateVerifyCodeButtonUI();
         // [END_EXCLUDE]
+      }).finally(() => {
+        updateProgressBar();
       });
       // [END verifyCode]
     }
@@ -350,10 +389,10 @@
     var user = firebase.auth().currentUser;
     if (user) {
       document.getElementById('sign-in-status').textContent = 'Signed in';
-      document.getElementById('account-details').textContent = JSON.stringify(user, null, '  ');
+      document.getElementById('account-details').innerHTML = prettyPrintJson.toHtml(user, prettyPrintJsonOptions);
     } else {
       document.getElementById('sign-in-status').textContent = 'Signed out';
-      document.getElementById('account-details').textContent = 'null';
+      document.getElementById('account-details').textContent = 'Not Available';
     }
   }
 
@@ -363,39 +402,68 @@
       document.getElementById('copy-accessToken-button').disabled = true;
       document.getElementById('copy-refreshToken-button').disabled = true;
       document.getElementById('copy-apiKey-button').disabled = true;
+      document.getElementById('user-object-button').disabled = true;
     } else {
       document.getElementById('copy-accessToken-button').disabled = false;
       document.getElementById('copy-refreshToken-button').disabled = false;
       document.getElementById('copy-apiKey-button').disabled = false;
+      document.getElementById('user-object-button').disabled = false;
     }
 
   }
+
   function copyApiKey() {
     'use strict';
-    var userData = JSON.parse(document.getElementById('account-details').textContent);
-    var api_key = userData.stsTokenManager.apiKey
+    let user = firebase.auth().currentUser;
+    let api_key = user.stsTokenManager.apiKey
+    let snackBarmessage = "API Key Copied!"
     if(api_key) {
       copy(api_key);
+    } else {
+      snackBarmessage = "No Key Found!"
     }
+    showSnackBar(snackBarmessage);
   }
 
   function copyRefreshToken() {
     'use strict';
-    var userData = JSON.parse(document.getElementById('account-details').textContent);
-    var token = userData.stsTokenManager.refreshToken
+    let user = firebase.auth().currentUser;
+    let token = user.stsTokenManager.refreshToken
+    let snackBarmessage = "Refresh Token Copied!"
     if(token) {
       copy(token);
+    } else {
+      snackBarmessage = "No Token Found!"
     }
+    showSnackBar(snackBarmessage);
   }
 
   function copyAccessToken() {
     'use strict';
-    var userData = JSON.parse(document.getElementById('account-details').textContent);
-    var token = userData.stsTokenManager.accessToken
-    var snackBarmessage = "Token Copied!"
+    let user = firebase.auth().currentUser;
+    let token = user.stsTokenManager.accessToken
+    let snackBarmessage = "Access Token Copied!"
     if(token) {
       copy(token);
+    } else {
+      snackBarmessage = "No Token Found!"
     }
+
+    showSnackBar(snackBarmessage);
+  }
+
+  function copyUserObject() {
+    'use strict';
+    let user = firebase.auth().currentUser;
+    let token = user
+    let snackBarmessage = "User Object Copied!"
+    if(token) {
+      copyJSON(user)
+    } else {
+      snackBarmessage = "No User Object Found!"
+    }
+
+    showSnackBar(snackBarmessage);
   }
 
   function copy(text) {
@@ -409,6 +477,38 @@
     
     return result;
   }
+
+  function copyJSON(jsonData) {
+    let selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = JSON.stringify(jsonData);
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
+
+    return true
+  }
+
+  function showSnackBar(snackBarmessage) {
+    'use strict';
+    let snackbarContainer = document.querySelector("#snackbar");
+
+    let handler = function(event) { }
+    
+    let data = {
+      message: snackBarmessage,
+      timeout: 5000,
+      actionHandler: handler,
+      actionText: "Okay!",
+    };
+    snackbarContainer.MaterialSnackbar.showSnackbar(data);
+  }
+  
 </script>
 
 

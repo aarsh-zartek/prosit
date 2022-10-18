@@ -1,5 +1,6 @@
 from rest_framework import mixins
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from apps.plan.serializers import DietPlanSerializer, DietPlanListSerializer, PlanCategorySerializer
@@ -25,3 +26,8 @@ class DietPlanView(SerializerActionClassMixin, ReadOnlyModelViewSet):
 		if self.action == 'list':
 			queryset = queryset.filter(plan_type=PLAN_TYPES.main_category)
 		return queryset
+
+	def get_serializer_context(self):
+		context = super().get_serializer_context()
+		context["user"] = self.request.user
+		return context

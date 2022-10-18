@@ -40,8 +40,9 @@ DEBUG = env.bool('DEBUG', default=False)
 DOMAIN = env.str('DOMAIN')
 DOMAIN_IP = env.str('DOMAIN_IP')
 TESTING_DOMAIN = env.str('TESTING_DOMAIN')
+STAGING_DOMAIN = env.str('STAGING_DOMAIN')
 
-ALLOWED_HOSTS = [DOMAIN, DOMAIN_IP, TESTING_DOMAIN]
+ALLOWED_HOSTS = [DOMAIN, DOMAIN_IP, TESTING_DOMAIN, STAGING_DOMAIN]
 
 
 # Application definition
@@ -63,6 +64,7 @@ THIRD_PARTY_APPS = [
     'django_extensions',
     'django_celery_beat',
     'django_celery_results',
+    "django_json_widget",
     'drf_yasg',
     'corsheaders',
     'phonenumber_field',
@@ -358,7 +360,8 @@ CKEDITOR_CONFIGS = {
                     'Maximize',
                 ]
             },
-        ]
+        ],
+        "width": "100%"
     },
 }
 
@@ -380,6 +383,9 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 
 CELERY_RESULT_BACKEND = 'django-db'
 
+# https://getmdl.io/customize/index.html
+FIREBASE_PRIMARY_COLOR = "Orange"
+FIREBASE_ACCENT_COLOR = "Blue"
 
 # Email Configuration
 
