@@ -55,6 +55,9 @@ class DietPlanSerializer(DynamicFieldsModelSerializer):
 	
 	def get_category(self, instance: DietPlan):
 		user = self.context.get("user")
+		if not instance.category:
+			return []
+
 		if user.is_authenticated and user.active_plan:
 			return PlanCategorySerializer(
 				instance=instance.category,
