@@ -14,11 +14,6 @@ from pathlib import Path
 from environ import environ
 import os
 
-import logging.config
-from django.utils.log import DEFAULT_LOGGING
-
-from lib.constants import FieldConstants
-
 env = environ.Env()
 environ.Env.read_env()
 
@@ -37,13 +32,9 @@ SECRET_KEY = env.str('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False)
 
-DOMAIN = env.str('DOMAIN')
-DOMAIN_IP = env.str('DOMAIN_IP')
-TESTING_DOMAIN = env.str('TESTING_DOMAIN')
-STAGING_DOMAIN = env.str('STAGING_DOMAIN')
+DOMAIN = env.list('DOMAIN', default="localhost")
 
-ALLOWED_HOSTS = [DOMAIN, DOMAIN_IP, TESTING_DOMAIN, STAGING_DOMAIN]
-
+ALLOWED_HOSTS = DOMAIN
 
 # Application definition
 
