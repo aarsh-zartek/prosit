@@ -17,7 +17,6 @@ import os
 import logging.config
 from django.utils.log import DEFAULT_LOGGING
 
-from lib.constants import FieldConstants
 
 env = environ.Env()
 environ.Env.read_env()
@@ -37,12 +36,9 @@ SECRET_KEY = env.str('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False)
 
-DOMAIN = env.str('DOMAIN')
-DOMAIN_IP = env.str('DOMAIN_IP')
-TESTING_DOMAIN = env.str('TESTING_DOMAIN')
-STAGING_DOMAIN = env.str('STAGING_DOMAIN')
+DOMAIN = env.list("DOMAIN", default="localhost")
 
-ALLOWED_HOSTS = [DOMAIN, DOMAIN_IP, TESTING_DOMAIN, STAGING_DOMAIN]
+ALLOWED_HOSTS = DOMAIN
 
 
 # Application definition
@@ -263,13 +259,7 @@ logging.config.dictConfig({
 
 # CORS
 CORS_ORIGIN_ALLOW_ALL = True
-# CORS_ORIGIN_WHITELIST = (
-#     'http://127.0.0.1:8000',
-#     'http://localhost:8000',
-#     'https://*.ngrok.io',
-# )
 
-# CSRF_TRUSTED_ORIGINS = ['https://*.ngrok.io','https://*.127.0.0.1']
 
 # Rest Framework Config - https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
@@ -286,7 +276,6 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_RATES": {
         "contact_form": "2/hour"
     },
-    # "DATE_TIME_FORMAT": FieldConstants.FULL_DATE_TIME_FORMAT
     "UPLOADED_FILES_USE_URL": True
 }
 
