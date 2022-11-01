@@ -17,17 +17,21 @@ class UserSubscriptionAdmin(admin.ModelAdmin):
         "subscription_status",
         "expires_on",
         "health_report_uploaded",
+        "health_code",
     )
-    readonly_fields = ("expires_on",)
+    readonly_fields = ("expires_on", "health_code")
     list_filter = ("subscription_status",)
     formfield_overrides = {
-        models.JSONField: {'widget': JSONEditorWidget},
+        models.JSONField: {"widget": JSONEditorWidget},
     }
 
     def get_readonly_fields(self, request, obj):
         read_only_fields = super().get_readonly_fields(request, obj)
         if not request.user.is_superuser:
-            read_only_fields += ("receipt",)
+            read_only_fields += (
+                "amount_paid",
+                "receipt",
+            )
 
         return read_only_fields
 

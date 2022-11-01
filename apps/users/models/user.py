@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -30,6 +31,11 @@ class User(LifecycleModelMixin, BaseModel, AbstractFirebaseUser):
     @property
     def full_name(self) -> str:
         return self.__str__()
+
+    def clean(self) -> None:
+        if User.objects.exclude(pk=self.pk).filter(email=self.email).exists():
+            raise ValidationError({"email": _("Email already exists")})
+        return super().clean()
 
     def delete(self, hard=False):
         """Deletes a user object

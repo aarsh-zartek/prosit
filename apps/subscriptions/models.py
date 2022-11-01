@@ -96,6 +96,10 @@ class UserSubscription(LifecycleModelMixin, BaseModel):
     def health_report_uploaded(self):
         return True if self.health_report else False
 
+    @admin.display(description="Health Code")
+    def health_code(self):
+        return self.health_report.health_code if self.health_report else "N/A"
+
     @hook(hook=AFTER_UPDATE, when="plan", has_changed=True, is_not=None)
     def after_update(self):
         health_code = self.health_report.health_code
