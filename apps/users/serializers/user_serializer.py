@@ -28,6 +28,12 @@ class UserSerializer(DynamicFieldsModelSerializer):
     def get_active_plan(self, instance: User) -> bool:
         return True if instance.active_plan else False
 
+    def validate_email(self, email):
+        email_filter = User.objects.filter(email=email)
+        if self.instance and email_filter.exclude(pk=self.pk).exists():
+            raise serializers.ValidationError("Email already exists.")
+        return email
+
     class Meta:
         model = User
         fields = (
