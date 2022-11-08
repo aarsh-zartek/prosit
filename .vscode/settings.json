@@ -1,10 +1,52 @@
 {
+    "djangointellisense.projectRoot": "${workspaceFolder}",
     "djangointellisense.settingsModule": "prosit.settings",
-    "djangointellisense.projectRoot": "E:\\Coding\\zartek\\prosit\\prosit",
     
+    "python.analysis.packageIndexDepths": [
+        {
+            "name": "django",
+            "depth": 4,
+            "includeAllSymbols": true
+        },
+        {
+            "name": "rest_framework",
+            "depth": 4,
+            "includeAllSymbols": true
+        },
+        {
+            "name": "phonenumber_field",
+            "depth": 3
+        },
+        {
+            "name": "pytest",
+            "depth": 3
+        }
+    ],
+    "python.analysis.exclude": [
+        "${userHome}/.virtualenvs/zartek-prosit/Lib/site-packages/*.dist-info",
+        "${userHome}/.virtualenvs/zartek-prosit/Lib/site-packages/**/__pycache__",
+        "${userHome}/.virtualenvs/zartek-prosit/Lib/site-packages/__pycache__",
+    ],
+    "python.analysis.extraPaths": [
+        "${userHome}/.virtualenvs/zartek-prosit/Lib/site-packages/django",
+        "${userHome}/.virtualenvs/zartek-prosit/Lib/site-packages/rest_framework",
+        "${userHome}/.virtualenvs/zartek-prosit/Lib/site-packages/django_celery_beat",
+        "${userHome}/.virtualenvs/zartek-prosit/Lib/site-packages/django_celery_results",
+        "${userHome}/.virtualenvs/zartek-prosit/Lib/site-packages/django_filters",
+        "${userHome}/.virtualenvs/zartek-prosit/Lib/site-packages/model_utils",
+        "${userHome}/.virtualenvs/zartek-prosit/Lib/site-packages/phonenumber_field",
+        "${userHome}/.virtualenvs/zartek-prosit/Lib/site-packages/pytest",
+    ],
+    "python.analysis.indexing": true,
+    "python.formatting.provider": "black",
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
     "python.testing.pytestArgs": [
         "apps"
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
+    "python.formatting.blackArgs": [
+        "--line-length=80",
+    ]
 }
