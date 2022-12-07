@@ -9,7 +9,7 @@ class FieldConstants:
     MAX_LENGTH = 255
     MAX_NAME_LENGTH = 60
     MAX_VALUE_LENGTH = 24
-    MAX_HEALTH_CODE_LENGTH = 8
+    MAX_HEALTH_CODE_LENGTH = 12
     DATE_FORMAT = "%b %-d, %Y"
     FULL_DATE_FORMAT = "%B %d, %Y"
     DATE_TIME_FORMAT = f"{DATE_FORMAT} %-I:%M %p"

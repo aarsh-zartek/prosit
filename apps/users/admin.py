@@ -59,7 +59,7 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = FieldSets(
         none=(
             "display_name", "phone_number", "email",
-            "password1", "password2", 
+            "password1", "password2",
         )
     )
     search_fields = ("uid", "display_name", "phone_number", "email")
@@ -72,7 +72,7 @@ class UserAdmin(BaseUserAdmin):
 
         if not request.user.is_superuser:
             self.exclude = ("is_superuser",)
-        
+
         return super().get_form(request, obj, **kwargs)
 
     def get_queryset(self, request: HttpRequest):
@@ -88,15 +88,15 @@ class UserAdmin(BaseUserAdmin):
 
         if not request.user.is_superuser:
             read_only_fields += ("is_staff",)
-        
+
         return read_only_fields
 
 
 class UserHealthReportAdmin(admin.ModelAdmin):
     list_display = (
         "user", "date", "vitamin_b12", "vitamin_d",
-        "creatin", "fasting_blood_sugar",
-        "hemoglobin", "thyroid_tsh", "health_code",
+        "creatin", "fasting_blood_sugar", "hemoglobin",
+        "thyroid_tsh", "workout_time", "health_code",
     )
     readonly_fields = ("health_code",)
 
