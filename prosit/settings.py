@@ -40,7 +40,6 @@ DOMAIN = env.list("DOMAIN", default="localhost")
 
 ALLOWED_HOSTS = DOMAIN
 
-STAGING_DOMAIN = env.str("STAGING_DOMAIN")
 
 # Application definition
 
@@ -288,7 +287,7 @@ FIREBASE_CONFIG = {
 FCM_DJANGO_SETTINGS = {
      # default: _('FCM Django')
     "APP_VERBOSE_NAME": "Firebase Cloud Messaging (FCM)",
-    
+
      # true if you want to have only one active device per registered user at a time
      # default: False
     "ONE_DEVICE_PER_USER": True,
@@ -332,13 +331,13 @@ JAZZMIN_SETTINGS = {
         "auth.group": "fas fa-users-cog",
 
         "authtoken.tokenproxy": "fas fa-coins",
-        
+
         "about.company": "fas fa-building",
         "about.contactform": "fas fa-headset",
         "about.faq": "fas fa-meh",
 
         "notification.usernotification": "fas fa-bell",
-        
+
         "plan.dietplan": "fas fa-calendar-alt",
         "plan.plancategory": "fas fa-stream",
         "plan.questionanswer": "fas fa-question",
