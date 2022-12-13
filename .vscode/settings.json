@@ -1,7 +1,7 @@
 {
     "djangointellisense.settingsModule": "prosit.settings",
-    "djangointellisense.projectRoot": "E:\\Coding\\zartek\\prosit\\prosit",
-    
+    "djangointellisense.projectRoot": "${workspaceFolder}",
+
     "python.testing.pytestArgs": [
         "apps"
     ],

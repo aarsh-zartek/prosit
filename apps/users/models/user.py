@@ -19,15 +19,15 @@ class User(LifecycleModelMixin, BaseModel, AbstractFirebaseUser):
     first_name = models.CharField(max_length=FieldConstants.MAX_NAME_LENGTH)
     last_name = models.CharField(max_length=FieldConstants.MAX_NAME_LENGTH)
     profile_picture = models.ImageField(upload_to=get_profile_picture_path, blank=True, null=True)
-    
+
     class Meta:
         verbose_name = _("User")
         verbose_name_plural = _("Users")
         ordering = ("created",)
-    
+
     def __str__(self) -> str:
         return f"{self.first_name} {self.last_name}"
-    
+
     @property
     def full_name(self) -> str:
         return self.__str__()
@@ -57,7 +57,7 @@ class User(LifecycleModelMixin, BaseModel, AbstractFirebaseUser):
         if user_subscription := self.subscriptions.filter(subscription_status=SubscriptionStatus.ACTIVE):
             return user_subscription.latest("created")
         return None
-    
+
     @property
     def active_plan(self):
         """
@@ -71,7 +71,7 @@ class UserHealthReport(LifecycleModelMixin, BaseModel):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="health_reports")
     date = models.DateField(verbose_name=_("Reports Generated On"), auto_now_add=True)
-    
+
     vitamin_b12 = models.BooleanField(verbose_name=_("Vitamin B12"))
     vitamin_d = models.BooleanField(verbose_name=_("Vitamin D"))
     uric_acid = models.BooleanField(verbose_name=_("Uric Acid"))
@@ -94,14 +94,18 @@ class UserHealthReport(LifecycleModelMixin, BaseModel):
                 verbose_name=_("PCOD / PCOS"),
                 blank=True, default=False
             )
-    
+    workout_time = models.PositiveSmallIntegerField(
+        verbose_name=_("Workout Time (Minutes)"),
+        default=0
+    )
+
     health_code = models.CharField(
         verbose_name=_("User Health Code"),
         max_length=FieldConstants.MAX_HEALTH_CODE_LENGTH,
         null=True,
         editable=False
     )
-    
+
     image = models.ImageField(upload_to=get_user_health_image_path, blank=True, null=True)
     extra_info = models.TextField(blank=True, null=True)
 
@@ -119,7 +123,7 @@ class UserHealthReport(LifecycleModelMixin, BaseModel):
         subscription.health_report = self
         subscription.save()
         reports = self.get_similar_health_reports()
-        
+
         if reports:
             # add plan to current user subscription
             #? TODO
@@ -140,7 +144,7 @@ class UserHealthReport(LifecycleModelMixin, BaseModel):
     def _assign_health_code(self) -> str:
         """Assigns a health code to user based on profile """
         profile = self.user.profile
-        
+
         weight = round(profile.weight)
         gender = profile.get_gender_display()[0]
         food_preference = profile.get_food_preference_display()[0]
@@ -199,7 +203,7 @@ class DailyActivity(BaseModel):
     """
     Model to track the daily activity of users such as weight
     """
-    
+
     user = models.ForeignKey(User, related_name="daily_activity", on_delete=models.CASCADE)
 
     weight = models.DecimalField(
@@ -212,6 +216,6 @@ class DailyActivity(BaseModel):
         verbose_name = _("Daily Activity")
         verbose_name_plural = _("Daily Activities")
         unique_together = ('user', 'date')
-    
+
     def __str__(self) -> str:
         return f"{self.user} - {self.date} - {self.weight}"
