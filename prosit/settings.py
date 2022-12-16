@@ -31,10 +31,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env.str('SECRET_KEY')
+SECRET_KEY = env.str("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool('DEBUG', default=False)
+DEBUG = env.bool("DEBUG", default=False)
 
 DOMAIN = env.list("DOMAIN", default="localhost")
 
@@ -45,38 +45,38 @@ ALLOWED_HOSTS = DOMAIN
 
 DJANGO_APPS = [
     # Must be added before `django.contrib.admin`
-    'jazzmin', # Custom Admin
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    "jazzmin",  # Custom Admin
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
 ]
 
 THIRD_PARTY_APPS = [
-    'rest_framework',
-    'rest_framework.authtoken',
-    'django_extensions',
-    'django_celery_beat',
-    'django_celery_results',
+    "rest_framework",
+    "rest_framework.authtoken",
+    "django_extensions",
+    "django_celery_beat",
+    "django_celery_results",
     "django_json_widget",
-    'drf_yasg',
-    'corsheaders',
-    'phonenumber_field',
-    'ckeditor',
-    'fcm_django',
-    'storages',
+    "drf_yasg",
+    "corsheaders",
+    "phonenumber_field",
+    "ckeditor",
+    "fcm_django",
+    "storages",
 ]
 
 LOCAL_APPS = [
-    'apps.firebase.apps.FirebaseConfig',
-    'apps.core.apps.CoreConfig',
-    'apps.users.apps.UsersConfig',
-    'apps.plan.apps.PlanConfig',
-    'apps.about.apps.AboutConfig',
-    'apps.notification.apps.NotificationConfig',
-    'apps.subscriptions.apps.SubscriptionsConfig',
+    "apps.firebase.apps.FirebaseConfig",
+    "apps.core.apps.CoreConfig",
+    "apps.users.apps.UsersConfig",
+    "apps.plan.apps.PlanConfig",
+    "apps.about.apps.AboutConfig",
+    "apps.notification.apps.NotificationConfig",
+    "apps.subscriptions.apps.SubscriptionsConfig",
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -84,67 +84,67 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # 'apps.core.exceptions.CustomExceptionMiddleware',
 ]
 
-ROOT_URLCONF = 'prosit.urls'
+ROOT_URLCONF = "prosit.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'prosit.wsgi.application'
+WSGI_APPLICATION = "prosit.wsgi.application"
 
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     },
 }
 
 # 'default': env.db_url()
 
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = "users.User"
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -152,9 +152,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'Asia/Kolkata'
+TIME_ZONE = "Asia/Kolkata"
 
 USE_I18N = True
 
@@ -172,18 +172,13 @@ AWS_S3_REGION_NAME = env.str("AWS_S3_REGION_NAME")
 # AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
 AWS_S3_CUSTOM_DOMAIN = None
 AWS_S3_ENDPOINT_URL = f"https://s3.{AWS_S3_REGION_NAME}.amazonaws.com"
-AWS_S3_OBJECT_PARAMETERS = {
-    "CacheControl": "max-age=86400"
-}
+AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
 
 AWS_S3_FILE_OVERWRITE = env.bool("AWS_S3_FILE_OVERWRITE", True)
 AWS_DEFAULT_ACL = "private"
 
 S3DIRECT_DESTINATIONS = {
-    "contents": {
-        "key": "contents/",
-        "bucket": AWS_STORAGE_BUCKET_NAME
-    }
+    "contents": {"key": "contents/", "bucket": AWS_STORAGE_BUCKET_NAME}
 }
 
 # S3 Storage
@@ -194,93 +189,95 @@ DEFAULT_FILE_STORAGE = "prosit.storage_backends.MediaStorage"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
 # STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Media Files
-MEDIA_URL = '/media/'
+MEDIA_URL = "/media/"
 
 # Path where media is stored
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
-DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880 # 5 MB
-FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880 # 5 MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5 MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5 MB
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Loggers
 LOGGING_CONFIG = None
 
-LOGLEVEL = os.environ.get('LOGLEVEL', 'info').upper()
+LOGLEVEL = os.environ.get("LOGLEVEL", "info").upper()
 LOG_FILE_NAME = os.path.join(BASE_DIR, "logs/prosit.log")
 
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': f'{BASE_DIR}\\.cache',
+    "default": {
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": f"{BASE_DIR}\\.cache",
     }
 }
 
-logging.config.dictConfig({
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'default': {
-            # exact format is not important, this is the minimum information
-            'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+logging.config.dictConfig(
+    {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "default": {
+                # exact format is not important, this is the minimum information
+                "format": "%(asctime)s %(name)-12s %(levelname)-8s %(message)s",
+            },
+            "django.server": DEFAULT_LOGGING["formatters"]["django.server"],
         },
-        'django.server': DEFAULT_LOGGING['formatters']['django.server'],
-    },
-    'handlers': {
-        # console logs to stderr
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'default',
+        "handlers": {
+            # console logs to stderr
+            "console": {
+                "class": "logging.StreamHandler",
+                "formatter": "default",
+            },
+            # Add Handler for Sentry for `warning` and above
+            "file": {
+                "level": "WARNING",
+                "class": "logging.handlers.RotatingFileHandler",
+                "filename": LOG_FILE_NAME,
+                "maxBytes": 1024 * 1024 * 10,  # 10MB
+                "backupCount": 10,
+                "formatter": "default",
+            },
+            "django.server": DEFAULT_LOGGING["handlers"]["django.server"],
         },
-        # Add Handler for Sentry for `warning` and above
-        'file': {
-            'level': 'WARNING',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': LOG_FILE_NAME,
-            'maxBytes': 1024 * 1024 * 10,  # 10MB
-            'backupCount': 10,
-            'formatter': 'default',
+        "loggers": {
+            # default for all undefined Python modules
+            "": {
+                "level": "INFO",
+                "handlers": ["console", "file"],
+            },
+            # Our application code
+            "apps.firebase": {
+                "level": LOGLEVEL,
+                "handlers": ["console", "file"],
+                # Avoid double logging because of root logger
+                "propagate": False,
+            },
+            "apps.plan": {
+                "level": LOGLEVEL,
+                "handlers": ["console", "file"],
+                # Avoid double logging because of root logger
+                "propagate": False,
+            },
+            # # Prevent noisy modules from logging to Sentry
+            # 'noisy_module': {
+            #     'level': 'ERROR',
+            #     'handlers': ['console'],
+            #     'propagate': False,
+            # },
+            # Default runserver request logging
+            "django.server": DEFAULT_LOGGING["loggers"]["django.server"],
         },
-        'django.server': DEFAULT_LOGGING['handlers']['django.server'],
-    },
-    'loggers': {
-        # default for all undefined Python modules
-        '': {
-            'level': 'INFO',
-            'handlers': ['console', 'file'],
-        },
-        # Our application code
-        'apps.firebase': {
-            'level': LOGLEVEL,
-            'handlers': ['console', 'file'],
-            # Avoid double logging because of root logger
-            'propagate': False,
-        },
-        'apps.plan': {
-            'level': LOGLEVEL,
-            'handlers': ['console', 'file'],
-            # Avoid double logging because of root logger
-            'propagate': False,
-        },
-        # # Prevent noisy modules from logging to Sentry
-        # 'noisy_module': {
-        #     'level': 'ERROR',
-        #     'handlers': ['console'],
-        #     'propagate': False,
-        # },
-        # Default runserver request logging
-        'django.server': DEFAULT_LOGGING['loggers']['django.server'],
-    },
-})
+    }
+)
 
 
 # CORS
@@ -293,16 +290,10 @@ REST_FRAMEWORK = {
         "apps.firebase.authentication.FirebaseAuthentication",
         "rest_framework.authentication.TokenAuthentication",
     ),
-    'DEFAULT_RENDERER_CLASSES': (
-        'apps.core.renderers.CustomAPIRenderer',
-    ),
-    'DEFAULT_THROTTLE_CLASSES': (
-        'rest_framework.throttling.ScopedRateThrottle',
-    ),
-    "DEFAULT_THROTTLE_RATES": {
-        "contact_form": "2/hour"
-    },
-    "UPLOADED_FILES_USE_URL": True
+    "DEFAULT_RENDERER_CLASSES": ("apps.core.renderers.CustomAPIRenderer",),
+    "DEFAULT_THROTTLE_CLASSES": ("rest_framework.throttling.ScopedRateThrottle",),
+    "DEFAULT_THROTTLE_RATES": {"contact_form": "2/hour"},
+    "UPLOADED_FILES_USE_URL": True,
 }
 
 FIREBASE_CONFIG = {
@@ -311,18 +302,15 @@ FIREBASE_CONFIG = {
 }
 
 FCM_DJANGO_SETTINGS = {
-     # default: _('FCM Django')
+    # default: _('FCM Django')
     "APP_VERBOSE_NAME": "Firebase Cloud Messaging (FCM)",
-
-     # true if you want to have only one active device per registered user at a time
-     # default: False
+    # true if you want to have only one active device per registered user at a time
+    # default: False
     "ONE_DEVICE_PER_USER": True,
-
     # devices to which notifications cannot be sent,
     # are deleted upon receiving error response from FCM
     # default: False
     "DELETE_INACTIVE_DEVICES": True,
-
     # Transform create of an existing Device (based on registration id) into
     # an update. See the section
     # "Update of device with duplicate registration ID" for more details.
@@ -352,105 +340,119 @@ JAZZMIN_SETTINGS = {
     "site_icon": "icon.png",
     "site_logo": "prosit-logo.png",
     "welcome_sign": "Welcome to Prosit Admin Panel",
-
     "icons": {
         "auth.group": "fas fa-users-cog",
-
         "authtoken.tokenproxy": "fas fa-coins",
-
         "about.company": "fas fa-building",
         "about.contactform": "fas fa-headset",
         "about.faq": "fas fa-meh",
-
         "notification.usernotification": "fas fa-bell",
-
         "plan.dietplan": "fas fa-calendar-alt",
         "plan.plancategory": "fas fa-stream",
         "plan.questionanswer": "fas fa-question",
-
         "subscriptions.usersubscription": "fas fa-rupee-sign",
-
         "users.user": "fas fa-users",
         "users.profile": "fas fa-id-card",
         "users.userhealthreport": "fas fa-file-medical",
         "users.dailyactivity": "fas fa-calendar-day",
-
         "django_celery_beat.clockedschedule": "fas fa-clock",
         "django_celery_beat.crontabschedule": "fas fa-stopwatch-20",
         "django_celery_beat.intervalschedule": "fas fa-stopwatch",
         "django_celery_beat.periodictask": "fas fa-history",
         "django_celery_beat.solarschedule": "fas fa-cloud-sun",
-
         "django_celery_results.groupresult": "fas fa-poll",
         "django_celery_results.taskresult": "fas fa-tasks",
-
         "fcm_django.fcmdevice": "fas fa-fire",
     },
-
     # "changeform_format": "vertical_tabs"
 }
 
 JAZZMIN_UI_TWEAKS = {
     "navbar": "navbar-gray-dark navbar-dark",
     "theme": "litera",
-    #00a68c
-
+    # 00a68c
     "button_classes": {
         "primary": "btn-outline-primary",
         "secondary": "btn-outline-secondary",
         "info": "btn-outline-info",
         "warning": "btn-outline-warning",
         "danger": "btn-outline-danger",
-        "success": "btn-success"
-    }
+        "success": "btn-success",
+    },
 }
 
 CKEDITOR_CONFIGS = {
-    'default': {
-        'toolbar': 'Prosit',
-        'toolbar_Prosit': [
+    "default": {
+        "toolbar": "Prosit",
+        "toolbar_Prosit": [
             {
-                'name': 'basicstyles',
-                'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']
+                "name": "basicstyles",
+                "items": [
+                    "Bold",
+                    "Italic",
+                    "Underline",
+                    "Strike",
+                    "Subscript",
+                    "Superscript",
+                    "-",
+                    "RemoveFormat",
+                ],
             },
             {
-                'name': 'paragraph',
-                'items': [
-                    'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'
-                ]
+                "name": "paragraph",
+                "items": [
+                    "NumberedList",
+                    "BulletedList",
+                    "-",
+                    "Outdent",
+                    "Indent",
+                    "-",
+                    "Blockquote",
+                    "CreateDiv",
+                    "-",
+                    "JustifyLeft",
+                    "JustifyCenter",
+                    "JustifyRight",
+                    "JustifyBlock",
+                ],
             },
             {
-                'name': 'clipboard',
-                'items': [
-                    'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'
-                ]
+                "name": "clipboard",
+                "items": [
+                    "Cut",
+                    "Copy",
+                    "Paste",
+                    "PasteText",
+                    "PasteFromWord",
+                    "-",
+                    "Undo",
+                    "Redo",
+                ],
             },
+            {"name": "styles", "items": ["Styles", "Format", "Font", "FontSize"]},
+            "/",  # put this to force next toolbar on new line
             {
-                'name': 'styles',
-                'items': ['Styles', 'Format', 'Font', 'FontSize']
-            },
-            '/',  # put this to force next toolbar on new line
-            {
-                'name': 'preview-maximize', 'items': [
+                "name": "preview-maximize",
+                "items": [
                     # put the name of your editor.ui.addButton here
-                    'Preview',
-                    'Maximize',
-                ]
+                    "Preview",
+                    "Maximize",
+                ],
             },
         ],
-        "width": "100%"
+        "width": "100%",
     },
 }
 
 
 # Celery Configuration
 
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
-CELERY_RESULT_BACKEND = 'django-db'
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_RESULT_SERIALIZER = 'json'
-RESULT_SERIALIZER = 'json'
-CELERY_TASK_SERIALIZER = 'json'
+CELERY_BROKER_URL = "redis://127.0.0.1:6379"
+CELERY_RESULT_BACKEND = "django-db"
+CELERY_ACCEPT_CONTENT = ["application/json"]
+CELERY_RESULT_SERIALIZER = "json"
+RESULT_SERIALIZER = "json"
+CELERY_TASK_SERIALIZER = "json"
 
 CELERY_TIMEZONE = TIME_ZONE
 CELERY_TASK_TRACK_STARTED = True
@@ -458,7 +460,7 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 
 ## Celery Results Configuration
 
-CELERY_RESULT_BACKEND = 'django-db'
+CELERY_RESULT_BACKEND = "django-db"
 
 # https://getmdl.io/customize/index.html
 FIREBASE_PRIMARY_COLOR = "Orange"
@@ -466,11 +468,11 @@ FIREBASE_ACCENT_COLOR = "Blue"
 
 # Email Configuration
 
-EMAIL_HOST = env.str('EMAIL_HOST', default='smtp.gmail.com')
-EMAIL_PORT = env.int('EMAIL_PORT', default=587)
+EMAIL_HOST = env.str("EMAIL_HOST", default="smtp.gmail.com")
+EMAIL_PORT = env.int("EMAIL_PORT", default=587)
 
-EMAIL_HOST_USER = env.str("EMAIL_HOST_USER", default='')
-EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD", default='')
+EMAIL_HOST_USER = env.str("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD", default="")
 EMAIL_USE_TLS = True
 
 PROSIT_ADMIN_EMAIL = env.list("PROSIT_ADMIN_EMAIL", default=list())
