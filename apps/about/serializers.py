@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from apps.core.serializers import DynamicFieldsModelSerializer
 from apps.about.models import FAQ, Company, ContactForm
+from lib.fields import AWSS3PresignedURLFileField
 
 
 class FAQSerializer(DynamicFieldsModelSerializer):
@@ -14,7 +15,7 @@ class FAQSerializer(DynamicFieldsModelSerializer):
 
 
 class CompanySerializer(DynamicFieldsModelSerializer):
-	stop_plan_pdf = serializers.FileField(use_url=True)
+	stop_plan_pdf = AWSS3PresignedURLFileField(use_url=True)
 	faqs = serializers.SerializerMethodField()
 
 	def get_faqs(self, instance: Company):
@@ -23,7 +24,7 @@ class CompanySerializer(DynamicFieldsModelSerializer):
 				exclude=("company",),
 				many=True
 			).data
-	
+
 	class Meta:
 		model = Company
 		fields = (
