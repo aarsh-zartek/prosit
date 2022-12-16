@@ -45,7 +45,7 @@ class UserAdmin(BaseUserAdmin):
         none=("uid", "password"),
         personal_info=(
             "display_name", "first_name", "last_name",
-            "email", "phone_number"
+            "email", "phone_number", "profile_picture"
         ),
         permissions=(
             "groups",

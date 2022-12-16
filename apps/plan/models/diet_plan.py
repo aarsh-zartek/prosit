@@ -18,11 +18,11 @@ class PlanCategory(BaseModel):
     name = models.CharField(verbose_name=_("Category Name"), max_length=FieldConstants.MAX_NAME_LENGTH)
 
     per_day_instructions_english = RichTextField(
-            verbose_name=_("Per Day Instructions English"), 
+            verbose_name=_("Per Day Instructions English"),
             blank=True, null=True
         )
     per_day_instructions_malayalam = RichTextField(
-            verbose_name=_("Per Day Instructions Malayalam"), 
+            verbose_name=_("Per Day Instructions Malayalam"),
             blank=True, null=True
         )
 
@@ -109,13 +109,13 @@ class PlanCategory(BaseModel):
                     )
 
     fields_required = MultiSelectField(choices=FIELDS_TO_SHOW, min_choices=3)
-    
+
     class Meta:
         verbose_name = _("Plan Category")
         verbose_name_plural = _("Plan Categories")
-    
+
     def __str__(self) -> str:
-        return self.name
+        return f"{self.name}"
 
 
 class DietPlan(BaseModel):
@@ -153,7 +153,7 @@ class DietPlan(BaseModel):
         # Main Category can't have parent
         if self.plan_type == PLAN_TYPES.main_category and self.parent is not None:
             raise ValidationError("Parent can't be specified for Main Category Plan Type")
-        
+
         # Sub Category must have parent
         elif self.plan_type == PLAN_TYPES.sub_category and self.parent is None:
             raise ValidationError("Parent must be specified for Sub Category Plan Type")
@@ -161,11 +161,11 @@ class DietPlan(BaseModel):
         # Sub Category can't have 'self' as parent
         elif self.plan_type == PLAN_TYPES.sub_category and self.parent == self:
             raise ValidationError("Parent can't be the same plan")
-        
+
         # Sub category can't have other Sub Category as parent
         elif self.plan_type == PLAN_TYPES.sub_category and self.parent.plan_type == PLAN_TYPES.sub_category:
             raise ValidationError("Sub category can't have other Sub Category as parent")
-        
+
         return super().clean()
 
     class Meta:
@@ -184,7 +184,7 @@ class QuestionAnswer(BaseModel):
                 on_delete=models.CASCADE,
                 related_name="question_answers"
             )
-    
+
     question = models.CharField(max_length=FieldConstants.MAX_LENGTH)
     answer = models.TextField()
 
