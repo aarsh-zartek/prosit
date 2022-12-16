@@ -10,11 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+import os
+import logging.config
+
 from pathlib import Path
 from environ import environ
-import os
-
-import logging.config
 from django.utils.log import DEFAULT_LOGGING
 
 
@@ -66,6 +66,7 @@ THIRD_PARTY_APPS = [
     'phonenumber_field',
     'ckeditor',
     'fcm_django',
+    'storages',
 ]
 
 LOCAL_APPS = [
@@ -160,17 +161,42 @@ USE_I18N = True
 USE_TZ = True
 
 
+# AWS Configuration
+AWS_ACCESS_KEY_ID = env.str("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = env.str("AWS_SECRET_ACCESS_KEY")
+AWS_LOCATION = env.str("AWS_LOCATION", default="static")
+AWS_STORAGE_BUCKET_NAME = env.str("AWS_STORAGE_BUCKET_NAME")
+AWS_QUERYSTRING_AUTH = True
+
+AWS_S3_REGION_NAME = env.str("AWS_S3_REGION_NAME")
+# AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+AWS_S3_CUSTOM_DOMAIN = None
+AWS_S3_ENDPOINT_URL = f"https://s3.{AWS_S3_REGION_NAME}.amazonaws.com"
+AWS_S3_OBJECT_PARAMETERS = {
+    "CacheControl": "max-age=86400"
+}
+
+AWS_S3_FILE_OVERWRITE = env.bool("AWS_S3_FILE_OVERWRITE", True)
+AWS_DEFAULT_ACL = "private"
+
+S3DIRECT_DESTINATIONS = {
+    "contents": {
+        "key": "contents/",
+        "bucket": AWS_STORAGE_BUCKET_NAME
+    }
+}
+
+# S3 Storage
+DEFAULT_FILE_STORAGE = "prosit.storage_backends.MediaStorage"
+# STATICFILES_STORAGE = "prosit.storage_backends.StaticStorage"
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = '/static/'
-
-if DEBUG:
-    STATICFILES_DIRS = (
-        os.path.join(BASE_DIR, 'static/'),
-    )
-else:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Media Files
 MEDIA_URL = '/media/'
