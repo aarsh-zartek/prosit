@@ -120,13 +120,13 @@ WSGI_APPLICATION = "prosit.wsgi.application"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    },
+    # "default": {
+    #     "ENGINE": "django.db.backends.sqlite3",
+    #     "NAME": BASE_DIR / "db.sqlite3",
+    # },
+    "default": env.db_url()
 }
 
-# 'default': env.db_url()
 
 AUTH_USER_MODEL = "users.User"
 
@@ -171,7 +171,7 @@ AWS_QUERYSTRING_AUTH = True
 AWS_S3_REGION_NAME = env.str("AWS_S3_REGION_NAME")
 # AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
 AWS_S3_CUSTOM_DOMAIN = None
-AWS_S3_ENDPOINT_URL = f"https://s3.{AWS_S3_REGION_NAME}.amazonaws.com"
+# AWS_S3_ENDPOINT_URL = f"https://s3.{AWS_S3_REGION_NAME}.amazonaws.com"
 AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
 
 AWS_S3_FILE_OVERWRITE = env.bool("AWS_S3_FILE_OVERWRITE", True)
@@ -190,8 +190,10 @@ DEFAULT_FILE_STORAGE = "prosit.storage_backends.MediaStorage"
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = "/static/"
-# STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "staticfiles"),
+)
 
 # Media Files
 MEDIA_URL = "/media/"
