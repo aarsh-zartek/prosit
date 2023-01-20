@@ -1,7 +1,11 @@
 {
     "djangointellisense.settingsModule": "prosit.settings",
     "djangointellisense.projectRoot": "E:\\Coding\\zartek\\prosit\\prosit",
-    
+
+    "python.linting.pylintArgs": [
+        // "--disable=W0311",
+        "--load-plugin=pylint_django"
+    ],
     "python.testing.pytestArgs": [
         "apps"
     ],
