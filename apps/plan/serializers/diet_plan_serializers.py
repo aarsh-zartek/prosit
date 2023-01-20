@@ -11,14 +11,14 @@ from lib.fields import AWSS3PresignedURLFileField
 
 class PlanCategorySerializer(DynamicFieldsModelSerializer):
 
-	instruction_audio_english = AWSS3PresignedURLFileField(use_url=True)
-	instruction_audio_malayalam = AWSS3PresignedURLFileField(use_url=True)
-	instruction_pdf_english = AWSS3PresignedURLFileField(use_url=True)
-	instruction_pdf_malayalam = AWSS3PresignedURLFileField(use_url=True)
-	preparation_audio_english = AWSS3PresignedURLFileField(use_url=True)
-	preparation_audio_malayalam = AWSS3PresignedURLFileField(use_url=True)
-	preparation_pdf_english = AWSS3PresignedURLFileField(use_url=True)
-	preparation_pdf_malayalam = AWSS3PresignedURLFileField(use_url=True)
+	# instruction_audio_english = AWSS3PresignedURLFileField(use_url=True)
+	# instruction_audio_malayalam = AWSS3PresignedURLFileField(use_url=True)
+	# instruction_pdf_english = AWSS3PresignedURLFileField(use_url=True)
+	# instruction_pdf_malayalam = AWSS3PresignedURLFileField(use_url=True)
+	# preparation_audio_english = AWSS3PresignedURLFileField(use_url=True)
+	# preparation_audio_malayalam = AWSS3PresignedURLFileField(use_url=True)
+	# preparation_pdf_english = AWSS3PresignedURLFileField(use_url=True)
+	# preparation_pdf_malayalam = AWSS3PresignedURLFileField(use_url=True)
 	fields_required = serializers.SerializerMethodField()
 
 	def get_fields_required(self, instance: PlanCategory) -> List[str]:
@@ -52,7 +52,7 @@ class DietPlanSerializer(DynamicFieldsModelSerializer):
 
 	category = serializers.SerializerMethodField()
 	queries = serializers.SerializerMethodField()
-	image = AWSS3PresignedURLFileField(use_url=True)
+	# image = AWSS3PresignedURLFileField(use_url=True)
 
 	def get_category(self, instance: DietPlan):
 		user = self.context.get("user")

@@ -15,7 +15,7 @@ class FAQSerializer(DynamicFieldsModelSerializer):
 
 
 class CompanySerializer(DynamicFieldsModelSerializer):
-	stop_plan_pdf = AWSS3PresignedURLFileField(use_url=True)
+	# stop_plan_pdf = AWSS3PresignedURLFileField(use_url=True)
 	faqs = serializers.SerializerMethodField()
 
 	def get_faqs(self, instance: Company):
