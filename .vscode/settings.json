@@ -28,14 +28,17 @@
     ],
     "python.analysis.inlayHints.variableTypes": false,
     "python.analysis.inlayHints.functionReturnTypes": true,
+    "python.linting.enabled": true,
     "python.linting.pylintEnabled": true,
     "python.linting.pylintArgs": [
+        // "--disable=W0311",
         "--disable=E1101",
         "--disable=C0114",
         "--disable=C0115",
         "--disable=C0116",
+        "--load-plugin=pylint_django"
     ],
-    "python.linting.enabled": true,
+
     "python.testing.pytestArgs": [
         "apps"
     ],

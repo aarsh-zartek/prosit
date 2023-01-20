@@ -107,6 +107,8 @@ pluggy==1.0.0
 prompt-toolkit==3.0.30
 proto-plus==1.20.3
 protobuf==3.20.0
+psycopg2==2.9.5
+psycopg2-binary==2.9.5
 pure-eval==0.2.2
 py==1.11.0
 pyasn1==0.4.8
