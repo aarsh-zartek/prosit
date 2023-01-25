@@ -7,7 +7,7 @@ from multiselectfield import MultiSelectField
 
 from apps.core.models import BaseModel
 
-from lib.constants import FieldConstants, AudioFormats, DocumentFormats
+from lib.constants import GYM_PLAN_WORDS, FieldConstants, AudioFormats, DocumentFormats
 from lib.choices import PLAN_TYPES, FIELDS_TO_SHOW
 from lib.utils import get_diet_plan_image_path, get_diet_plan_instruction_path, get_preparation_path
 
@@ -18,11 +18,11 @@ class PlanCategory(BaseModel):
     name = models.CharField(verbose_name=_("Category Name"), max_length=FieldConstants.MAX_NAME_LENGTH)
 
     per_day_instructions_english = RichTextField(
-            verbose_name=_("Per Day Instructions English"), 
+            verbose_name=_("Per Day Instructions English"),
             blank=True, null=True
         )
     per_day_instructions_malayalam = RichTextField(
-            verbose_name=_("Per Day Instructions Malayalam"), 
+            verbose_name=_("Per Day Instructions Malayalam"),
             blank=True, null=True
         )
 
@@ -109,17 +109,23 @@ class PlanCategory(BaseModel):
                     )
 
     fields_required = MultiSelectField(choices=FIELDS_TO_SHOW, min_choices=3)
-    
+
     class Meta:
         verbose_name = _("Plan Category")
         verbose_name_plural = _("Plan Categories")
-    
+
     def __str__(self) -> str:
         return self.name
 
 
 class DietPlan(BaseModel):
-    name = models.CharField(verbose_name=_("Diet Plan Name"), max_length=FieldConstants.MAX_NAME_LENGTH)
+    name = models.CharField(
+        verbose_name=_("Diet Plan Name"),
+        max_length=FieldConstants.MAX_NAME_LENGTH,
+        help_text=_(
+            f"A Plan will be considered GYM Plan if it has one of `{', '.join(GYM_PLAN_WORDS)}` words"
+        )
+    )
     category = models.ForeignKey(
         PlanCategory,
         on_delete=models.SET_NULL,
@@ -153,7 +159,7 @@ class DietPlan(BaseModel):
         # Main Category can't have parent
         if self.plan_type == PLAN_TYPES.main_category and self.parent is not None:
             raise ValidationError("Parent can't be specified for Main Category Plan Type")
-        
+
         # Sub Category must have parent
         elif self.plan_type == PLAN_TYPES.sub_category and self.parent is None:
             raise ValidationError("Parent must be specified for Sub Category Plan Type")
@@ -161,11 +167,11 @@ class DietPlan(BaseModel):
         # Sub Category can't have 'self' as parent
         elif self.plan_type == PLAN_TYPES.sub_category and self.parent == self:
             raise ValidationError("Parent can't be the same plan")
-        
+
         # Sub category can't have other Sub Category as parent
         elif self.plan_type == PLAN_TYPES.sub_category and self.parent.plan_type == PLAN_TYPES.sub_category:
             raise ValidationError("Sub category can't have other Sub Category as parent")
-        
+
         return super().clean()
 
     class Meta:
@@ -176,6 +182,10 @@ class DietPlan(BaseModel):
     def __str__(self) -> str:
         return f"{self.name} - {self.category}"
 
+    @property
+    def is_gym_plan(self) -> bool:
+        return any(word in self.name.lower() for word in GYM_PLAN_WORDS)
+
 
 class QuestionAnswer(BaseModel):
     diet_plan = models.ForeignKey(
@@ -184,7 +194,7 @@ class QuestionAnswer(BaseModel):
                 on_delete=models.CASCADE,
                 related_name="question_answers"
             )
-    
+
     question = models.CharField(max_length=FieldConstants.MAX_LENGTH)
     answer = models.TextField()
 
