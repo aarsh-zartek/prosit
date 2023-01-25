@@ -6,6 +6,7 @@ from rest_framework.validators import UniqueTogetherValidator
 from phonenumber_field.serializerfields import PhoneNumberField
 
 from apps.core.serializers import DynamicFieldsModelSerializer
+from apps.plan.models import DietPlan
 from apps.plan.serializers.diet_plan_serializers import DietPlanSerializer
 from apps.users.models import User, DailyActivity, UserHealthReport, Profile
 from apps.users.serializers.profile_serializer import ProfileSerializer
@@ -67,10 +68,11 @@ class UserHealthReportSerializer(DynamicFieldsModelSerializer):
             raise serializers.ValidationError("Enter a value between 1 and 30")
         return hemoglobin
 
-    def validate(self, attrs):
-        user = self.context.get('user')
+    def validate(self, attrs: dict) -> dict:
+        user: User = self.context.get('user')
         pcod_pcos = attrs.get('pcod_pcos', None)
         image = attrs.get("image", "not_present")
+        workout_time = attrs.get("workout_time", None)
 
         if not user.active_subscription:
             raise serializers.ValidationError("No Active Subscription found for this user")
@@ -85,6 +87,20 @@ class UserHealthReportSerializer(DynamicFieldsModelSerializer):
             raise serializers.ValidationError("You must provide `pcod_pcos` field for the female user")
         elif pcod_pcos and (user.profile.gender == GENDER.male):
             attrs.pop('pcod_pcos')
+
+        plan_id = user.active_subscription.receipt["plan_id"]
+        try:
+            subscribed_for = DietPlan.objects.get(id=plan_id)
+        except DietPlan.DoesNotExist:
+            raise serializers.ValidationError("No Plan exists")
+
+        if workout_time is None and subscribed_for.is_gym_plan:
+            raise serializers.ValidationError(f"Workout Time required for {subscribed_for.name}")
+        if workout_time is not None and not subscribed_for.is_gym_plan:
+            try:
+                attrs.pop("workout_time")
+            except KeyError:
+                pass
 
         return attrs
 
