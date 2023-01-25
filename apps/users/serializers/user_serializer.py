@@ -24,9 +24,15 @@ class UserSerializer(DynamicFieldsModelSerializer):
 
     def get_active_subscription(self, instance: User) -> bool:
         return True if instance.active_subscription else False
-    
+
     def get_active_plan(self, instance: User) -> bool:
         return True if instance.active_plan else False
+
+    def validate_email(self, email):
+        email_filter = User.objects.filter(email=email)
+        if self.instance and email_filter.exclude(pk=self.pk).exists():
+            raise serializers.ValidationError("Email already exists.")
+        return email
 
     class Meta:
         model = User
@@ -40,7 +46,7 @@ class UserSerializer(DynamicFieldsModelSerializer):
         instance = super().create(validated_data)
         profile, _ = Profile.objects.create(user=instance)
         return instance
-    
+
     def update(self, instance, validated_data):
         profile_data = validated_data.pop('profile', None)
         if profile_data:
@@ -60,7 +66,7 @@ class UserHealthReportSerializer(DynamicFieldsModelSerializer):
         if not 1 < int(hemoglobin) < 30:
             raise serializers.ValidationError("Enter a value between 1 and 30")
         return hemoglobin
-    
+
     def validate(self, attrs):
         user = self.context.get('user')
         pcod_pcos = attrs.get('pcod_pcos', None)
@@ -69,6 +75,9 @@ class UserHealthReportSerializer(DynamicFieldsModelSerializer):
         if not user.active_subscription:
             raise serializers.ValidationError("No Active Subscription found for this user")
 
+        if user.active_subscription.health_report:
+            raise serializers.ValidationError("You already have an active subscription")
+
         if image is None:
             attrs.pop("image")
 
@@ -76,15 +85,15 @@ class UserHealthReportSerializer(DynamicFieldsModelSerializer):
             raise serializers.ValidationError("You must provide `pcod_pcos` field for the female user")
         elif pcod_pcos and (user.profile.gender == GENDER.male):
             attrs.pop('pcod_pcos')
-        
+
         return attrs
-        
+
     class Meta:
         model = UserHealthReport
         fields = (
             "user", "vitamin_b12", "vitamin_d", "hemoglobin", "uric_acid",
             "creatin", "fasting_blood_sugar", "cholesterol", "thyroid_tsh", "pcod_pcos",
-            "dry_skin", "image", "extra_info"
+            "workout_time", "dry_skin", "image", "extra_info"
         )
 
 
@@ -92,7 +101,7 @@ class DailyActivitySerializer(DynamicFieldsModelSerializer):
     """To track daily user activity
 
     `weight` is a non-editable field
-    
+
     `date` must be less than or equal to today's date
     """
 
@@ -102,7 +111,7 @@ class DailyActivitySerializer(DynamicFieldsModelSerializer):
         if date_value > timezone.now():
             raise serializers.ValidationError("Date must be less than or equal to today's date")
         return date_value
-    
+
     class Meta:
         model = DailyActivity
         fields = ("user", "weight", "date")
@@ -127,11 +136,11 @@ class UserDietPlanSerializer(DynamicFieldsModelSerializer):
             exclude=("queries", "parent", 'plan_type'),
             context=self.context
         ).data
-    
+
     def get_subscription_status(self, instance: User) -> str:
         return instance.active_subscription.get_subscription_status_display()
 
-    
+
     class Meta:
         model = User
         fields = ("my_plan", "subscription_status")

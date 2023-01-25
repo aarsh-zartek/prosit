@@ -55,6 +55,9 @@ class DietPlanSerializer(DynamicFieldsModelSerializer):
 	
 	def get_category(self, instance: DietPlan):
 		user = self.context.get("user")
+		if not instance.category:
+			return {}
+
 		if user.is_authenticated and user.active_plan:
 			return PlanCategorySerializer(
 				instance=instance.category,
@@ -100,9 +103,11 @@ class DietPlanSerializer(DynamicFieldsModelSerializer):
 
 class DietPlanListSerializer(DynamicFieldsModelSerializer):
 
-	category_name = serializers.CharField(source="category.name")
+	category_name = serializers.SerializerMethodField()
 	sub_categories = serializers.SerializerMethodField()
 
+	def get_category_name(self, instance: DietPlan) -> str:
+		return instance.category.name if instance.category else ""
 	def get_sub_categories(self, instance: DietPlan) -> list:
 		serializer = DietPlanSerializer(
 			instance.sub_categories.all(),

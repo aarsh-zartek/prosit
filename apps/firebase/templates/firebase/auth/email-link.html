@@ -3,79 +3,81 @@
 {% block title %} Email Link Authentication Example {% endblock title %}
 
 {% block content %}
-  <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-grid">
+<div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-grid">
 
-    <!-- Container for the demo -->
-    <div id="sign-in-card" class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
-      <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
-        <h2 class="mdl-card__title-text">Email Link Authentication</h2>
-      </div>
-      <div class="mdl-card__supporting-text mdl-color-text--grey-600">
-        <p>Enter your email below and sign in to your account through a link sent to you via email. This will
-          automatically create an account if you do not have one already.</p>
-        <form onsubmit="return false">
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <input class="mdl-textfield__input" type="text" id="email" name="email">
-            <label class="mdl-textfield__label" for="email">Email</label>
-            <span class="mdl-textfield__error">Input is not a valid email!</span>
-          </div>
-          &nbsp;&nbsp;&nbsp;
-          <button disabled class="mdl-button mdl-js-button mdl-button--colored mdl-js-ripple-effect mdl-button--raised white-font" id="sign-in"
-            name="signin">Sign In without password</button>
-        </form>
-      </div>
+  <!-- Container for the demo -->
+  <div id="sign-in-card"
+    class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
+    <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
+      <h2 class="mdl-card__title-text">Email Link Authentication</h2>
     </div>
+    <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+      <p>Enter your email below and sign in to your account through a link sent to you via email. This will
+        automatically create an account if you do not have one already.</p>
+      <form id="sign-in-form" onsubmit="return false">
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+          <input class="mdl-textfield__input" type="text" id="email" name="email">
+          <label class="mdl-textfield__label" for="email">Email</label>
+          <span class="mdl-textfield__error">Input is not a valid email!</span>
+        </div>
+        &nbsp;&nbsp;&nbsp;
+        <button
+          disabled class="mdl-button mdl-js-button mdl-button--colored mdl-js-ripple-effect mdl-button--raised white-font"
+          id="sign-in" name="signin">Sign In without password</button>
+      </form>
+    </div>
+  </div>
 
-    <!-- Container for the sign in status and user info -->
-    <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop user-details-container">
-      <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
-        <h2 class="mdl-card__title-text">User Status</h2>
-      </div>
-      <div class="mdl-card__supporting-text mdl-color-text--grey-600">
-        <!-- Container where we'll display the user details -->
-        <div class="user-details-container">
-          Firebase sign-in status: <span id="sign-in-status" style="font-weight: bold;">Unknown</span>
-          <div>Firebase auth <code>currentUser</code> object value:</div>
-          <pre><code id="account-details">
+  <!-- Container for the sign in status and user info -->
+  <div
+    class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop user-details-container">
+    <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
+      <h2 class="mdl-card__title-text">User Status</h2>
+    </div>
+    <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+      <!-- Container where we'll display the user details -->
+      <div class="user-details-container">
+        Firebase sign-in status: <span id="sign-in-status" style="font-weight: bold;">Unknown</span>
+        <div>Firebase auth <code>currentUser</code> object value:</div>
+        <pre><code id="account-details">
             <div class="mdl-spinner mdl-js-spinner is-active"></div>
           </code></pre>
-          <br/>
+        <br />
 
-          <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="user-object-button">
-            <i class="material-icons">code</i>
-            Copy User Object
-          </button>
-        </div>
-      </div>
-      <div class="mdl-card__menu">
-        <button class="mdl-button mdl-js-button mdl-button--icon white-font" id="refresh-button" onclick="window.location.reload()">
-          <i class="material-icons">refresh</i>
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="user-object-button">
+          <i class="material-icons">code</i>
+          Copy User Object
         </button>
       </div>
-      <div class="mdl-card__actions mdl-card--border">
-        <button class="mdl-button mdl-js-button mdl-button--colored mdl-js-ripple-effect mdl-button--raised white-font" id="copy-accessToken-button">
-          <i class="material-icons">copy_all</i>
-          Copy Access Token
-        </button>
-        &nbsp;
-        <button class="mdl-button mdl-js-button mdl-button--accent mdl-js-ripple-effect mdl-button--raised white-font" id="copy-refreshToken-button">
-          <i class="material-icons">autorenew</i>
-          Copy Refresh Token
-        </button>
-        &nbsp;
-        <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised" id="copy-apiKey-button">
-          <i class="material-icons">api</i>
-          Copy API Key
-        </button>
-      </div>
-
-      <div id="snackbar" class="mdl-js-snackbar mdl-snackbar">
-        <div class="mdl-snackbar__text"></div>
-        <button class="mdl-snackbar__action" type="button"></button>
-      </div>
+    </div>
+    <div class="mdl-card__menu">
+      <button class="mdl-button mdl-js-button mdl-button--icon white-font" id="refresh-button"
+        onclick="window.location.reload()">
+        <i class="material-icons">refresh</i>
+      </button>
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+      <button class="mdl-button mdl-js-button mdl-button--colored mdl-js-ripple-effect mdl-button--raised white-font"
+        id="copy-accessToken-button">
+        <i class="material-icons">copy_all</i>
+        Copy Access Token
+      </button>
+      &nbsp;
+      <button class="mdl-button mdl-js-button mdl-button--accent mdl-js-ripple-effect mdl-button--raised white-font"
+        id="copy-refreshToken-button">
+        <i class="material-icons">autorenew</i>
+        Copy Refresh Token
+      </button>
+      &nbsp;
+      <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised" id="copy-apiKey-button">
+        <i class="material-icons">api</i>
+        Copy API Key
+      </button>
     </div>
 
   </div>
+
+</div>
 {% endblock content %}
 
 
@@ -101,7 +103,6 @@
       });
       // [END signout]
     } else {
-      updateProgressBar("block");
       var email = document.getElementById('email').value;
       // Sending email with sign-in link.
       // [START authwithemail]
@@ -113,6 +114,7 @@
       };
 
       firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings).then(function () {
+        updateProgressBar("block");
         // Save the email locally so you don’t need to ask the user for it again if they open
         // the link on the same device.
         window.localStorage.setItem('emailForSignIn', email);
@@ -195,11 +197,116 @@
   }
 
   /**
+   * Registers all required event bindings
+   */
+   function registerEventBindings() {
+    // Event bindings.
+    document.getElementById('copy-accessToken-button').addEventListener('click', copyAccessToken);
+    document.getElementById('copy-refreshToken-button').addEventListener('click', copyRefreshToken);
+    document.getElementById('copy-apiKey-button').addEventListener('click', copyApiKey);
+    document.getElementById('user-object-button').addEventListener('click', copyUserObject);
+  }
+
+  function copyApiKey() {
+    'use strict';
+    let api_key = getValue("apiKey");
+    let snackBarmessage = "API Key Copied!"
+    if (api_key) {
+      copy(api_key);
+    } else {
+      snackBarmessage = "No Key Found!"
+    }
+    showSnackBar(snackBarmessage);
+  }
+
+  function copyRefreshToken() {
+    'use strict';
+    let token = getValue("refreshToken");
+    let snackBarmessage = "Refresh Token Copied!"
+    if (token) {
+      copy(token);
+    } else {
+      snackBarmessage = "No Token Found!"
+    }
+    showSnackBar(snackBarmessage);
+  }
+
+  function copyAccessToken() {
+    'use strict';
+    let token = getValue("accessToken");
+    let snackBarmessage = "Access Token Copied!"
+    if (token) {
+      copy(token);
+    } else {
+      snackBarmessage = "No Token Found!"
+    }
+
+    showSnackBar(snackBarmessage);
+  }
+
+  function copyUserObject() {
+    'use strict';
+    let token = getValue("user");
+    let snackBarmessage = "User Object Copied!"
+    if (token) {
+      copyJSON(user)
+    } else {
+      snackBarmessage = "No User Object Found!"
+    }
+
+    showSnackBar(snackBarmessage);
+  }
+
+  function copy(text) {
+    var input = document.createElement('input');
+    input.setAttribute('value', text.trim());
+    document.body.appendChild(input);
+    input.select();
+
+    var result = document.execCommand('copy');
+    document.body.removeChild(input);
+    
+    return result;
+  }
+
+  function copyJSON(jsonData) {
+    let selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = JSON.stringify(jsonData);
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
+
+    return true
+  }
+
+
+  function disableButtons() {
+    var user = firebase.auth().currentUser;
+    if(!user) {
+      document.getElementById('copy-accessToken-button').disabled = true;
+      document.getElementById('copy-refreshToken-button').disabled = true;
+      document.getElementById('copy-apiKey-button').disabled = true;
+      document.getElementById('user-object-button').disabled = true;
+    } else {
+      document.getElementById('copy-accessToken-button').disabled = false;
+      document.getElementById('copy-refreshToken-button').disabled = false;
+      document.getElementById('copy-apiKey-button').disabled = false;
+      document.getElementById('user-object-button').disabled = false;
+    }
+  }
+  /**
    * initApp handles setting up UI event listeners and registering Firebase auth listeners:
    *  - firebase.auth().onAuthStateChanged: This listener is called when the user is signed in or
    *    out, and that is where we update the UI.
    */
   function initApp() {
+    "use strict";
     // Restore the previously used value of the email.
     var email = window.localStorage.getItem('emailForSignIn');
     document.getElementById('email').value = email;
@@ -225,6 +332,7 @@
         document.getElementById('sign-in-status').textContent = 'Signed in';
         document.getElementById('sign-in').textContent = 'Sign out';
         document.getElementById('account-details').innerHTML = prettyPrintJson.toHtml(user, prettyPrintJsonOptions);
+        localStorage.setItem("user_account_details", JSON.stringify(user));
         // [END_EXCLUDE]
       } else {
         // User is signed out.
@@ -233,10 +341,13 @@
         document.getElementById('sign-in-status').textContent = 'Signed out';
         document.getElementById('sign-in').textContent = 'Sign In without password';
         document.getElementById('account-details').textContent = 'Not Available';
+        localStorage.removeItem("user_account_details");
         // [END_EXCLUDE]
       }
       // [START_EXCLUDE silent]
       document.getElementById('sign-in').disabled = false;
+      disableButtons();
+      
       // [END_EXCLUDE]
       updateProgressBar();
     });
@@ -245,6 +356,9 @@
     document.getElementById('sign-in').addEventListener('click', toggleSignIn, false);
   }
 
+  /**
+ * Set up UI event listeners and registering Firebase auth listeners.
+ */
   window.onload = initApp;
 </script>
 

@@ -17,7 +17,6 @@ import os
 import logging.config
 from django.utils.log import DEFAULT_LOGGING
 
-from lib.constants import FieldConstants
 
 env = environ.Env()
 environ.Env.read_env()
@@ -37,12 +36,11 @@ SECRET_KEY = env.str('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False)
 
-DOMAIN = env.str('DOMAIN')
-DOMAIN_IP = env.str('DOMAIN_IP')
-TESTING_DOMAIN = env.str('TESTING_DOMAIN')
+DOMAIN = env.list("DOMAIN", default="localhost")
 
-ALLOWED_HOSTS = [DOMAIN, DOMAIN_IP, TESTING_DOMAIN]
+ALLOWED_HOSTS = DOMAIN
 
+STAGING_DOMAIN = env.str("STAGING_DOMAIN")
 
 # Application definition
 
@@ -63,6 +61,7 @@ THIRD_PARTY_APPS = [
     'django_extensions',
     'django_celery_beat',
     'django_celery_results',
+    "django_json_widget",
     'drf_yasg',
     'corsheaders',
     'phonenumber_field',
@@ -121,13 +120,9 @@ WSGI_APPLICATION = 'prosit.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    },
+    'default': env.db()
 }
 
-# 'default': env.db_url()
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -261,13 +256,7 @@ logging.config.dictConfig({
 
 # CORS
 CORS_ORIGIN_ALLOW_ALL = True
-# CORS_ORIGIN_WHITELIST = (
-#     'http://127.0.0.1:8000',
-#     'http://localhost:8000',
-#     'https://*.ngrok.io',
-# )
 
-# CSRF_TRUSTED_ORIGINS = ['https://*.ngrok.io','https://*.127.0.0.1']
 
 # Rest Framework Config - https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
@@ -284,7 +273,6 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_RATES": {
         "contact_form": "2/hour"
     },
-    # "DATE_TIME_FORMAT": FieldConstants.FULL_DATE_TIME_FORMAT
     "UPLOADED_FILES_USE_URL": True
 }
 
@@ -296,7 +284,7 @@ FIREBASE_CONFIG = {
 FCM_DJANGO_SETTINGS = {
      # default: _('FCM Django')
     "APP_VERBOSE_NAME": "Firebase Cloud Messaging (FCM)",
-    
+
      # true if you want to have only one active device per registered user at a time
      # default: False
     "ONE_DEVICE_PER_USER": True,
@@ -340,13 +328,13 @@ JAZZMIN_SETTINGS = {
         "auth.group": "fas fa-users-cog",
 
         "authtoken.tokenproxy": "fas fa-coins",
-        
+
         "about.company": "fas fa-building",
         "about.contactform": "fas fa-headset",
         "about.faq": "fas fa-meh",
 
         "notification.usernotification": "fas fa-bell",
-        
+
         "plan.dietplan": "fas fa-calendar-alt",
         "plan.plancategory": "fas fa-stream",
         "plan.questionanswer": "fas fa-question",

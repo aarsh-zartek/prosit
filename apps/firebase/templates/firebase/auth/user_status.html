@@ -11,7 +11,7 @@
       <pre><code id="account-details">
         <div class="mdl-spinner mdl-js-spinner is-active"></div>
       </code></pre>
-      <br/>
+      <br />
 
       <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="user-object-button">
         <i class="material-icons">code</i>
@@ -20,17 +20,20 @@
     </div>
   </div>
   <div class="mdl-card__menu">
-    <button class="mdl-button mdl-js-button mdl-button--icon white-font" id="refresh-button" onclick="window.location.reload()">
+    <button class="mdl-button mdl-js-button mdl-button--icon white-font" id="refresh-button"
+      onclick="window.location.reload()">
       <i class="material-icons">refresh</i>
     </button>
   </div>
   <div class="mdl-card__actions mdl-card--border">
-    <button class="mdl-button mdl-js-button mdl-button--colored mdl-js-ripple-effect mdl-button--raised white-font" id="copy-accessToken-button">
+    <button class="mdl-button mdl-js-button mdl-button--colored mdl-js-ripple-effect mdl-button--raised white-font"
+      id="copy-accessToken-button">
       <i class="material-icons">copy_all</i>
       Copy Access Token
     </button>
     &nbsp;
-    <button class="mdl-button mdl-js-button mdl-button--accent mdl-js-ripple-effect mdl-button--raised white-font" id="copy-refreshToken-button">
+    <button class="mdl-button mdl-js-button mdl-button--accent mdl-js-ripple-effect mdl-button--raised white-font"
+      id="copy-refreshToken-button">
       <i class="material-icons">autorenew</i>
       Copy Refresh Token
     </button>
@@ -41,10 +44,6 @@
     </button>
   </div>
 
-  <div id="snackbar" class="mdl-js-snackbar mdl-snackbar">
-    <div class="mdl-snackbar__text"></div>
-    <button class="mdl-snackbar__action" type="button"></button>
-  </div>
 </div>
 
 
@@ -80,7 +79,7 @@
 
   function disableButtons() {
     var user = firebase.auth().currentUser;
-    if(!user) {
+    if (!user) {
       document.getElementById('copy-accessToken-button').disabled = true;
       document.getElementById('copy-refreshToken-button').disabled = true;
       document.getElementById('copy-apiKey-button').disabled = true;
@@ -93,12 +92,12 @@
     }
 
   }
-  function copyAPIKey() {
+
+  function copyApiKey() {
     'use strict';
-    var user = firebase.auth().currentUser;
-    let api_key = user.stsTokenManager.apiKey
-    var snackBarmessage = "API Key Copied!"
-    if(api_key) {
+    let api_key = getValue("apiKey");
+    let snackBarmessage = "API Key Copied!"
+    if (api_key) {
       copy(api_key);
     } else {
       snackBarmessage = "No Key Found!"
@@ -108,10 +107,9 @@
 
   function copyRefreshToken() {
     'use strict';
-    var user = firebase.auth().currentUser;
-    let token = user.stsTokenManager.refreshToken
-    var snackBarmessage = "Refresh Token Copied!"
-    if(token) {
+    let token = getValue("refreshToken");
+    let snackBarmessage = "Refresh Token Copied!"
+    if (token) {
       copy(token);
     } else {
       snackBarmessage = "No Token Found!"
@@ -121,10 +119,9 @@
 
   function copyAccessToken() {
     'use strict';
-    var user = firebase.auth().currentUser;
-    let token = user.stsTokenManager.accessToken
-    var snackBarmessage = "Access Token Copied!"
-    if(token) {
+    let token = getValue("accessToken");
+    let snackBarmessage = "Access Token Copied!"
+    if (token) {
       copy(token);
     } else {
       snackBarmessage = "No Token Found!"
@@ -135,10 +132,9 @@
 
   function copyUserObject() {
     'use strict';
-    var user = firebase.auth().currentUser;
-    let token = user
-    var snackBarmessage = "User Object Copied!"
-    if(token) {
+    let token = getValue("user");
+    let snackBarmessage = "User Object Copied!"
+    if (token) {
       copyJSON(user)
     } else {
       snackBarmessage = "No User Object Found!"
@@ -175,26 +171,4 @@
     return true
   }
 
-  function showSnackBar(snackBarmessage) {
-    'use strict';
-    var snackbarContainer = document.querySelector("#snackbar");
-
-    var handler = function(event) { }
-
-    var data = {
-      message: snackBarmessage,
-      timeout: 5000,
-      actionHandler: handler,
-      actionText: "Okay!",
-    };
-    snackbarContainer.MaterialSnackbar.showSnackbar(data);
-  }
-
-  function updateProgressBar(display_style="none") {
-    if (display_style == "block") {
-      progressBar.style.display = "block";
-    } else {
-      progressBar.style.display = "none";
-    }
-  }
 </script>

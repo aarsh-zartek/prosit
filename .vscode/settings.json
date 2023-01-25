@@ -1,0 +1,15 @@
+{
+    "djangointellisense.settingsModule": "prosit.settings",
+    "djangointellisense.projectRoot": "${workspaceFolder}",
+
+    "python.linting.pylintArgs": [
+        // "--disable=W0311",
+        "--load-plugin=pylint_django"
+    ],
+
+    "python.testing.pytestArgs": [
+        "apps"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+}
