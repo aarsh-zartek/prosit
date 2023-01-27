@@ -96,7 +96,7 @@ class UserHealthReport(LifecycleModelMixin, BaseModel):
             )
     workout_time = models.PositiveSmallIntegerField(
         verbose_name=_("Workout Time (Minutes)"),
-        default=0
+        default=0, null=True
     )
 
     health_code = models.CharField(
