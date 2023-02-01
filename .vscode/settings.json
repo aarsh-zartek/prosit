@@ -2,10 +2,30 @@
     "djangointellisense.settingsModule": "prosit.settings",
     "djangointellisense.projectRoot": "${workspaceFolder}",
 
+    "python.analysis.packageIndexDepths": [
+        {
+            "name": "django",
+            "depth": 5,
+            "includeAllSymbols": true
+        },
+        {
+            "name": "rest_framework",
+            "depth": 4,
+            "includeAllSymbols": true
+        },
+        {
+            "name": "django_filters",
+            "depth": 4
+        },
+    ],
+    "python.analysis.autoImportUserSymbols": true,
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.indexing": true,
     "python.linting.pylintArgs": [
         // "--disable=W0311",
         "--load-plugin=pylint_django"
     ],
+    "python.analysis.inlayHints.functionReturnTypes": true,
 
     "python.testing.pytestArgs": [
         "apps"
