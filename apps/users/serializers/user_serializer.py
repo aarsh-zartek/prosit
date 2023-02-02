@@ -10,8 +10,7 @@ from apps.plan.models import DietPlan
 from apps.plan.serializers.diet_plan_serializers import DietPlanSerializer
 from apps.users.models import User, DailyActivity, UserHealthReport, Profile
 from apps.users.serializers.profile_serializer import ProfileSerializer
-
-from lib.choices import GENDER
+from lib.choices import GENDER, PLAN_TYPES
 
 
 class UserSerializer(DynamicFieldsModelSerializer):
@@ -31,11 +30,16 @@ class UserSerializer(DynamicFieldsModelSerializer):
         return True if instance.active_plan else False
 
     def get_plan_name(self, instance: User) -> str | None:
-        from apps.plan.models import DietPlan
         sub = instance.active_subscription
         plan_name = None
+        if not sub:
+            return plan_name
         try:
-            plan_name = DietPlan.objects.filter(id=sub.receipt["plan_id"]).first().name
+            plan = DietPlan.objects.get(id=sub.receipt["plan_id"])
+            if plan.plan_type == PLAN_TYPES.main_category:
+                plan_name = plan.name
+            else:
+                plan_name = plan.parent.name
         except:
             try:
                 plan_name = instance.active_plan.name
