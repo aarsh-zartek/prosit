@@ -6,11 +6,11 @@ from rest_framework.validators import UniqueTogetherValidator
 from phonenumber_field.serializerfields import PhoneNumberField
 
 from apps.core.serializers import DynamicFieldsModelSerializer
+from apps.plan.models import DietPlan
 from apps.plan.serializers.diet_plan_serializers import DietPlanSerializer
 from apps.users.models import User, DailyActivity, UserHealthReport, Profile
 from apps.users.serializers.profile_serializer import ProfileSerializer
-
-from lib.choices import GENDER
+from lib.choices import GENDER, PLAN_TYPES
 
 
 class UserSerializer(DynamicFieldsModelSerializer):
@@ -21,12 +21,31 @@ class UserSerializer(DynamicFieldsModelSerializer):
     profile = ProfileSerializer(required=False)
     active_subscription = serializers.SerializerMethodField()
     active_plan = serializers.SerializerMethodField()
+    plan_name = serializers.SerializerMethodField()
 
     def get_active_subscription(self, instance: User) -> bool:
         return True if instance.active_subscription else False
 
     def get_active_plan(self, instance: User) -> bool:
         return True if instance.active_plan else False
+
+    def get_plan_name(self, instance: User) -> str | None:
+        sub = instance.active_subscription
+        plan_name = None
+        if not sub:
+            return plan_name
+        try:
+            plan = DietPlan.objects.get(id=sub.receipt["plan_id"])
+            if plan.plan_type == PLAN_TYPES.main_category:
+                plan_name = plan.name
+            else:
+                plan_name = plan.parent.name
+        except:
+            try:
+                plan_name = instance.active_plan.name
+            except:
+                pass
+        return plan_name
 
     def validate_email(self, email):
         email_filter = User.objects.filter(email=email)
@@ -39,7 +58,8 @@ class UserSerializer(DynamicFieldsModelSerializer):
         fields = (
             "id", "uid", "display_name", "password", "phone_number",
             "email", "first_name", "last_name", "profile",
-            "profile_picture", "active_subscription", "active_plan"
+            "profile_picture", "active_subscription", "active_plan",
+            "plan_name"
         )
 
     def create(self, validated_data):
@@ -67,10 +87,11 @@ class UserHealthReportSerializer(DynamicFieldsModelSerializer):
             raise serializers.ValidationError("Enter a value between 1 and 30")
         return hemoglobin
 
-    def validate(self, attrs):
-        user = self.context.get('user')
+    def validate(self, attrs: dict) -> dict:
+        user: User = self.context.get('user')
         pcod_pcos = attrs.get('pcod_pcos', None)
         image = attrs.get("image", "not_present")
+        workout_time = attrs.get("workout_time", None)
 
         if not user.active_subscription:
             raise serializers.ValidationError("No Active Subscription found for this user")
@@ -85,6 +106,20 @@ class UserHealthReportSerializer(DynamicFieldsModelSerializer):
             raise serializers.ValidationError("You must provide `pcod_pcos` field for the female user")
         elif pcod_pcos and (user.profile.gender == GENDER.male):
             attrs.pop('pcod_pcos')
+
+        plan_id = user.active_subscription.receipt["plan_id"]
+        try:
+            subscribed_for = DietPlan.objects.get(id=plan_id)
+        except DietPlan.DoesNotExist:
+            raise serializers.ValidationError("No Plan exists")
+
+        if workout_time is None and subscribed_for.is_gym_plan:
+            raise serializers.ValidationError(f"Workout Time required for {subscribed_for.name}")
+        if workout_time is not None and not subscribed_for.is_gym_plan:
+            try:
+                attrs.pop("workout_time")
+            except KeyError:
+                pass
 
         return attrs
 
