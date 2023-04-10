@@ -70,6 +70,10 @@ class CancellationReason:
     CUSTOMER_SUPPORT = "customer_support"
     UNKNOWN = "unknown"
 
+
+GYM_PLAN_WORDS = ["gym", "fitness", "workout"]
+
+
 class SubscriptionStatus:
     ACTIVE = "active"
     EXPIRED = "expired"

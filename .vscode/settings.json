@@ -1,11 +1,6 @@
 {
     "djangointellisense.settingsModule": "prosit.settings",
     "djangointellisense.projectRoot": "${workspaceFolder}",
-
-
-    "python.analysis.autoImportUserSymbols": true,
-    "python.analysis.autoImportCompletions": true,
-    "python.analysis.completeFunctionParens": true,
     "python.analysis.packageIndexDepths": [
         {
             "name": "django",
@@ -21,15 +16,10 @@
             "name": "django_filters",
             "depth": 4
         },
-        {
-            "name": "dateutil",
-            "depth": 3
-        },
     ],
-    "python.analysis.inlayHints.variableTypes": false,
-    "python.analysis.inlayHints.functionReturnTypes": true,
-    "python.linting.enabled": true,
-    "python.linting.pylintEnabled": true,
+    "python.analysis.autoImportUserSymbols": true,
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.indexing": true,
     "python.linting.pylintArgs": [
         // "--disable=W0311",
         "--disable=E1101",
@@ -38,7 +28,7 @@
         "--disable=C0116",
         "--load-plugin=pylint_django"
     ],
-
+    "python.analysis.inlayHints.functionReturnTypes": true,
     "python.testing.pytestArgs": [
         "apps"
     ],

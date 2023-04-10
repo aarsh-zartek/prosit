@@ -93,6 +93,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # 'apps.core.exceptions.CustomExceptionMiddleware',
+    'apps.subscriptions.middleware.ExpireSubscriptionMiddleware',
 ]
 
 ROOT_URLCONF = "prosit.urls"

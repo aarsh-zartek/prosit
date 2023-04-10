@@ -7,7 +7,7 @@ from multiselectfield import MultiSelectField
 
 from apps.core.models import BaseModel
 
-from lib.constants import FieldConstants, AudioFormats, DocumentFormats
+from lib.constants import GYM_PLAN_WORDS, FieldConstants, AudioFormats, DocumentFormats
 from lib.choices import PLAN_TYPES, FIELDS_TO_SHOW
 from lib.utils import get_diet_plan_image_path, get_diet_plan_instruction_path, get_preparation_path
 
@@ -119,7 +119,13 @@ class PlanCategory(BaseModel):
 
 
 class DietPlan(BaseModel):
-    name = models.CharField(verbose_name=_("Diet Plan Name"), max_length=FieldConstants.MAX_NAME_LENGTH)
+    name = models.CharField(
+        verbose_name=_("Diet Plan Name"),
+        max_length=FieldConstants.MAX_NAME_LENGTH,
+        help_text=_(
+            f"A Plan will be considered GYM Plan if it has one of `{', '.join(GYM_PLAN_WORDS)}` words"
+        )
+    )
     category = models.ForeignKey(
         PlanCategory,
         on_delete=models.SET_NULL,
@@ -175,6 +181,13 @@ class DietPlan(BaseModel):
 
     def __str__(self) -> str:
         return f"{self.name} - {self.category}"
+
+    @property
+    def is_gym_plan(self) -> bool:
+        if self.plan_type == PLAN_TYPES.main_category:
+            return any(word in self.name.lower() for word in GYM_PLAN_WORDS)
+        else:
+            return self.parent.name.lower in GYM_PLAN_WORDS
 
 
 class QuestionAnswer(BaseModel):

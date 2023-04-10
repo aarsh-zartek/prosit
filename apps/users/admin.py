@@ -96,9 +96,18 @@ class UserHealthReportAdmin(admin.ModelAdmin):
     list_display = (
         "user", "date", "vitamin_b12", "vitamin_d",
         "creatin", "fasting_blood_sugar", "hemoglobin",
-        "thyroid_tsh", "workout_time", "health_code",
+        "thyroid_tsh", "health_code",
     )
-    readonly_fields = ("health_code",)
+    readonly_fields = ("health_code", "workout_time")
+
+    # def get_readonly_fields(self, request: HttpRequest, obj: Optional[UserHealthReport]):
+    #     readonly_fields = super().get_readonly_fields(request, obj)
+    #     plan = obj.subscription.plan
+    #     if plan and plan.is_gym_plan:
+    #         pass
+    #     else:
+    #         readonly_fields += ("workout_time")
+
 
 class DailyActvityAdmin(admin.ModelAdmin):
     list_display = ("user", "weight", "date")
