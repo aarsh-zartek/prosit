@@ -53,10 +53,15 @@ urlpatterns = [
 ]
 
 schema_view = get_schema_view(
-    openapi.Info(
-        title="Swagger API",
+    info=openapi.Info(
+        title="Prosit API",
         default_version="v1",
-        description="Documentation for the Backend API",
+        description="Documentation for API v1",
+        contact=openapi.Contact(
+            name="Prosit Health",
+            email="prosithealth@gmail.com",
+            url="https://prosithealth.in"
+        )
     ),
     public=True,
 )

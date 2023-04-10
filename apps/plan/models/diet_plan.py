@@ -184,7 +184,10 @@ class DietPlan(BaseModel):
 
     @property
     def is_gym_plan(self) -> bool:
-        return any(word in self.name.lower() for word in GYM_PLAN_WORDS)
+        if self.plan_type == PLAN_TYPES.main_category:
+            return any(word in self.name.lower() for word in GYM_PLAN_WORDS)
+        else:
+            return self.parent.name.lower in GYM_PLAN_WORDS
 
 
 class QuestionAnswer(BaseModel):
