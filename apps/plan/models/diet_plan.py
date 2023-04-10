@@ -115,7 +115,7 @@ class PlanCategory(BaseModel):
         verbose_name_plural = _("Plan Categories")
 
     def __str__(self) -> str:
-        return self.name
+        return f"{self.name}"
 
 
 class DietPlan(BaseModel):

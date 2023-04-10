@@ -45,7 +45,7 @@ class UserAdmin(BaseUserAdmin):
         none=("uid", "password"),
         personal_info=(
             "display_name", "first_name", "last_name",
-            "email", "phone_number"
+            "email", "phone_number", "profile_picture"
         ),
         permissions=(
             "groups",
@@ -68,7 +68,7 @@ class UserAdmin(BaseUserAdmin):
         "display_name",
     )
 
-    def get_form(self, request: Any, obj: Optional[User]=..., change: bool=..., **kwargs: Any):
+    def get_form(self, request: Any, obj: Optional[User]=..., **kwargs: Any):
 
         if not request.user.is_superuser:
             self.exclude = ("is_superuser",)

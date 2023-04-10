@@ -6,18 +6,19 @@ from apps.core.serializers import DynamicFieldsModelSerializer
 from apps.plan.models.diet_plan import DietPlan, PlanCategory, QuestionAnswer
 
 from lib.choices import PLAN_TYPES
+from lib.fields import AWSS3PresignedURLFileField
 
 
 class PlanCategorySerializer(DynamicFieldsModelSerializer):
-			
-	instruction_audio_english = serializers.FileField(use_url=True)
-	instruction_audio_malayalam = serializers.FileField(use_url=True)
-	instruction_pdf_english = serializers.FileField(use_url=True)
-	instruction_pdf_malayalam = serializers.FileField(use_url=True)
-	preparation_audio_english = serializers.FileField(use_url=True)
-	preparation_audio_malayalam = serializers.FileField(use_url=True)
-	preparation_pdf_english = serializers.FileField(use_url=True)
-	preparation_pdf_malayalam = serializers.FileField(use_url=True)
+
+	# instruction_audio_english = AWSS3PresignedURLFileField(use_url=True)
+	# instruction_audio_malayalam = AWSS3PresignedURLFileField(use_url=True)
+	# instruction_pdf_english = AWSS3PresignedURLFileField(use_url=True)
+	# instruction_pdf_malayalam = AWSS3PresignedURLFileField(use_url=True)
+	# preparation_audio_english = AWSS3PresignedURLFileField(use_url=True)
+	# preparation_audio_malayalam = AWSS3PresignedURLFileField(use_url=True)
+	# preparation_pdf_english = AWSS3PresignedURLFileField(use_url=True)
+	# preparation_pdf_malayalam = AWSS3PresignedURLFileField(use_url=True)
 	fields_required = serializers.SerializerMethodField()
 
 	def get_fields_required(self, instance: PlanCategory) -> List[str]:
@@ -51,8 +52,8 @@ class DietPlanSerializer(DynamicFieldsModelSerializer):
 
 	category = serializers.SerializerMethodField()
 	queries = serializers.SerializerMethodField()
-	image = serializers.ImageField(use_url=True)
-	
+	# image = AWSS3PresignedURLFileField(use_url=True)
+
 	def get_category(self, instance: DietPlan):
 		user = self.context.get("user")
 		if not instance.category:
@@ -68,7 +69,7 @@ class DietPlanSerializer(DynamicFieldsModelSerializer):
 			context=self.context,
 			fields=("fields_required",)
 		).data
-		
+
 	def get_queries(self, instance: DietPlan):
 		serializer = QuestionAnswerSerializer(
 			instance.question_answers.all(),
@@ -84,19 +85,19 @@ class DietPlanSerializer(DynamicFieldsModelSerializer):
 
 		if plan_type == PLAN_TYPES.sub_category and parent is None:
 			raise serializers.ValidationError("Parent must be specified for Sub category Plan Type")
-		
+
 		if plan_type == PLAN_TYPES.category and parent is not None:
 			attrs.pop('parent')
-		
+
 		return attrs
-	
+
 	class Meta:
 		model = DietPlan
 		fields = (
 			"id", "name", "category", "plan_type", "parent",
 			"queries", "value", "image", "product_identifier"
 		)
-	
+
 	def create(self, validated_data):
 		return super().create(validated_data)
 
